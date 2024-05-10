@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="GetCustomerDetailsRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DateTimeFormat" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Token" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetCustomerDetailsRequest" nillable="true" type="tns:GetCustomerDetailsRequest" />
+  <xs:complexType name="GetCustomerDetailsResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CustomerDetails" nillable="true" type="tns:CustomerDetails" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultStatus" type="tns:ResultStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetCustomerDetailsResult" nillable="true" type="tns:GetCustomerDetailsResult" />
+  <xs:complexType name="CustomerDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Birthdate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CivilStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EmailAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IClickCustomerNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InsuranceCustomerNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InsuredClass" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Landline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LicenseNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MobileNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nationality" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NatureOfWork" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OtherCustomerNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PlaceOfBirth" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SignaturePath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SourceOfFunds" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TinID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ValidIDNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ValidIDPresented" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ZipCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerDetails" nillable="true" type="tns:CustomerDetails" />
+  <xs:simpleType name="ResultStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Successful" />
+      <xs:enumeration value="Failed" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ResultStatus" nillable="true" type="tns:ResultStatus" />
+  <xs:complexType name="ProcessInsuranceTransactionRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BeneficiaryCollection" nillable="true" type="tns:ArrayOfBeneficiaryDetails" />
+      <xs:element minOccurs="0" name="CustomerDetails" nillable="true" type="tns:CustomerDetails" />
+      <xs:element minOccurs="0" name="GeneralDetails" nillable="true" type="tns:GeneralDetails" />
+      <xs:element minOccurs="0" name="GuardianDetails" nillable="true" type="tns:GuardianDetails" />
+      <xs:element minOccurs="0" name="Token" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProcessInsuranceTransactionRequest" nillable="true" type="tns:ProcessInsuranceTransactionRequest" />
+  <xs:complexType name="ArrayOfBeneficiaryDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BeneficiaryDetails" nillable="true" type="tns:BeneficiaryDetails" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBeneficiaryDetails" nillable="true" type="tns:ArrayOfBeneficiaryDetails" />
+  <xs:complexType name="BeneficiaryDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BeneficiaryBirthday" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BeneficiaryContactNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BeneficiaryName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BeneficiaryRelationship" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BeneficiaryDetails" nillable="true" type="tns:BeneficiaryDetails" />
+  <xs:complexType name="GeneralDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DateTimeFormat" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ForRenewal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IntegrationId" type="xs:long" />
+      <xs:element minOccurs="0" name="IsPaid" type="xs:boolean" />
+      <xs:element minOccurs="0" name="NumberOfCOCs" type="xs:int" />
+      <xs:element minOccurs="0" name="PlatformAPI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ReferenceNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SourceCOC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TransactionSourceId" type="xs:int" />
+      <xs:element minOccurs="0" name="TransactionTypeId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GeneralDetails" nillable="true" type="tns:GeneralDetails" />
+  <xs:complexType name="GuardianDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GuardianBirthday" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GuardianContactNo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GuardianName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GuardianRelationship" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GuardianDetails" nillable="true" type="tns:GuardianDetails" />
+  <xs:complexType name="ProcessInsuranceTransactionResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="InsuranceTransactionCollection" nillable="true" type="tns:ArrayOfInsuranceTransactionDetails" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultStatus" type="tns:ResultStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProcessInsuranceTransactionResult" nillable="true" type="tns:ProcessInsuranceTransactionResult" />
+  <xs:complexType name="ArrayOfInsuranceTransactionDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InsuranceTransactionDetails" nillable="true" type="tns:InsuranceTransactionDetails" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInsuranceTransactionDetails" nillable="true" type="tns:ArrayOfInsuranceTransactionDetails" />
+  <xs:complexType name="InsuranceTransactionDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="COCNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EffectiveDate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InsuranceTransactionDetails" nillable="true" type="tns:InsuranceTransactionDetails" />
+</xs:schema>

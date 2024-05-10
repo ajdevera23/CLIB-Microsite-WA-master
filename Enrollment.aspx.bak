@@ -1,0 +1,257 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/Enrollment.Master" AutoEventWireup="true" CodeFile="Enrollment.aspx.cs" Inherits="Enrollment" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <link type="text/css" href="../Style/enrollment.css" rel="stylesheet" />
+</asp:Content>
+
+
+<asp:Content ContentPlaceHolderID="productLogo" runat="server">
+    <img src="../Images/ProductLogoSample.png" runat="server" id="productImage"/>
+</asp:Content>
+<asp:Content ContentPlaceHolderID="partnerLogo" runat="server">
+    <img src="../Images/ProductLogoSample.png" runat="server" id="partnerImage"/>
+</asp:Content>
+
+<asp:Content ContentPlaceHolderID="infoForm" runat="server">
+    <form id="enrollmentForm" class="container body-content" method="post" runat="server">
+    <div class="container my-3">
+        <div class="tab-content" id="personalInfoHead" align="center">
+            <h3 style="color:white;" align="center"> Insured Information </h3>
+        </div>
+        <div class="tab-pane show active fade" id="personalInfoBody">
+            <div class="accordion">
+                <div class="form-group mb-0">
+            <div class="row" align="center">
+                <div class="col-md-4 mb-3" align="left" >
+                    <span class="text-required">*</span>First Name: <br />
+                    <input type="text" id="firstName" class="form-control" onpaste="return false" placeholder="First Name" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="25"/>
+
+                </div>
+                <div class="col-md-4 mb-3" align="left">
+                     <span class="text-required">*</span>Middle Name: <br />
+                     <input type="text" id="middleName" class="form-control" onpaste="return false" placeholder="Middle Name" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="20"/>
+                   </div> 
+                <div class="col-md-4 mb-3" align="left">
+                     <span class="text-required">*</span>Last Name: <br />
+                    <input type="text" id="lastName" class="form-control" onpaste="return false" placeholder="Last Name" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="20" />
+                    </div>
+
+                </div>
+                <div class="row" align="left">
+                    <div class="col-md-4 mb-3">
+                       <span class="text-required">*</span> Birthdate: <br />
+                    <asp:TextBox runat="server" class="form-control" onpaste="return false" type="date" ID="birthDateTextBox"></asp:TextBox>
+                
+                    
+                    </div>
+                    <div class="col-md-4 mb-3">
+                
+                    <span class="text-required">*</span>Place of Birth: <br />
+                    <input type="text"  onpaste="return false" class="form-control" id="placeOfBirth" placeholder="Place of Birth" runat="server" maxlength="150"/>
+                        </div>
+                    <div class="col-12 col-md-4" align="left">
+                   
+                    <div class=row>
+                        <div class="col">
+                    <span class="text-required">*</span>Gender: <br />
+                    <asp:RadioButton runat="server" ID="maleRadioButton" Text="Male" GroupName="genderRadioButton"/><br />
+                    <asp:RadioButton runat="server" ID="femaleRadioButton" Text="Female" GroupName="genderRadioButton"/>
+                    </div>
+                        <div class="col">
+                            <div class="row">
+                            <span class="text-required">*</span>Civil Status:
+                                </div>
+                            
+                            <div class="row">
+                        <div class="col-form-label-sm">
+                     
+                    <asp:RadioButton runat="server" ID="singleCivilStatus" Text="Single" GroupName="civilStatusRadioButton" /><br />
+                    <asp:RadioButton runat="server" ID="marriedCivilStatus" Text="Married" GroupName="civilStatusRadioButton" /><br />
+                    </div>
+                               
+                        <div class="col-form-label-sm">
+                        
+                           
+                    <asp:RadioButton runat="server" ID="widowedCivilStatus" Text="Widow" GroupName="civilStatusRadioButton" /><br />
+                    <asp:RadioButton runat="server" ID="separatedCivilStatus" Text="Separated" GroupName="civilStatusRadioButton" /><br />
+                            </div>
+                                    </div>
+                               
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-12 mb-3"">
+                        
+                    <span class="text-required">*</span>Present Address: <br />
+                    <asp:TextBox type="text" class="form-control" onpaste="return false" placeholder="Room/Floor/Unit Building Name/Street, Barangay, City, Province, Zip Code" id="presentAddress"  runat="server" MaxLength="120" />
+                
+                    </div>
+                </div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3" align="left">
+                    <span class="text-required">*</span>Contact No: <br />
+                    <asp:TextBox type="number" class="form-control" onpaste="return false" id="contactNumber" placeholder="09XXXXXXXXX" runat="server" Maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                </div>
+                    <div class="col-md-8 mb-3" align="left">
+                
+                    <span class="text-required">*</span>Email: <br />
+                    <asp:TextBox type="email" class="form-control" onpaste="return false" id="emailAddress" placeholder="juandelacruz@gmail.com" onkeypress="return emailCheck(event)" MaxLength="50" runat="server"></asp:TextBox>
+                      <i class="text-required" style="font-size:smaller">  Your COC details will be sent here.</i>
+                </div>
+                </div>
+                
+                
+                
+                
+                <div class="row">
+                    
+                <div class="col-md-4 mb-3" align="left">
+                    <span class="text-required">*</span>Valid ID: <br />
+                    <asp:DropDownList ID="validIdDropDownList" class="form-control" runat="server"></asp:DropDownList>
+                </div>
+               <div class="col-md-8 mb-3" align="left">
+                   <span class="text-required">*</span> ID No.:<br />
+                    <asp:TextBox type="text" class="form-control" placeholder="Enter your ID Number" onpaste="return false" onkeypress="return characterAndNumbers(event)" id="idNumber" runat="server" maxlength="25" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"></asp:TextBox>
+                </div>
+                    <div class="col-md-12 mb-3" align="left">
+                    <span class="text-required">*</span>Source of Funds/Nature of Work/Business:<br />
+                    <asp:TextBox id="sourceOfFunds" class="form-control" onpaste="return false" placeholder="Nature of Work/Business" onkeypress="return characterAndNumbers(event)" MaxLength="30" runat="server" />
+                        </div>
+                </div>
+            </div>
+            
+                    </div>
+            </div>
+       
+        <div class="container my-3">
+        <br /><div id="beneInfoHead" class="tab-content" runat="server" align="center">
+            <h3 style="color:white;" align="center"> Beneficiary Information </h3>
+        </div>
+        <div id="beneInfoBody" class="tab-pane show active fade" runat="server">
+            <div class="container my-3">
+            <div class="row">
+                <div class="col-md-4 mb-3" align="left" >
+                    <span class=text-required>*</span>Beneficiary First Name: <br />
+                    <asp:TextBox runat="server" class="form-control" onpaste="return false" placeholder="Beneficiary First Name" onkeypress="return characterAndNumbers(event)" ID="beneFirstName" MaxLength="25"></asp:TextBox>
+                </div>
+                <div class="col-md-4 mb-3" align="left">
+                    <span class=text-required>*</span>Beneficiary Middle Name: <br />
+                     <input type="text" onpaste="return false" class="form-control" placeholder="Beneficiary Middle Name" onkeypress="return characterAndNumbers(event)" id="beneMiddleName" maxlength="20" runat="server"/>
+                </div>
+                <div class="col-md-4 mb-3" align="left">
+                    <span class=text-required>*</span>Beneficiary Last Name: <br />
+                    <input type="text" id="beneLastName" class="form-control" onpaste="return false" placeholder="Beneficiary Last Name" onkeypress="return characterAndNumbers(event)" maxlength="20" runat="server"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3" align="left">
+                    <span class="text-required">*</span> Relationship to the Insured: <br />
+                    <asp:DropDownList runat="server" class="form-control" onpaste="return false" ID="relationshipDropDownList" ></asp:DropDownList>
+                </div>
+            </div>
+            <div class="row">
+                <br /><p> </p>
+            </div>
+                </div>
+            </div>
+        </div>
+    <div class="container my-3">
+    <div id="vehicleInfoHead" class="tab-pane show active fade" runat="server" align="center" >
+            <h3 style="color:white;" align="center"> Vehicle Information </h3>
+        </div>
+        <div id="vehicleInfoBody" runat="server" class="container-fluid">
+            
+        </div>
+        </div>
+
+        
+        <div id="dataPrivacyFormHead" class="tab-pane show active fade" align="center">
+            <h3 style="color:white;" align="center"> Data Privacy Agreement & Client Consent Declaration </h3>
+        </div>
+        <div id="dataPrivacyFormBody" class="tab-pane show active fade">
+            <div class="container my-3">
+            <div class="row" >
+                <div class="col-sm-10 offset-sm-1" align="left">
+                    <input type="checkbox" id="dataPrivacy1Checkbox" class="form-check-input ml-1" runat="server"/>
+                    <label class="form-check-label ml-4" for="dataPrivacyCheckbox">I hereby acknowledge that I have read, understand, and agree to the <a href="DataPrivacy.aspx" target="_blank">Data Privacy Policy</a> of Cebuana Lhuillier.</label><br />
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-sm-10 offset-sm-1" align="left">
+                    <input type="checkbox" id="dataPrivacy2Checkbox" class="form-check-input ml-1" runat="server"/>
+                    <label class="form-check-label ml-4" for="dataPrivacyCheckbox">I hereby acknowledge that I have read, understand, and agree to the <a href="https://www.cebuanalhuillier.com/microinsurance" target="_blank">Terms and Conditions</a> relating to insurance coverage and payment of my services.</label><br />
+                </div>
+            </div>
+                </div>
+        </div>
+            
+    
+    <div id="submitFormBody" >
+        <div class="row">
+            <div class="col-sm-10 offset-sm-1" align="center">
+                <div id="main">
+                        <br /><br /><asp:Image ID="captchaImage" runat="server" Style="width:368px;" />
+                        <br />
+                        <asp:LinkButton ID="generateNewCaptcha" runat="server" 
+                            onclick="generateNewCaptcha_Click" Font-Size="Small" Font-Italic="true">Generate new code</asp:LinkButton><br />
+                    <div class="col-md-4 mb-3">
+                        <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server"></input>
+                        </div>
+                        
+                 </div>
+                <div class="col-md-2 mb-3">
+                    <button runat="server" type="submit" class="btn btn-primary btn-block" id="submitBtn" name="submitBtn" text="Submit">Submit</button>  
+                </div>
+            </div>
+        </div>
+    </div>
+        <hr />
+        <footer class="pb-3">
+            <center>
+              <p>© 2020 - Cebuana Lhuillier</p>  
+            </center>
+        </footer>
+  </form>
+</asp:Content>
+<asp:Content ContentPlaceHolderID="ScriptContent" runat="server">
+    <script>
+       function character(e)
+       {
+        isIE = document.all ? 1 : 0
+        keyEntry = !isIE ? e.which : event.keyCode;
+        if (((keyEntry >= '65') && (keyEntry <= '90')) || ((keyEntry >= '97') && (keyEntry <= '122')) || (keyEntry == '46') || (keyEntry == '32') || keyEntry == '45' || keyEntry=='188')
+        return true;
+        else
+        {
+            return false;
+        }
+        }
+
+        function characterAndNumbers(e)
+       {
+        isIE = document.all ? 1 : 0
+        keyEntry = !isIE ? e.which : event.keyCode;
+        if (((keyEntry >= '48') && (keyEntry <= '57')) || ((keyEntry >= '65') && (keyEntry <= '90')) || ((keyEntry >= '97') && (keyEntry <= '122')) || (keyEntry == '46') || (keyEntry == '32') || (keyEntry == '45') || (keyEntry=='188') || (keyEntry=='39'))
+        return true;
+        else
+        {
+            return false;
+        }
+        }
+
+        function emailCheck(e)
+       {
+        isIE = document.all ? 1 : 0
+        keyEntry = !isIE ? e.which : event.keyCode;
+        if (((keyEntry >= '48') && (keyEntry <= '57')) || ((keyEntry >= '64') && (keyEntry <= '90')) || ((keyEntry >= '97') && (keyEntry <= '122')) || (keyEntry == '46') || (keyEntry == '32') || keyEntry == '45') || keyEntry == '186' || keyEntry == '189' || keyEntry == '95') 
+        return true;
+        else
+        {
+            return false;
+        }
+       }
+    </script>
+</asp:Content> 

@@ -1,0 +1,63 @@
+﻿html, body {
+    width: 100%;
+/*    background-image: url('../Images/Background/glass-background-white.png');*/
+    background-size: cover;
+
+}
+
+#voucherForm {
+  
+    width:80%;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    overflow-x: hidden;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba( 0, 38, 62, 0.95 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+#productRegHeader {
+    background-color: #00263E;
+    width: 100%;
+   
+}
+#clibLogo {
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ /*   width: 358px;*/
+}
+
+#productRegContainer{
+    margin-top:50px;
+    margin-left:auto;
+    margin-right:auto;
+    align-items:center;
+    width:100%;
+    height:100%;
+}
+
+#voucherDiv {
+    color: white;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#voucherDivBody {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  /*  width: 100%;*/
+}
+#BodyContent_captchaImage{
+    border-radius:10px;
+    width:100%;
+}

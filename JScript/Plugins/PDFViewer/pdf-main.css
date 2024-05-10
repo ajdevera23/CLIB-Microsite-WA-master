@@ -1,0 +1,40 @@
+body, .bodyContent, #pages {
+    background: #fff;
+    color: #00263E;
+}
+.bodyContent{
+   margin-top:120px;
+}
+#pages {
+    text-align: center;
+}
+.page {
+    width: 80%;
+    padding: 0px;
+    margin: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    animation: pageIn 1s ease;
+    transition: all 1s ease, width 0.2s ease;
+}
+@keyframes pageIn{
+  0%{
+      transform: translateX(-300px);
+      opacity: 0;
+  }
+  100%{
+      transform: translateX(0px);
+      opacity: 1;
+  }
+}
+#zoom-in{
+    
+}
+#zoom-percent{
+    display: inline-block;
+}
+#zoom-percent::after{
+    content: "%";
+}
+#zoom-out{
+    
+}

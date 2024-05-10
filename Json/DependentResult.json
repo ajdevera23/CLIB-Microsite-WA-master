@@ -1,0 +1,20 @@
+{
+  "DependentResult": [
+    {
+      "Relationship": "SPOUSE",
+      "RelationshipCount": 1
+    },
+    {
+      "Relationship": "PARENT",
+      "RelationshipCount": 2
+    },
+    {
+      "Relationship": "CHILDREN",
+      "RelationshipCount": 2
+    },
+    {
+      "Relationship": "SIBLINGS",
+      "RelationshipCount": 2
+    }
+  ]
+}

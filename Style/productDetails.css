@@ -1,0 +1,344 @@
+﻿/** {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+*/
+
+
+.prod_desc {
+    padding-bottom: 30px;
+    color: #00263E;
+    font-size: 18px;
+}
+.product-container {
+    font-size: 16px;
+}
+.product-description {
+    padding-bottom: 30px;
+    font-size: 16px;
+}
+.product-title {
+    margin: auto;
+    padding: 30px;
+    text-align: center;
+    color: #00263E;
+}
+
+.tbl_benefits {
+    width: 80%;
+    margin: auto;
+    font-size: 16px;
+}
+.tbl_benefits tr, td{
+    border: 1px solid #00263E;
+}
+
+.th-header {
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #00263E;
+    border: 1px solid #00263E;
+}
+.th-header td {
+    border: 1px solid #ffffff;
+}
+.text-center{
+    text-align:center;
+}
+.text-left{
+    padding-left:10px;
+}
+.product-table-benefits {
+    padding-bottom: 30px;
+}
+.product-claims {
+    padding-bottom: 100px;
+}
+}
+.product-general-provisions {
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+.product-definitionof-term {
+    padding-bottom: 30px;
+    padding-top:30px;
+}
+.product-exclusions {
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+.footer-tbl {
+    padding: 30px;
+}
+/*
+bottom navigation*/
+
+.navbar-bottom {
+    position: fixed;
+    bottom: 0;
+    left:0;
+    right:0;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    padding: 10px;
+    background: #122C44;
+    border-radius: 30px 30px 0 0;
+    margin: auto;
+    box-shadow: 0 10px 20px 0 #e84c4f66;
+}
+
+.navbar-bottom button {
+
+}
+
+.navbar-bottom button:active:not(.plus) {
+    transform: scale(1.2);
+}
+
+.navbar-bottom button.active {
+    color: #e84c4f;
+}
+
+.navbar-bottom button i {
+    font-size: 1.5rem;
+    pointer-events: none;
+}
+
+    .navbar-bottom button.plus {
+        height: 50px;
+        color: #fff;
+        background: #2E75B6;
+        border-radius: 15px;
+        width: 100%;
+        font-size: 20px;
+        box-shadow: 0 10px 20px 0 #122C44;
+        font-weight: 600;
+        margin: auto;
+        left: 0;
+        right: 0;
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    }
+
+.navbar-bottom button.plus:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.navbar-bottom .effect {
+    position: absolute;
+    width: 60px;
+    height: 50px;
+    border-radius: 18px;
+    background: #122C44;
+    opacity: 0;
+}
+
+/*TRAVEL TABLE*/
+
+/* Styles for the overlay */
+.overlay-modal-travel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    z-index:99999;
+}
+
+/* Styles for the modal */
+.modal-travel {
+    background-color: #E4E6E9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out;
+    position: relative;
+    /* Set a maximum height for the modal */
+    max-height: 80vh; /* You can adjust this value as needed */
+    /* Enable vertical scrolling */
+    overflow-y: auto;
+}
+
+/* Modal animation */
+
+.modal-content {
+    /* Set a maximum height for the content */
+    max-height: 60vh; /* You can adjust this value as needed */
+    /* Enable vertical scrolling for the content */
+    overflow-y: auto;
+    overflow-x:hidden;
+    padding:20px;
+    border-radius:5px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Close button styles */
+.close-btn-travel {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+}
+
+/* Table styles */
+.table-travel {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table-travel th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.table-travel th {
+    background-color: #f2f2f2;
+}
+
+
+
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.btn-a-brc-tp:not(.disabled):not(:disabled).active, .btn-brc-tp, .btn-brc-tp:focus:not(:hover):not(:active):not(.active):not(.dropdown-toggle), .btn-h-brc-tp:hover, .btn.btn-f-brc-tp:focus, .btn.btn-h-brc-tp:hover {
+    border-color: transparent;
+}
+
+.btn-outline-blue {
+    color: #0d6ce1;
+    border-color: #5a9beb;
+    background-color: transparent;
+}
+
+.btn {
+    cursor: pointer;
+    position: relative;
+    z-index: auto;
+    border-radius: .175rem;
+    transition: color .15s,background-color .15s,border-color .15s,box-shadow .15s,opacity .15s;
+}
+
+.border-2 {
+    border-width: 2px !important;
+    border-style: solid !important;
+    border-color: transparent;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.bgc-white {
+    background-color: #fff !important;
+}
+
+
+.text-green-d1 {
+    color: #277b5d !important;
+}
+
+.letter-spacing {
+    letter-spacing: .5px !important;
+}
+
+.font-bolder, .text-600 {
+    font-weight: 600 !important;
+}
+
+.text-170 {
+    font-size: 1.7em !important;
+}
+
+.text-purple-d1 {
+    color: #6d62b5 !important;
+}
+
+.text-primary-d1 {
+    color: #122C44 !important;
+}
+
+.text-secondary-d1 {
+    color: #5f718b !important;
+}
+
+.text-180 {
+    font-size: 1.8em !important;
+}
+
+.text-150 {
+    font-size: 1.5em !important;
+}
+
+.text-danger-m3 {
+    color: #e05858 !important;
+}
+
+.rotate-45 {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.position-l {
+    left: 0;
+}
+
+.position-b, .position-bc, .position-bl, .position-br, .position-center, .position-l, .position-lc, .position-r, .position-rc, .position-t, .position-tc, .position-tl, .position-tr {
+    position: absolute !important;
+    display: block;
+}
+
+.mt-n475, .my-n475 {
+    margin-top: -2.5rem !important;
+}
+
+.ml-35, .mx-35 {
+    margin-left: 1.25rem !important;
+}
+
+.text-dark-l1 {
+    color: #56585e !important;
+}
+
+.text-90 {
+    font-size: .9em !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.mt-25, .my-25 {
+    margin-top: .75rem !important;
+}
+
+.text-110 {
+    font-size: 1.1em !important;
+}
+
+.deleted-text {
+    text-decoration: line-through;
+    ;
+}
+.btn-info{
+    background-color:#00263E;
+}

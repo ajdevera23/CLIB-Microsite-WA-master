@@ -1,0 +1,91 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Dashboard.master.cs" Inherits="Dashboard" %>
+
+<!DOCTYPE html>
+
+<html runat="server">
+<head runat="server">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="icon" href="Images/favicon.png" type="image/gif" sizes="16x16"/>
+    <title>Cebuana Lhuillier Insurance Brokers | Microsite</title>
+    <!--=============== BOOTSRAP 4 ===============-->
+    <link href="<%= ResolveUrl("~/Style/Bootstrap/bootstrap.css") %>"  rel="stylesheet" />
+    <!--=============== DASHBOARD ===============-->
+    <link href="<%= ResolveUrl("~/Style/dashboard.css") %>" rel="stylesheet" />
+     <!--=============== BOXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+     <!--=============== SWEETALERT ===============-->
+    <link href="<%= ResolveUrl("~/Style/sweetalert/sweetalert2.min.css") %>" rel="stylesheet" />
+    <script src="<%= ResolveUrl("~/Scripts/sweetalert/sweetalert2.all.min.js") %>"></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+
+<body runat="server">
+    <div class="container">
+        <div class="bodyContent">   
+            <asp:ContentPlaceHolder ID="bodyContentTitle" runat="server">
+            </asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="bodyContentForm" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </div>
+    <div class="navBar">
+        <div class="row" id="title">
+          <div class="center-logo">
+            <%
+                // Get the value of the query string parameter "PART"
+                string partParam = Request.QueryString["PART"];
+
+                // Define the base URL from the configuration
+                string baseUrl = ConfigurationManager.AppSettings["ProductRegistration"];
+
+                // Define the redirection URL based on the query string parameter "PART" or session partner value
+                string redirectUrl = baseUrl;
+                if (!string.IsNullOrEmpty(partParam))
+                {
+                    // If "PART" parameter is found and not empty, construct the URL based on it
+                    redirectUrl += "?PART=" + Server.UrlEncode(partParam);
+                }
+                else if (Session["PartnerValue"] != null)
+                {
+                    // If session partner value is available, construct the URL based on it
+                    string sessionPartnerValue = Session["PartnerValue"].ToString();
+                    if (sessionPartnerValue == "IQR" || sessionPartnerValue == "EQR" || sessionPartnerValue == "CLIB Microsite")
+                    {
+                        redirectUrl += "?PART=" + Server.UrlEncode(sessionPartnerValue);
+                    }
+                }
+
+                // Render the redirection URL with the image
+            %>
+            <a href="<%= redirectUrl %>"><img id="clibLogo" src="../Images/CLIB.png" /></a>
+
+          </div>
+        </div>
+        <div id="below-title">
+            <div id="navButtons"> 
+                <%--<a href="../Public/Dashboard.aspx" class="nav-link d-inline" >Home</a>
+                <a href="" class="nav-link d-inline"> | </a>
+                <a href="#logout" id="logoutLink"  class="nav-link d-inline" >Logout</a>--%>
+            </div>
+        </div>   
+    </div>
+
+ <script src="<%= ResolveUrl("~/JScript/Jquery/jquery-3.5.1.min.js") %>"></script>
+ <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
+    <%--<script src='https://www.google.com/recaptcha/api.js'></script>--%>
+ <script src="<%= ResolveUrl("~/JScript/upload.js") %>"></script>
+
+    <script>
+        var sessionExpiration = '<%= Session["SessionExpiration"] %>';
+    </script>
+    <script src="<%= ResolveUrl("~/JScript/idleScreenIQR.js") %>"></script>
+
+</body>
+</html>
+
+<script>
+    if (top != self)
+        top.location.href = self.location.href;
+</script>
