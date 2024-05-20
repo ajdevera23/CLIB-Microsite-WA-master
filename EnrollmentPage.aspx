@@ -9,7 +9,6 @@
 <asp:Content ContentPlaceHolderID="partnerLogo" runat="server">
 <%--  <img src="../Images/ProductLogoSample.png" runat="server" id="partnerImage" />--%>
 <div id="partnerImage" runat="server" class="image-container-through-div"></div>
-
 </asp:Content>
 <asp:Content ContentPlaceHolderID="infoForm" runat="server">
    <a href="javascript:" id="return-to-top"><i class="icon-svg" aria-hidden="true">
