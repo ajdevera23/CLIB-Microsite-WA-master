@@ -872,6 +872,9 @@ body {
     }
 }
 
+
+
+
 .plans .plan .plan-content:focus {
     border: 2px solid #216ee0;
     background: #eaf1fe;
@@ -1147,3 +1150,43 @@ label.radio-card .card-content h5 {
     color:#fff;
 }
 
+
+.button-iqreqr {
+    display: inline-block;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .button-iqreqr span {
+        display: block;
+    }
+
+
+@media (max-width: 768px) {
+    .pet-selection {
+        margin-bottom: 15px;
+    }
+
+    .image-radio-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .image-radio-list .aspRadioButtonList {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .image-radio-list label, .image-radio-list img {
+            display: block;
+            margin: 0 auto;
+        }
+}

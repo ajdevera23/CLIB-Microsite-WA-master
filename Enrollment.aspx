@@ -698,7 +698,7 @@
               <i class="fas fa-angle-right"></i>
             </button>
             <div class="accordion-body active">
-               <div class="row">
+               <%--<div class="row">
                     <div class="col-md-8 pet-selection">
                          <span class="text-required">&nbsp;&nbsp;*</span><label> Select Type of Pet</label><br />
                         <div class="d-flex align-items-center justify-content-center">
@@ -729,7 +729,38 @@
                         </asp:RadioButtonList>
                     </div>
                </div>
-               </div>
+               </div>--%>
+
+                    <div class="row">
+        <div class="col-md-8 col-12 pet-selection">
+            <span class="text-required">&nbsp;&nbsp;*</span><label> Select Type of Pet</label><br />
+            <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
+                <asp:RadioButtonList ID="fld_PetCategory" runat="server" CssClass="image-radio-list" RepeatDirection="Horizontal" RepeatLayout="Table">
+                    <asp:ListItem Value="Cat">
+                        <div style="text-align:center;">
+                            <label style="margin-left:10px">Cat</label>
+                            <img src="/Images/pet/cat-icon.png" class="pet-image" alt="Cat" /><br />
+                        </div>
+                    </asp:ListItem>
+                    <asp:ListItem Value="Dog">
+                        <div style="text-align:center;">
+                            <label style="margin-left:10px">Dog</label>
+                            <img src="/Images/pet/dog-icon.png" class="pet-image" alt="Dog" /><br />
+                        </div>
+                    </asp:ListItem>
+                </asp:RadioButtonList>
+            </div>
+        </div>
+        <div class="col-md-3 col-12 pet-selection">
+            <span class="text-required">&nbsp;&nbsp;*</span><label>Select Pet Gender:</label><br /><br />
+            <div class="d-flex align-items-center justify-content-center">
+                <asp:RadioButtonList ID="fld_Gender" runat="server" RepeatDirection="Vertical">
+                    <asp:ListItem Text="&nbsp; &nbsp;Male" Value="M" />
+                    <asp:ListItem Text="&nbsp; &nbsp;Female" Value="F" />
+                </asp:RadioButtonList>
+            </div>
+        </div>
+    </div>
           
             <div class="row">
                 <div class="col-md-3 mb-3" align="left">
