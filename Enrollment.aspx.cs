@@ -220,7 +220,7 @@ public partial class Enrollment : System.Web.UI.Page
     {
         try
         {
-            firstName.Value = Session["firstName"].ToString();
+           firstName.Value = Session["firstName"].ToString();
             middleName.Value = Session["middleName"].ToString();
             lastName.Value = Session["lastName"].ToString();
             suffix.Value = Session["suffix"].ToString();

@@ -40,7 +40,6 @@
         </asp:ContentPlaceHolder>
             
    </div>
-     <script src='  '></script>
       <script src="<%= ResolveUrl("~/JScript/Jquery/jquery-3.5.1.min.js") %>"></script>
       <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
       <script src="<%= ResolveUrl("~/JScript/productRegistration.js") %>"></script>
@@ -52,6 +51,6 @@
 </body>
 </html>
 <script>
-   if (top!=self)
-      top.location.href=self.location.href;
+    if (top != self)
+        top.location.href = self.location.href;
 </script>
