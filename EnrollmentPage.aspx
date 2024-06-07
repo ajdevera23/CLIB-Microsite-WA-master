@@ -17,7 +17,6 @@
     <path fill="currentColor" d="M12 8.293 6.354 14.354a.5.5 0 0 1-.708-.708l6-6a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L12 8.293z" />
   </svg>
 </i></a>
-    <p>TESTING</p>
     <form id="enrollmentForm" class="body-content container-enrollment" autocomplete="off" runat="server">
     <div class="accordion">
       <div class="accordion-item">
