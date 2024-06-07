@@ -58,6 +58,7 @@
                   <asp:TextBox runat="server" class="form-control" onkeypress="return text_changed(this);" onchange="this.onkeypress();" oninput="this.onkeypress();" onpaste="return false" type="date" ID="birthDateTextBox" ReadOnly="true"></asp:TextBox>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
