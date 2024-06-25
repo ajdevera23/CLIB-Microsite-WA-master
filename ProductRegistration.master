@@ -41,7 +41,7 @@
         </asp:ContentPlaceHolder>
             
    </div>
-      <script src="<%= ResolveUrl("~/JScript/Jquery/jquery-3.5.1.min.js") %>"></script>
+      <script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>
       <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
       <script src="<%= ResolveUrl("~/JScript/productRegistration.js") %>"></script>
 
@@ -49,6 +49,11 @@
         
     </asp:ContentPlaceHolder>
 
+    <script>
+        if (typeof jQuery !== 'undefined') {
+            jQuery.fn.jquery = undefined;
+        }
+    </script>
 </body>
 </html>
 <script>
