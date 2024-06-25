@@ -579,7 +579,7 @@
 
 
 
-  const VERSION = '5.0.0';
+  const VERSION = 'undefined';
 
   class BaseComponent {
     constructor(element) {
