@@ -54,7 +54,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
     PurchaseResult purchaseResult = new PurchaseResult();
 
     Nationality Nationality = new Nationality();
-   
+
 
     private SelectionListRequest selectionlistrequest = new SelectionListRequest();
     private SelectionResult selectionlistresult = new SelectionResult();
@@ -77,7 +77,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+
         Response.Cache.SetCacheability(HttpCacheability.NoCache);
         Response.Cache.SetNoStore();
 
@@ -89,7 +89,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            
+
             generateCaptcha();
             postload();
 
@@ -109,7 +109,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
                 GetNationalities();
                 GetListNatureOfWork();
             }
-            if(Session["categoryCode"].ToString() == "PRI")
+            if (Session["categoryCode"].ToString() == "PRI")
             {
                 FirePropertyField();
             }
@@ -273,7 +273,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
         #endregion
 
 
-     
+
     }
     #endregion
 
@@ -300,7 +300,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
         birthDateTextBox.Text = Session["DateOfBirth"].ToString();
     }
     #endregion
-   
+
     #region FIRE PROPERTY FIELD
     public void FirePropertyField()
     {
@@ -335,7 +335,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
 
     #region SubmitBtn_Click
     protected void SubmitBtn_Click(object sender, EventArgs e)
-     {
+    {
         try
         {
             if (WebCaptcha.IsCaptchaCorrect(captchaText.Value.Trim(), HttpContext.Current))
@@ -684,59 +684,59 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
         #region SAVING CLIENT INFORMATION
 
         #region CLIENT KYC INITIALIZATION
-                string birthdate = "";
-                string guardianbirthdate = "";
-                string guardianrelationship = "";
-                string beneficiaryrelationship = "";
-                string natureofwork = "";
-                string bodyOfWaterDistanceText = fld_BodyOfWaterDistance.Text.Trim();
-                string floorAreaText = fld_FloorArea.Text.Trim();
-                string noOfStoreysText = fld_NoOfStoreys.Text.Trim();
-                string propertyAgeText = fld_PropertyAge.Text.Trim();
+        string birthdate = "";
+        string guardianbirthdate = "";
+        string guardianrelationship = "";
+        string beneficiaryrelationship = "";
+        string natureofwork = "";
+        string bodyOfWaterDistanceText = fld_BodyOfWaterDistance.Text.Trim();
+        string floorAreaText = fld_FloorArea.Text.Trim();
+        string noOfStoreysText = fld_NoOfStoreys.Text.Trim();
+        string propertyAgeText = fld_PropertyAge.Text.Trim();
 
-                Session["ProductName"].ToString();
+        Session["ProductName"].ToString();
 
-                #region ISMINOR
+        #region ISMINOR
 
-                if (Session["IsMinor"].ToString() == "True" && Session["categoryCode"].ToString() != "PRI")
-                        {
-                            guardianbirthdate = DateTime.Parse(guardianBirthDate.Text.Trim()).ToString("MM/dd/yyyy");
-                            guardianrelationship = guardianRelationshipDropDownList.SelectedValue.Trim();
-                        }
-                        else
-                        {
-                            if (guardianRelationshipDropDownList.SelectedValue == "Select")
-                            {
-                                guardianrelationship = null;
-                            }
+        if (Session["IsMinor"].ToString() == "True" && Session["categoryCode"].ToString() != "PRI")
+        {
+            guardianbirthdate = DateTime.Parse(guardianBirthDate.Text.Trim()).ToString("MM/dd/yyyy");
+            guardianrelationship = guardianRelationshipDropDownList.SelectedValue.Trim();
+        }
+        else
+        {
+            if (guardianRelationshipDropDownList.SelectedValue == "Select")
+            {
+                guardianrelationship = null;
+            }
 
-                            guardianBirthDate.Text = "";
-                        }
-                #endregion
+            guardianBirthDate.Text = "";
+        }
+        #endregion
 
-                #region NATURE OF WORK
-                if (fld_NatureOfWork.SelectedValue == "Select")
-                {
-                    natureofwork = null;
-                }
-                else
-                {
-                    natureofwork = fld_NatureOfWork.SelectedValue.ToString();
-                }
-                #endregion
+        #region NATURE OF WORK
+        if (fld_NatureOfWork.SelectedValue == "Select")
+        {
+            natureofwork = null;
+        }
+        else
+        {
+            natureofwork = fld_NatureOfWork.SelectedValue.ToString();
+        }
+        #endregion
 
-                #region RELATIONSHIP EMPTY STRING
-                if (relationshipDropDownList.SelectedValue == "Select")
-                    {
-                        beneficiaryrelationship = null;
-                    }
-                    else
-                    {
-                        beneficiaryrelationship = relationshipDropDownList.SelectedValue.ToString();
-                    }
+        #region RELATIONSHIP EMPTY STRING
+        if (relationshipDropDownList.SelectedValue == "Select")
+        {
+            beneficiaryrelationship = null;
+        }
+        else
+        {
+            beneficiaryrelationship = relationshipDropDownList.SelectedValue.ToString();
+        }
 
-                    birthdate = DateTime.Parse(birthDateTextBox.Text.Trim()).ToString("MM/dd/yyyy");
-                #endregion
+        birthdate = DateTime.Parse(birthDateTextBox.Text.Trim()).ToString("MM/dd/yyyy");
+        #endregion
         #endregion
 
 
@@ -1280,13 +1280,13 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
         SelectionRequestMethod();
         selectionlistrequest.DefinitionId = 24;
         var returnValue = getList.IMSSelectionList(selectionlistrequest);
-        DD_TypeExteriorWalls.Items.Clear(); 
+        DD_TypeExteriorWalls.Items.Clear();
         DD_TypeExteriorWalls.Items.Insert(0, new ListItem("Select", "Select"));
         foreach (var item in returnValue.Result)
         {
             DD_TypeExteriorWalls.Items.Add(new ListItem(item.DisplayText, item.DisplayText));
         }
-   
+
         DD_TypeExteriorWalls.DataBind();
     }
     private string GetTypeExteriorWallsSelectedValue()
@@ -1544,7 +1544,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
     #region GET PROVINCE
     public void GetListProvince()
     {
- 
+
         token.Token = generateToken.GenerateTokenAuth();
         IList<string> provList;
         provList = getList.GetListProvince(token);
@@ -1924,7 +1924,7 @@ public partial class EnrollmentPage2 : System.Web.UI.Page
     {
         GetListCity(DDProvince.SelectedValue);
         UpdatePanel1.Update();
-        
+
     }
     protected void PDDLProvince_SelectedIndexChanged(object sender, EventArgs e)
     {
