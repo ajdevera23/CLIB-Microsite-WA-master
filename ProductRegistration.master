@@ -23,8 +23,9 @@
         <div class="hr-row">
             <div class="col-lg-12" style="align-content:center">
                 <center>
-                <img src="../Images/CLIB.png" id="clibLogo" />
-                    </center>
+<img src="../Images/CLIB.png" id="clibLogo" alt="CLIB LOGO"/>
+
+                </center>
             </div>
        </div>
        <%-- </center>--%>

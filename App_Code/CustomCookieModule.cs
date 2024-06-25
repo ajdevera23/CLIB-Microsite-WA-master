@@ -1,31 +1,45 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
 public class CustomCookieModule : IHttpModule
 {
+
     public void Init(HttpApplication context)
     {
         context.BeginRequest += OnBeginRequest;
-        context.EndRequest += OnEndRequest;
+        //context.EndRequest += OnEndRequest;
     }
 
     private void OnBeginRequest(object sender, EventArgs e)
     {
         HttpApplication application = (HttpApplication)sender;
         HttpContext context = application.Context;
-
         HttpCookie existingCookie = context.Request.Cookies["MyCookie"];
-        if (existingCookie == null)
+
+        if (existingCookie == null )
         {
-            SetCookieWithoutSameSite(context.Response, "MyCookie", "MyValue", DateTime.Now.AddHours(1));
+            string sessionId = GenerateSecureSessionID();
+            SetCookieWithoutSameSite(context.Response, "CLIB_Cookies", sessionId, DateTime.Now.AddHours(1), true, true, "Lax");
         }
 
-        if (!IsWebResource(context.Request.Url.AbsolutePath))
+        //if (!IsWebResource(context.Request.Url.AbsolutePath))
+        //{
+        //    InjectScript(context);
+        //}
+    }
+
+    public static string GenerateSecureSessionID()
+    {
+     
+        byte[] sessionIdBytes = new byte[32];
+        using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
         {
-            InjectScript(context);
+            rng.GetBytes(sessionIdBytes);
         }
+        return BitConverter.ToString(sessionIdBytes).Replace("-", "").ToLower();
     }
 
     private void SetCookieWithoutSameSite(HttpResponse response, string key, string value, DateTime? expires = null, bool secure = true, bool httpOnly = true, string sameSite = "Lax")

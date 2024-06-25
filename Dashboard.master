@@ -59,7 +59,7 @@
 
                 // Render the redirection URL with the image
             %>
-            <a href="<%= redirectUrl %>"><img id="clibLogo" src="../Images/CLIB.png" /></a>
+            <a href="<%= redirectUrl %>"><img id="clibLogo" src="/Images/CLIB.png" alt="CLIB LOGO"/></a>
 
           </div>
         </div>
