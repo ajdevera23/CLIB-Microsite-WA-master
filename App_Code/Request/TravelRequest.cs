@@ -19,6 +19,7 @@ public class TravelRequest : BaseRequest
     public int TravelDurationDays { get; set; }
     public string TravelDurationFrom { get; set; }
     public string TravelDurationTo { get; set; }
+    public string TravelOrigin { get; set; }
     public string VisaType { get; set; }
     public string SecondaryProductCode { get; set; }
 }

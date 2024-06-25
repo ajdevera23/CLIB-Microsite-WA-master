@@ -15,7 +15,7 @@
                 <div class="col-12 col-md-4" >
                     <%--<asp:TextBox ID="voucherCode" Text=" " class="form-control voucherInput" MaxLength="20"  runat="server" TextMode="SingleLine" />--%>
    
-                    <input type="text" class="form-control" id="voucherCode" name="voucherCode"  placeholder="Please enter your voucher code here" maxlength="20" min="12" runat="server" style="text-align:center;" />
+                    <input type="text" class="form-control" id="voucherCode" name="voucherCode"  placeholder="Please enter your voucher code here" maxlength="21" min="12" runat="server" style="text-align:center;" />
                     <div id="main">
                         <br />
                         <asp:Image ID="captchaImage" runat="server" Style="width:80%;" />
@@ -45,7 +45,7 @@
             <center>
               <p>© 2020 - Cebuana Lhuillier</p>  
             </center>
-        </footer>
+    </footer>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="ScriptContent" runat="server">    <%--<script type="text/javascript">
         $(document).ready(function (){
