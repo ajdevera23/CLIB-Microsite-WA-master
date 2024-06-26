@@ -462,13 +462,13 @@ public partial class ClientReferral : System.Web.UI.Page
             {
                 if (getList.CheckIfADCClientExists(token) == true)
                 {
-                    VisibleInput();
                     ValidateRetrieveDetailsPerADCCLient();
 
                     bool checkClientReferralAgingValidation = getList.ClientReferralAgingValidation(token);
                     //if Existing Client
                     if (checkClientReferralAgingValidation == true)
                     {
+                        VisibleInput();
                         //Existing Client with more than 90 days aging of client referral tran number (Action: Update Entry, Generate New Reference Number)
                         //Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Client already exists with 91 days lapsed.')", true);
 
@@ -534,7 +534,6 @@ public partial class ClientReferral : System.Web.UI.Page
                 //if Existing Client
                 if (getList.CheckIfADCClientExists(token) == true)
                 {
-                    VisibleInput();
                     ValidateRetrieveDetailsPerADCCLient();
 
                     bool checkClientReferralAgingValidation = getList.ClientReferralAgingValidation(token);
@@ -542,7 +541,8 @@ public partial class ClientReferral : System.Web.UI.Page
                     //Existing Client with more than 90 days aging of client referral tran number (Action: Update Entry, Generate New Reference Number)
                     if (checkClientReferralAgingValidation == true)
                     {
-                   
+                        VisibleInput();
+
                         //Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Client already exists with 91 days lapsed.')", true);
                         individualPnl.Visible = true;
                         otherDetailsPnl.Visible = true;
