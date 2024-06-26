@@ -91,7 +91,7 @@
 <div class="row gutters-xs">
 <div class="col-12 col-lg-6">
 <div class="form-floating mb-3">
-    <input runat="server" placeholder="Address or Zipcode" id="rtnLbl" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
+    <input runat="server" placeholder="Referral Transaction Number:" id="rtnLbl" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
     <label for="s_address">Referral Transaction Number:</label>
 </div>
 </div>
@@ -150,11 +150,11 @@
  <% } %> 
 <asp:Panel ID="groupPnl" runat="server">
 <div class="form-floating mb-3">
-<input type="text" id="fld_GroupName" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="25" minlength="2" required="required" />
+<input type="text" id="fld_GroupName" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="100" minlength="1" required="required" />
 <label for="s_address"> Group / Business Name:</label>
 </div>
 <div class="form-floating mb-3">
-<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="25" minlength="2" required="required" />
+<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="100" minlength="1" required="required" />
 <label for="s_address">  Contact Person Designation:</label>
 </div>
 
@@ -185,7 +185,7 @@
     <label for="s_address"> <span class="text-required">* Cellphone Number:</span></label>
 </div>
 <div class="form-floating mb-3">
-     <input type="text" placeholder="* Address Building / Street Name:" id="fld_Address" class="form-control" onpaste="return false" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="120" minlength="2"/>
+     <input type="text" placeholder="* Address Building / Street Name:" id="fld_Address" class="form-control" onpaste="return false" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="120" minlength="10"/>
     <label for="s_address"> <span class="text-required">* Address Building / Street Name:</span></label>
 </div>
 <div class="form-floating mb-3">
@@ -197,17 +197,17 @@
     <label for="DDcity"><span class="text-required">* City:</span></label>
 </div>
 <div class="form-floating mb-3">
-     <input type="text" placeholder="* Zip Code:"  id="ZipCode" class="form-control" onpaste="return false" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="5" />
+     <input type="text" placeholder="* Zip Code:"  id="ZipCode" class="form-control" onpaste="return false" runat="server" onkeypress="return characterAndNumbers(event)" maxlength="4" />
     <label for="s_address"> <span class="text-required">* Zip Code:</span></label>
 </div>
 
 <div class="form-floating mb-3">
- <input type="text" placeholder="* Interested with following products:"  id="fld_Interests" class="form-control" maxlength="250" minlength="5" runat="server" />
+ <input type="text" placeholder="* Interested with following products:"  id="fld_Interests" class="form-control" maxlength="250" minlength="1" runat="server" />
     <label for="s_address"> <span class="text-required">* Interested with following products:</span></label>
 </div>
 
 <div class="form-floating mb-3">
-       <input type="text" placeholder="* Preferred appointment time and Notes:"  id="fld_Appointments" class="form-control" maxlength="250" minlength="5" runat="server" />
+       <input type="text" placeholder="* Preferred appointment time and Notes:"  id="fld_Appointments" class="form-control" maxlength="250" minlength="1" runat="server" />
     <label for="s_address"> <span class="text-required">* Preferred appointment time and Notes:</span></label>
 </div>
 
@@ -494,9 +494,6 @@
         });
 
 
-        //function saveFileMetaData(fileName) {
-        //    localStorage.setItem('uploadedFileName', fileName);
-        //}
 
     </script>
 

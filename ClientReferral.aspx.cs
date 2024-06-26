@@ -44,16 +44,11 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         if (IsPostBack)
         {
-            //LoadFileFromLocalStorage();
 
-
-            // Postback, retain the file name
             string fileName = HiddenFileName.Value;
             if (!string.IsNullOrEmpty(fileName))
             {
                 fileLabelText.InnerText = fileName;
-                string script = String.Format("saveFileMetaData('{0}');", PhotoUpload.FileName);
-                ScriptManager.RegisterStartupScript(this, GetType(), "saveFileMetaData", script, true);
             }
             else
             {
@@ -117,23 +112,6 @@ public partial class ClientReferral : System.Web.UI.Page
     }
 
     #endregion
-
-
-    //private void LoadFileFromLocalStorage()
-    //{
-    //    // This script will check local storage and set the label text if file metadata is found
-    //    string script = String.Format(@"
-    //    <script type='text/javascript'>
-    //        window.onload = function() {{
-    //            var fileName = localStorage.getItem('uploadedFileName');
-    //            if (fileName) {{
-    //                document.getElementById('{0}').innerText = fileName;
-    //            }}
-    //        }};
-    //    </script>", lblImageName.ClientID);
-
-    //    ClientScript.RegisterStartupScript(this.GetType(), "loadFileFromLocalStorage", script);
-    //}
 
     #region CALL CLIENT REFERRAL METHOD
     public void CallMethodClientReferral()
@@ -504,9 +482,29 @@ public partial class ClientReferral : System.Web.UI.Page
                         cellphoneNo.Value = retrieveIndividualRecord.ContactNumber;
                         emailAddress.Value = retrieveIndividualRecord.Email;
                         fld_Address.Value = retrieveIndividualRecord.Address;
-                        DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+
+                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province) != null)
+                        {
+                            DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+                        }
+                        else
+                        {
+                            DDProvince.SelectedValue = "Select";
+                        }
+
                         GetListCity(retrieveIndividualRecord.Province);
-                        DDcity.SelectedValue = retrieveIndividualRecord.City;
+
+                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City) != null)
+                        {
+
+                            DDcity.SelectedValue = retrieveIndividualRecord.City;
+                        }
+                        else
+                        {
+                            DDcity.SelectedValue = "Select";
+                        }
+
+
                         ZipCode.Value = retrieveIndividualRecord.ZipCode;
                         fld_Interests.Value = retrieveIndividualRecord.Interests;
                         fld_Appointments.Value = retrieveIndividualRecord.Appointments;
@@ -559,9 +557,28 @@ public partial class ClientReferral : System.Web.UI.Page
                         cellphoneNo.Value = retrieveIndividualRecord.ContactNumber;
                         emailAddress.Value = retrieveIndividualRecord.Email;
                         fld_Address.Value = retrieveIndividualRecord.Address;
-                        DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+
+                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province) != null)
+                        {
+                            DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+                        }
+                        else
+                        {
+                            DDProvince.SelectedValue = "Select";
+                        }
+
                         GetListCity(retrieveIndividualRecord.Province);
-                        DDcity.SelectedValue = retrieveIndividualRecord.City;
+
+                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City) != null)
+                        {
+
+                            DDcity.SelectedValue = retrieveIndividualRecord.City;
+                        }
+                        else
+                        {
+                            DDcity.SelectedValue = "Select";
+                        }
+
                         ZipCode.Value = retrieveIndividualRecord.ZipCode;
                         fld_Interests.Value = retrieveIndividualRecord.Interests;
                         fld_Appointments.Value = retrieveIndividualRecord.Appointments;
@@ -790,7 +807,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
                             agentReferralRequest.Token = generateToken.GenerateTokenAuth();
                             agentReferralRequest.ADCCity = DDcity.SelectedValue.ToString();
-                            agentReferralRequest.ADCCity = fld_Address.Value.ToString();
+                            agentReferralRequest.ADCEmailAddress = emailAddress.Value.ToString();
                             agentReferralRequest.ADCMobileNumber = cellphoneNo.Value.ToString();
 
                             //PhotoSaving
@@ -826,9 +843,17 @@ public partial class ClientReferral : System.Web.UI.Page
                             var returnValue = getList.IQRSaveClientReferral(agentReferralRequest);
                             string message = returnValue.Message;
 
-                            if (returnValue.Message == "Transaction Successful")
+                            if (returnValue.Message == "Client Referral Data Saved successfully")
                             {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire('Transaction Successfully Created');window.location = 'ClientReferral.aspx';", true);
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", @"
+                                            Swal.fire({
+                                                title: 'Transaction Successfully Created',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                            }).then(() => {
+                                                window.location = 'ClientReferral.aspx';
+                                            });
+                                        ", true);
 
                                 Session["FileUpload1"] = null;
                                 HiddenFileName.Value = null;
@@ -865,7 +890,7 @@ public partial class ClientReferral : System.Web.UI.Page
             else
             {
                 strMessage = "Photo is required.";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "setTimeout(function() { Swal.fire(`" + strMessage + "`); }, 5000);", true);
                 lblImageName.Visible = false;
                 HiddenFileName.Value = null;
                 Session["FileUpload1"] = null;
@@ -999,7 +1024,15 @@ public partial class ClientReferral : System.Web.UI.Page
                             TokenRequest clientReferralTran;
                             clientReferralTran = getList.ClientReferralTran(token);
 
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire('Transaction Successfully Created');window.location = 'ClientReferral.aspx';", true);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", @"
+                                            Swal.fire({
+                                                title: 'Transaction Successfully Created',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                            }).then(() => {
+                                                window.location = 'ClientReferral.aspx';
+                                            });
+                                        ", true);
 
                             Session["FileUpload1"] = null;
                             HiddenFileName.Value = null;
@@ -1079,7 +1112,16 @@ public partial class ClientReferral : System.Web.UI.Page
             TokenRequest clientReferralTran;
             clientReferralTran = getList.ClientReferralTran(token);
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire('Transaction Successfully Created');window.location = 'ClientReferral.aspx';", true);
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", @"
+                                            Swal.fire({
+                                                title: 'Transaction Successfully Created',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                            }).then(() => {
+                                                window.location = 'ClientReferral.aspx';
+                                            });
+                                        ", true);
         }
     }
 
@@ -1168,8 +1210,15 @@ public partial class ClientReferral : System.Web.UI.Page
 
 
 
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire('Transaction Successfully Created');window.location = 'ClientReferral.aspx';", true);
-
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", @"
+                                            Swal.fire({
+                                                title: 'Transaction Successfully Created',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                            }).then(() => {
+                                                window.location = 'ClientReferral.aspx';
+                                            });
+                                        ", true);
 
                             Session["FileUpload1"] = null;
                             HiddenFileName.Value = null;
@@ -1253,8 +1302,15 @@ public partial class ClientReferral : System.Web.UI.Page
             TokenRequest clientReferralTran;
             clientReferralTran = getList.ClientReferralTran(token);
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire('Transaction Successfully Created');window.location = 'ClientReferral.aspx';", true);
-
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", @"
+                                            Swal.fire({
+                                                title: 'Transaction Successfully Created',
+                                                showConfirmButton: false,
+                                                timer: 5000
+                                            }).then(() => {
+                                                window.location = 'ClientReferral.aspx';
+                                            });
+                                        ", true);
         }
     }
 
