@@ -462,6 +462,7 @@ public partial class ClientReferral : System.Web.UI.Page
             {
                 if (getList.CheckIfADCClientExists(token) == true)
                 {
+                    VisibleInput();
                     ValidateRetrieveDetailsPerADCCLient();
 
                     bool checkClientReferralAgingValidation = getList.ClientReferralAgingValidation(token);
@@ -483,9 +484,9 @@ public partial class ClientReferral : System.Web.UI.Page
                         emailAddress.Value = retrieveIndividualRecord.Email;
                         fld_Address.Value = retrieveIndividualRecord.Address;
 
-                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province) != null)
+                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province.ToUpper()) != null)
                         {
-                            DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+                            DDProvince.SelectedValue = retrieveIndividualRecord.Province.ToUpper();
                         }
                         else
                         {
@@ -494,10 +495,10 @@ public partial class ClientReferral : System.Web.UI.Page
 
                         GetListCity(retrieveIndividualRecord.Province);
 
-                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City) != null)
+                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City.ToUpper()) != null)
                         {
 
-                            DDcity.SelectedValue = retrieveIndividualRecord.City;
+                            DDcity.SelectedValue = retrieveIndividualRecord.City.ToUpper();
                         }
                         else
                         {
@@ -508,13 +509,8 @@ public partial class ClientReferral : System.Web.UI.Page
                         ZipCode.Value = retrieveIndividualRecord.ZipCode;
                         fld_Interests.Value = retrieveIndividualRecord.Interests;
                         fld_Appointments.Value = retrieveIndividualRecord.Appointments;
-                        PhotoUpload.Visible = false;
-                        photoTR.Visible = false;
-                        btnSave.Visible = true;
-                        groupRbtn.Checked = true;
-                        FirstName.Disabled = true;
-                        LastName.Disabled = true;
-                        birthDateTextBox.Disabled = true;
+
+
                     }
                     //Existing Client with less than 90 days aging of client referral tran number Action: No Action Needed. Collapse all panel)
                     else if (checkClientReferralAgingValidation == false)
@@ -538,6 +534,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 //if Existing Client
                 if (getList.CheckIfADCClientExists(token) == true)
                 {
+                    VisibleInput();
                     ValidateRetrieveDetailsPerADCCLient();
 
                     bool checkClientReferralAgingValidation = getList.ClientReferralAgingValidation(token);
@@ -545,6 +542,7 @@ public partial class ClientReferral : System.Web.UI.Page
                     //Existing Client with more than 90 days aging of client referral tran number (Action: Update Entry, Generate New Reference Number)
                     if (checkClientReferralAgingValidation == true)
                     {
+                   
                         //Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Client already exists with 91 days lapsed.')", true);
                         individualPnl.Visible = true;
                         otherDetailsPnl.Visible = true;
@@ -558,9 +556,9 @@ public partial class ClientReferral : System.Web.UI.Page
                         emailAddress.Value = retrieveIndividualRecord.Email;
                         fld_Address.Value = retrieveIndividualRecord.Address;
 
-                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province) != null)
+                        if (DDProvince.Items.FindByValue(retrieveIndividualRecord.Province.ToUpper()) != null)
                         {
-                            DDProvince.SelectedValue = retrieveIndividualRecord.Province;
+                            DDProvince.SelectedValue = retrieveIndividualRecord.Province.ToUpper();
                         }
                         else
                         {
@@ -569,10 +567,10 @@ public partial class ClientReferral : System.Web.UI.Page
 
                         GetListCity(retrieveIndividualRecord.Province);
 
-                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City) != null)
+                        if (DDcity.Items.FindByValue(retrieveIndividualRecord.City.ToUpper()) != null)
                         {
 
-                            DDcity.SelectedValue = retrieveIndividualRecord.City;
+                            DDcity.SelectedValue = retrieveIndividualRecord.City.ToUpper();
                         }
                         else
                         {
@@ -583,14 +581,6 @@ public partial class ClientReferral : System.Web.UI.Page
                         fld_Interests.Value = retrieveIndividualRecord.Interests;
                         fld_Appointments.Value = retrieveIndividualRecord.Appointments;
 
-
-                        PhotoUpload.Visible = false;
-                        photoTR.Visible = false;
-                        btnSave.Visible = true;
-                        individualRbtn.Checked = true;
-                        FirstName.Disabled = true;
-                        LastName.Disabled = true;
-                        birthDateTextBox.Disabled = true;
                     }
                     //Existing Client with less than 90 days aging of client referral tran number Action: No Action Needed. Collapse all panel)
                     else if (checkClientReferralAgingValidation == false)
