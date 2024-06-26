@@ -14,18 +14,22 @@ public class CustomCookieModule : IHttpModule
     {
         HttpApplication application = (HttpApplication)sender;
         HttpContext context = application.Context;
-        HttpCookie existingCookie = context.Request.Cookies["MyCookie"];
+        HttpCookie aspSessionId = context.Request.Cookies["ASP.NET_SessionId"];
 
-        if (existingCookie == null )
+        if (aspSessionId != null)
+        {
+            SetCookieWithoutSameSite(context.Response, "ASP.NET_SessionId", aspSessionId.Value, DateTime.Now.AddHours(1), true, true, "None");
+        }
+        else
         {
             string sessionId = GenerateSecureSessionID();
-            SetCookieWithoutSameSite(context.Response, "CLIB_Cookies", sessionId, DateTime.Now.AddHours(1), true, true, "Lax");
+            SetCookieWithoutSameSite(context.Response, "ASP.NET_SessionId", sessionId, DateTime.Now.AddHours(1), true, true, "None");
         }
     }
 
     public static string GenerateSecureSessionID()
     {
-     
+
         byte[] sessionIdBytes = new byte[32];
         using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
         {
