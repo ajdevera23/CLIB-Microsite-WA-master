@@ -1,13 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/ClientReferral.master" AutoEventWireup="true" CodeFile="ClientReferral.aspx.cs" Inherits="ClientReferral" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Header" ContentPlaceHolderID="HeaderContent" runat="Server">
-        <link href="Style/clientReferral.css" rel="stylesheet" />
-    <link href="JScript/Plugins/Referral/bootstrap.min.css" rel="stylesheet" />
+
 </asp:Content>
 <asp:Content ID="ClientReferralPageMain" ContentPlaceHolderID="BodyContent" runat="server">
 <div class="main-container">
     <form id="adcForm" runat="server">
-
 <%-- <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
  <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
  <ContentTemplate>--%>
@@ -295,8 +293,32 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="ScriptContent" runat="Server">
-    <script src="JScript/Plugins/Referral/bootstrap.bundle.min.js"></script>
     <script>
+        //-------------------------------- PREVENT FOR INSPECT ELEMENT AND FUNCTION F12 --------------------///
+        $(document).bind("contextmenu", function (e) {
+            e.preventDefault();
+        });
+        $(document).keydown(function (e) {
+            if (e.which === 123) {
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (event.keyCode == 123) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        }
 
 
         $(document).ready(function () {
@@ -492,9 +514,6 @@
                 });
             });
         });
-
-
-
     </script>
 
 

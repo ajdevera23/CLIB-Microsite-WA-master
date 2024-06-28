@@ -314,6 +314,9 @@ public partial class ClientReferral : System.Web.UI.Page
             emailAddress.Focus();
             photoTR.Visible = true;
             individualPnl.Visible = true;
+            FirstName.Attributes.Add("disabled", "disabled");
+            LastName.Attributes.Add("disabled", "disabled");
+            birthDateTextBox.Attributes.Add("disabled", "disabled");
             otherDetailsPnl.Visible = true;
             dpaPnl.Visible = true;
             btnSave.Visible = true;
@@ -784,8 +787,8 @@ public partial class ClientReferral : System.Web.UI.Page
                         strMessage = "File name is too long. File name should NOT be more than 50 characters ";
                         strMessage += "(including spaces and file extension).";
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
-                        Session["FileUpload1"] = null;
-                        HiddenFileName.Value = null;
+
+                        clearphotoupload();
                     }
                     else
                     {
@@ -845,13 +848,12 @@ public partial class ClientReferral : System.Web.UI.Page
                                             });
                                         ", true);
 
-                                Session["FileUpload1"] = null;
-                                HiddenFileName.Value = null;
-                                lblImageName.Visible = false;
+                                clearphotoupload();
                             }
                             else
                             {
                                 Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
+                                clearphotoupload();
                                 return;
                             }
                         }
@@ -859,10 +861,7 @@ public partial class ClientReferral : System.Web.UI.Page
                         {
                             strMessage = "Allowed attachment file size is up to 3MB per file.";
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
-
-                            Session["FileUpload1"] = null;
-                            HiddenFileName.Value = null;
-                            lblImageName.Visible = false;
+                            clearphotoupload();
                         }
                     }
                 }
@@ -870,33 +869,37 @@ public partial class ClientReferral : System.Web.UI.Page
                 {
                     strMessage = @"Invalid file format. Allowed formats are as follows: \n";
                     strMessage += "1. Image (*.jpg, *.jpeg)";
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
-
-                    lblImageName.Visible = false;
-                    HiddenFileName.Value = null;
-                    Session["FileUpload1"] = null;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`);", true);
+                    clearphotoupload();
                 }
             }
             else
             {
                 strMessage = "Photo is required.";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "setTimeout(function() { Swal.fire(`" + strMessage + "`); }, 5000);", true);
-                lblImageName.Visible = false;
-                HiddenFileName.Value = null;
-                Session["FileUpload1"] = null;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`);", true);
+                clearphotoupload();
             }
 
 
         }
         catch (Exception ex)
         {
-
             SystemUtility.EventLog.SaveError(ex.ToString());
             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
             throw;
         }
     }
     #endregion
+
+
+    public void clearphotoupload()
+    {
+        lblImageName.Visible = false;
+        lblImageName.Text = null;
+        HiddenFileName.Value = null;
+        Session["FileUpload1"] = null;
+        fileLabelText.InnerText = "* Choose a file JPEG, JPG and up to 3MB";
+    }
 
     #region SAVING OF CLIENT REFERRAL MODULE
     public void SavingClientReferralInformation()
@@ -956,9 +959,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
 
-                        Session["FileUpload1"] = null;
-                        HiddenFileName.Value = null;
-                        HiddenFileName.Value = null;
+                        clearphotoupload();
                     }
                     else
                     {
@@ -1024,9 +1025,7 @@ public partial class ClientReferral : System.Web.UI.Page
                                             });
                                         ", true);
 
-                            Session["FileUpload1"] = null;
-                            HiddenFileName.Value = null;
-                            lblImageName.Visible = false;
+                            clearphotoupload();
                         }
                         else if (fileSizeActual > fileSizeLimit)
                         {
@@ -1034,9 +1033,8 @@ public partial class ClientReferral : System.Web.UI.Page
 
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
 
-                            Session["FileUpload1"] = null;
-                            HiddenFileName.Value = null;
-                            lblImageName.Visible = false;
+                            clearphotoupload();
+    
                         }
                     }
                 }
@@ -1047,9 +1045,8 @@ public partial class ClientReferral : System.Web.UI.Page
 
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
 
-                    Session["FileUpload1"] = null;
-                    HiddenFileName.Value = null;
-                    lblImageName.Visible = false;
+                    clearphotoupload();
+    
                 }
 
                 //ClientSideScript.Alert("Client is successfully added.");
@@ -1058,6 +1055,8 @@ public partial class ClientReferral : System.Web.UI.Page
             {
                 strMessage = "Photo ID is required.";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
+
+                clearphotoupload();
 
             }
         }
@@ -1112,6 +1111,8 @@ public partial class ClientReferral : System.Web.UI.Page
                                                 window.location = 'ClientReferral.aspx';
                                             });
                                         ", true);
+
+            clearphotoupload();
         }
     }
 
@@ -1140,8 +1141,7 @@ public partial class ClientReferral : System.Web.UI.Page
                         strMessage = "File name is too long. File name should NOT be more than 50 characters ";
                         strMessage += "(including spaces and file extension).";
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
-                        Session["FileUpload1"] = null;
-                        HiddenFileName.Value = null;
+                        clearphotoupload();
                     }
                     else
                     {
@@ -1210,18 +1210,14 @@ public partial class ClientReferral : System.Web.UI.Page
                                             });
                                         ", true);
 
-                            Session["FileUpload1"] = null;
-                            HiddenFileName.Value = null;
-                            lblImageName.Visible = false;
+                            clearphotoupload();
                         }
                         else if (fileSizeActual > fileSizeLimit)
                         {
                             strMessage = "Allowed attachment file size is up to 3MB per file.";
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
 
-                            Session["FileUpload1"] = null;
-                            HiddenFileName.Value = null;
-                            lblImageName.Visible = false;
+                            clearphotoupload();
                         }
                     }
                 }
@@ -1232,10 +1228,7 @@ public partial class ClientReferral : System.Web.UI.Page
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
 
 
-
-                    lblImageName.Visible = false;
-                    HiddenFileName.Value = null;
-                    Session["FileUpload1"] = null;
+                    clearphotoupload();
                 }
 
                 //ClientSideScript.Alert("Client is successfully added.");
@@ -1244,9 +1237,8 @@ public partial class ClientReferral : System.Web.UI.Page
             {
                 strMessage = "Photo is required.";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "Swal.fire(`" + strMessage + "`); ", true);
-                lblImageName.Visible = false;
-                HiddenFileName.Value = null;
-                Session["FileUpload1"] = null;
+
+                clearphotoupload();
             }
 
 
@@ -1301,6 +1293,8 @@ public partial class ClientReferral : System.Web.UI.Page
                                                 window.location = 'ClientReferral.aspx';
                                             });
                                         ", true);
+
+            clearphotoupload();
         }
     }
 
