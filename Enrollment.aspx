@@ -493,12 +493,17 @@
         </button>
         <div class="accordion-body active">
             <div class="container">
-                   <div class="row">
-          <div class="col-md-6 mb-3">
+          <div class="row">
+
+           <div class="col-md-4 mb-3">
+            <span class="text-required">*</span> Origin: <br />
+            <asp:DropDownList runat="server" class="form-control" onpaste="return false" ID="fld_Origin" AutoPostBack="true"></asp:DropDownList>
+          </div>
+          <div class="col-md-4 mb-3">
             <span class="text-required">*</span> Destination: <br />
             <asp:DropDownList runat="server" class="form-control" onpaste="return false" ID="fld_Destination" OnSelectedIndexChanged="fld_Destination_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
           </div>
-         <div class="col-md-6 mb-3">
+         <div class="col-md-4 mb-3">
             <div id="lbl_VisaType" runat="server"><span class="text-required">*</span> Visa Type: <br /></div>  
          <asp:DropDownList onpaste="return false" class="form-control" id="fld_VisaType" runat="server" readonly="readonly" Enabled="false"></asp:DropDownList>
           </div>
@@ -698,38 +703,6 @@
               <i class="fas fa-angle-right"></i>
             </button>
             <div class="accordion-body active">
-               <%--<div class="row">
-                    <div class="col-md-8 pet-selection">
-                         <span class="text-required">&nbsp;&nbsp;*</span><label> Select Type of Pet</label><br />
-                        <div class="d-flex align-items-center justify-content-center">
-                          <asp:RadioButtonList ID="fld_PetCategory" runat="server" CssClass="image-radio-list"  RepeatDirection="Horizontal" RepeatLayout="Table">
-                            <asp:ListItem Value="Cat" >
-                                <div style="text-align:center;">
-                                    <label style="margin-left:10px">Cat</label>
-                                    <img src="/Images/pet/cat-icon.png" class="pet-image" alt="Cat" /><br />
-                                   
-                                </div>
-                            </asp:ListItem>
-                            <asp:ListItem Value="Dog">
-                                <div style="text-align:center;">
-                                      <label style="margin-left:10px">Dog</label>
-                                    <img src="/Images/pet/dog-icon.png" class="pet-image" alt="Dog" /><br />
-                                 
-                                </div>
-                            </asp:ListItem>
-                        </asp:RadioButtonList>
-                        </div>
-                    </div>
-                <div class="col-md-3 pet-selection">
-                <span class=text-required>&nbsp;&nbsp;*</span>Select Pet Gender:<br /><br />
-                    <div class="d-flex align-items-center justify-content-center" >
-                       <asp:RadioButtonList ID="fld_Gender" runat="server" RepeatDirection="Vertical">
-                            <asp:ListItem Text="&nbsp; &nbsp;Male" Value="M"/>
-                            <asp:ListItem Text="&nbsp; &nbsp;Female" Value="F" />
-                        </asp:RadioButtonList>
-                    </div>
-               </div>
-               </div>--%>
 
                     <div class="row">
         <div class="col-md-8 col-12 pet-selection">

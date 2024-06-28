@@ -146,6 +146,7 @@ public partial class Enrollment : System.Web.UI.Page
             {
                 GetDestinationType();
                 GetOptionalCoverage();
+                GetTravelOrigin();
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClearLocalStorage", "localStorage.removeItem('selectedPlan');", true);
             }
 
@@ -593,6 +594,7 @@ public partial class Enrollment : System.Web.UI.Page
             fieldvalidationrequest.TypeInnerPartitions = GetTypeInnerPartitionsSelectedValue();
             fieldvalidationrequest.TypeOfHome = DD_TypeOfHome.SelectedValue.ToString();
             fieldvalidationrequest.TypeRoof = GetTypeRoofSelectedValue();
+            fieldvalidationrequest.TravelOrigin = fld_Origin.SelectedValue.ToString();
             fieldvalidationrequest.UserId = Request.QueryString["PART"].ToString();
             fieldvalidationrequest.ValidID = validIdDropDownList.SelectedValue.ToString();
             fieldvalidationrequest.VisaType = fld_VisaType.Text.ToString();
@@ -1020,14 +1022,20 @@ public partial class Enrollment : System.Web.UI.Page
 
             #region TRAVEL FIELDS
 
+            if (fld_Origin.SelectedValue == "Select" && Session["CategoryId"].ToString() == "11")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Please Select Travel Origin.');", true);
+                return;
+            }
+
             if (fld_Destination.SelectedValue == "Select" && Session["CategoryId"].ToString() == "11")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Please Select Destination.');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Please Select Travel Destination.');", true);
                 return;
             }
             if (fld_VisaType.SelectedValue == "Select" && Session["ProductCode"].ToString() == "FPGIT" && Session["CategoryId"].ToString() == "11")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Please Select Visa Type.');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Please Select Travel Visa Type.');", true);
                 return;
             }
             if (!basicRadio.Checked && !completeRadio.Checked && Session["CategoryId"].ToString() == "11")
@@ -1582,6 +1590,7 @@ public partial class Enrollment : System.Web.UI.Page
                 travelrequest.Nationality = DDNationality.SelectedValue.ToString();
                 travelrequest.NatureOfWork = natureofwork;
                 travelrequest.NumberOfCOCs = long.Parse(numberInput.Text);
+                travelrequest.TravelOrigin = fld_Origin.SelectedValue.ToString();
                 travelrequest.Occupation = fld_Occupation.Text.ToString();
 
                 foreach (RepeaterItem item in repeaterQuestions.Items)
@@ -2997,6 +3006,37 @@ public partial class Enrollment : System.Web.UI.Page
 
     #endregion
 
+
+    #region GET TRAVEL ORIGIN
+    public void GetTravelOrigin()
+    {
+        try
+        {
+           
+            if(GetDestinationTypeValue() == "International")
+            {
+                fld_Origin.Items.Insert(0, new ListItem("Philippines", "Philippines"));
+                fld_Origin.Enabled = false;
+                fld_Origin.CssClass = "form-control";
+            }
+            else
+            {
+                fld_Origin.Items.Insert(0, new ListItem("Select", "Select"));
+                fld_Origin.Enabled = true;
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            SystemUtility.EventLog.SaveError(ex.ToString());
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
+            throw;
+        }
+    }
+
+    #endregion
+
     #region GET DESTINATION TYPE
     public void GetDestinationType()
     {
@@ -3017,12 +3057,12 @@ public partial class Enrollment : System.Web.UI.Page
             {
                 fld_VisaType.Items.Insert(0, new ListItem("Select", "Select"));
             }
-          
 
             Dictionary<string, string> destinationToVisaTypeMap = new Dictionary<string, string>();
 
             foreach (var item in returnValue.Result)
             {
+                fld_Origin.Items.Add(new ListItem(item.Destination, item.Destination));
                 fld_Destination.Items.Add(new ListItem(item.Destination, item.Destination));
                 fld_VisaType.Items.Add(new ListItem(item.VisaType, item.VisaType));
 

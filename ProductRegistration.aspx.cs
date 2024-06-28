@@ -15,6 +15,9 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
     GetList getList = new GetList();
     TokenRequest token = new TokenRequest();
 
+    AffiliateDetailsRequest affiliatedetailsrequest = new AffiliateDetailsRequest();
+    AffiliateDetailsResult affiliatedetailsresult = new AffiliateDetailsResult();
+
     string productCode;
     string partnerCode;
     string referenceCode; //from e-voucher from CLIB
@@ -26,7 +29,7 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
 
 
     protected void Page_Load(object sender, EventArgs e)
-     {
+    {
         if (Request.QueryString["PART"] != null && Request.QueryString["PROD"] == null && Request.QueryString["REFNUM"] == null)
         {
             string partValue = Request.QueryString["PART"];
@@ -218,7 +221,7 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
             
             if (voucherCode.Value.Length != 0 )
             {
-                if (voucherCode.Value.Trim().Length == 12 || voucherCode.Value.Trim().Length == 20 || voucherCode.Value.Trim().Length == 13 || voucherCode.Value.Trim().Length == 15)
+                if (voucherCode.Value.Trim().Length == 12 || voucherCode.Value.Trim().Length == 21 || voucherCode.Value.Trim().Length == 13 || voucherCode.Value.Trim().Length == 15)
                 {
                     partnerCode = voucherCode.Value.Substring(0, 3);
                     product.ProductCode = voucherCode.Value.Substring(3, 5);
@@ -234,6 +237,11 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
                     else if (voucherCode.Value.Length == 13)
                     {
                         token.ReferenceCode = voucherCode.Value.Substring(8, 5);
+                    }
+                    // AGENT REFFERAL VOUCHERS 
+                    else if (voucherCode.Value.Length == 21)
+                    {
+                        token.ReferenceCode = voucherCode.Value.Substring(8, 13);
                     }
                     // REGULAR VOUCHER EXTENDED
                     else if (voucherCode.Value.Length == 15)
@@ -253,7 +261,6 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
                          //Jep 042721 Added Client Referral Validation
                         if (partnerCode == "CLH" && product.ProductCode == "REFER")
                         {
-
                             //string designation = voucherCode.Value.Substring(8, 1);
                             string BranchCode = voucherCode.Value.Substring(8, 5);
                             token.BranchCode = BranchCode;
@@ -263,6 +270,7 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
                                 string timeStamp;
                                 timeStamp = GetTimestamp(DateTime.Now);
                                 Session["BranchCode"] = BranchCode;
+                                Session["ReferralPartnerCode"] = partnerCode;
                                 Session["RTN"] = BranchCode + timeStamp;
                                 //Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('"+Session["RTN"].ToString()+ "')",true);
 
@@ -272,6 +280,28 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
                             {
                                 Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Branch code does not exists.');", true);
                             }
+                        }
+                    }
+                    else if (voucherCode.Value.Length == 21)
+                    {
+                        //AJ 04142024 Added Agent Referral Validation
+                        if (partnerCode == "AFL" && product.ProductCode == "REFER")
+                        {
+                            //string designation = voucherCode.Value.Substring(8, 1);
+                            string BranchCode = voucherCode.Value.Substring(8, 5);
+                            string affiliateCode = voucherCode.Value.Substring(8, 13);
+
+                            token.BranchCode = BranchCode;
+                            Session.Clear();
+                            string RTn = GenerateRTN(affiliateCode);
+                            Session["BranchCode"] = BranchCode;
+                            Session["ReferralPartnerCode"] = partnerCode;
+                            Session["RTN"] = RTn;
+
+
+                             CheckAffiliateDetails(affiliateCode);
+
+
                         }
                     }
 
@@ -325,8 +355,39 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
         WebCaptcha.GenerateCaptcha(captchaImage, HttpContext.Current);
         captchaText.Value = "";
     }
+    #region CHECK AFFILIATE DETAILS
+    public void CheckAffiliateDetails(string affiliateCode)
+    {
+        try
+        {
+            affiliatedetailsrequest.Token = generateToken.GenerateTokenAuth();
+            affiliatedetailsrequest.AgentCode = affiliateCode;
+            affiliatedetailsrequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
 
+            var returnValue = getList.GetAffiliateDetails(affiliatedetailsrequest);
+            string message = returnValue.Message;
 
+            if (returnValue.Message  == "Agent Already Exist, Got Agent Details.")
+            {
+                Session["ADCAffiliateCode"] = returnValue.Result[0].AffiliateCode.ToString();
+                Session["ADCFirstName"] = returnValue.Result[0].FirstName.ToString();
+                Session["ADCLastName"] = returnValue.Result[0].LastName.ToString();
+
+                Response.Redirect(ConfigurationManager.AppSettings["ClientReferral"].Trim());
+            }
+            else
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+    #endregion
     public void InvalidUrl()
     {
         Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Invalid URL use case. Please check that you have the correct URL and try again.');", true);
@@ -344,6 +405,23 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
         token.PartnerCode = voucherCode.Value.Substring(0, 3);
         token.ProductCode = voucherCode.Value.Substring(3, 5);
     }
+
+    public static string GenerateRTN(string affiliateCode)
+    {
+        // Current date and time
+        DateTime now = DateTime.Now;
+
+        // Extract year, month, date, and time components
+        string year = now.ToString("yy"); // Last two digits of the year
+        string month = now.ToString("MM"); // Month as two digits
+        string day = now.ToString("dd"); // Day as two digits
+        string time = now.ToString("HHmmss"); // Time as HHmmss
+
+        // Combine parts to form the RTN
+        string RTN = string.Format("{0}{1}{2}{3}{4}", affiliateCode, year, month, day, time);
+        return RTN;
+    }
+
 
     private void gotoCheckEligibility()
     {

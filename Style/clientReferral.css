@@ -1,0 +1,217 @@
+﻿html, body {
+    height: 100vh;
+    margin: 0;
+    background-color: #00263E !important;
+}
+.main-container {
+
+}
+
+
+.d-middle {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.opacity-8, .overlay-opacity-8:after {
+    opacity: .8
+}
+
+opacity-8, .overlay-opacity-8:after {
+    opacity: .8;
+}
+
+.overlay-dark-hover:hover:after, .overlay-dark:after {
+    background: #00263E;
+    height:100%;
+}
+
+.section {
+    width: 100%;
+    height: 100vh; /* Use 100vh to make the height cover the entire viewport height */
+    background-size: cover; /* Ensures the background image covers the entire section */
+    background-repeat: no-repeat; /* Prevents the background image from repeating */
+    background-position: center center; /* Centers the background image */
+}
+
+.overlay-dark-hover:after, .overlay-dark:after, .overlay-light-hover:after, .overlay-light:after {
+    bottom: 0;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+
+.bg-theme-color-light {
+    background-color: #00263E !important;
+  
+}
+
+.bg-cover {
+    background-position: 100% !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+.overlay-dark, .overlay-dark-hover, .overlay-light, .overlay-light-hover {
+    position: relative;
+}
+
+    #overlay-default, .overlay-dark, .overlay-dark-hover:after, .overlay-default, .overlay-light, .overlay-light-hover:after {
+        transition: all .2s ease;
+    }
+
+.section, section {
+    position: relative;
+    word-break: break-word;
+}
+
+.overlay-dark > *, .overlay-light > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+.container-custom {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.left-col {
+    width: 50%;
+    background-color: #000;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.right-col {
+    width: 50%;
+    margin-left: 50%;
+    overflow-y: auto;
+    height: 100vh;
+    padding: 20px;
+}
+
+@media (max-width: 991px) {
+    .container-custom {
+        display: block;
+        height: auto;
+    }
+
+    .left-col, .right-col {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin: 0;
+    }
+
+    .right-col {
+        padding: 15px;
+    }
+}
+
+.form-floating .bootstrap-select .form-control,
+.form-floating .bootstrap-select .dropdown-toggle {
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+    padding: 0.75rem 1.25rem;
+}
+
+    .form-floating .bootstrap-select .dropdown-toggle::after {
+        top: 50%;
+    }
+
+.form-floating label {
+    top: -0.75rem;
+    left: 0.75rem;
+    color: #6c757d;
+    font-size: 100%;
+    transition: all 0.1s ease-in-out;
+}
+
+.form-floating .bootstrap-select .dropdown-toggle,
+.form-floating .bootstrap-select .dropdown-toggle:focus,
+.form-floating .bootstrap-select .dropdown-toggle:hover {
+    border: 1px solid #ced4da;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+.card {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+    .card:hover {
+        background-color: #00263E;
+        color: #fff;
+        transition: all 0.5s;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    }
+
+    .card span {
+        font-size: 14px;
+    }
+
+.clickable {
+    cursor: pointer;
+    position: relative;     
+}
+
+    .clickable.active {
+        border: 2px solid #ffffff /* Change to your preferred color */
+    }
+
+        .clickable.active .image::after {
+            content: "✔"; /* Unicode for check mark */
+            color: #ffffff; /* Change to your preferred color */
+            font-size: 24px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+.hidden-radio {
+    display: none;
+}
+
+
+
+.file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    border: 2px dashed #00263E; /* Border style */
+    border-radius: 4px; /* Rounded corners */
+    text-align: center;
+    line-height: 50px; /* Center text vertically */
+    font-family: Arial, sans-serif;
+    color: #555; /* Text color */
+    cursor: pointer;
+}
+
+    .file-upload input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }

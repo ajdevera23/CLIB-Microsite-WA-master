@@ -73,7 +73,7 @@
 
                 // Render the redirection URL with the image
             %>
-            <a href="<%= redirectUrl %>"><img id="clibLogo" src="../Images/CLIB.png" /></a>
+            <a href="<%= redirectUrl %>"><img id="clibLogo" src="/Images/CLIB.png" alt="CLIB LOGO"/></a>
           </div>
         </div>
         <div id="below-title">
@@ -84,7 +84,7 @@
             </div>
         </div>   
     </div>
- <script src="<%= ResolveUrl("~/JScript/Jquery/jquery-3.5.1.min.js") %>"></script>
+ <script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>
  <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
  <script src="https://www.google.com/recaptcha/api.js?"></script>
  <script src="<%= ResolveUrl("~/JScript/enrollment.js") %>"></script>
@@ -96,6 +96,12 @@
     <script src="<%= ResolveUrl("~/JScript/idleScreenIQR.js") %>"></script>
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server">
     </asp:ContentPlaceHolder>
+
+    <script>
+        if (typeof jQuery !== 'undefined') {
+            jQuery.fn.jquery = undefined;
+        }
+    </script>
 </body>
 </html>
 

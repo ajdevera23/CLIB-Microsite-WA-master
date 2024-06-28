@@ -112,6 +112,8 @@ public class FieldValidationRequest
     public int TravelDurationDays { get; set; }
     public string TravelDurationFrom { get; set; }
     public string TravelDurationTo { get; set; }
+
+    public string TravelOrigin { get; set; }
     public string TypeBeams { get; set; }
     public string TypeColumns { get; set; }
     public string TypeExteriorWalls { get; set; }

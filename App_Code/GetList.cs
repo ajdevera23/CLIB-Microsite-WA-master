@@ -331,6 +331,46 @@ public class GetList
         return returnValue;
      }
 
+
+    public ADCClientIfExistResult GetADCClientIfExist(ADCClientIfExistRequest token)
+    {
+        ADCClientIfExistResult returnValue = new ADCClientIfExistResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetADCClientIfExist"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<ADCClientIfExistResult>(jsonResult);
+
+        return returnValue;
+    }
+
+    public AffiliateDetailsResult GetAffiliateDetails(AffiliateDetailsRequest token)
+    {
+        AffiliateDetailsResult returnValue = new AffiliateDetailsResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetAffiliateDetails"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<AffiliateDetailsResult>(jsonResult);
+
+        return returnValue;
+    }
+
+    public AgentReferralResult IQRSaveClientReferral(AgentReferralRequest token)
+    {
+        AgentReferralResult returnValue = new AgentReferralResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["IQRSaveClientReferral"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<AgentReferralResult>(jsonResult);
+
+        return returnValue;
+    }
+
     public DisplayPaymentSummaryResult DisplayPaymentSummary(DisplayPaymentSummaryRequest token)
     {
         DisplayPaymentSummaryResult returnValue = new DisplayPaymentSummaryResult();
@@ -369,6 +409,9 @@ public class GetList
 
         return returnValue;
     }
+
+
+
 
     public CreateInvoiceResult XenditCreateInvoice(CreateInvoiceRequest token)
     {
