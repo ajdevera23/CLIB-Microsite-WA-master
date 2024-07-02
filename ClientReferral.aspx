@@ -152,7 +152,7 @@
 <label for="s_address"> Group / Business Name:</label>
 </div>
 <div class="form-floating mb-3">
-<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="100" minlength="1" required="required" />
+<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="50" minlength="1" required="required" />
 <label for="s_address">  Contact Person Designation:</label>
 </div>
 
