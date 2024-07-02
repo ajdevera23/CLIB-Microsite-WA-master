@@ -382,7 +382,7 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
         }
         catch (Exception)
         {
-
+    
             throw;
         }
 

@@ -1282,91 +1282,84 @@ if (categoryid == "10")
 // TRAVEL INSURANCE JS
 if (categoryid == "11")
      {
-         //---------------------------TRAVEL SELECTION PURPOSE OF TRAVEL--------------------------------------//
-         $(document).ready(function () {
-             // Function to initialize the selection state
-             function initializeSelectionState() {
-                 var storedPlan = localStorage.getItem('selectedPlan');
-
-                 if (storedPlan) {
-                     // Select the stored plan
-                     $('.plan input[value="' + storedPlan + '"]').prop('checked', true);
-                     $('.plan input[value="' + storedPlan + '"]').parent().addClass('selected');
-                 }
-             }
-
-             // Handle the click event for the plan
-             function attachClickHandler() {
-                 $('.plans .plan').on('click', function () {
-                     selectPlan(this);
-                 });
-             }
-
-             // Function to select a plan
-             function selectPlan(plan) {
-                 // Remove the 'selected' class from all plans
-                 $('.plans .plan').removeClass('selected');
-
-                 // Add the 'selected' class to the clicked plan
-                 $(plan).addClass('selected');
-
-                 // Update the corresponding radio button
-                 var radioInput = $(plan).find('input[type="radio"]');
-                 radioInput.prop('checked', true);
-
-                 // Store the selected plan in local storage
-                 localStorage.setItem('selectedPlan', radioInput.val());
+    $(document).ready(function () {
+        //---------------------------TRAVEL SELECTION PURPOSE OF TRAVEL--------------------------------------//
 
 
-             }
+        function initializeSelectionState() {
+            var storedPlan = localStorage.getItem('selectedPlan');
 
-             // Initialize selection state on page load
-             initializeSelectionState();
+            if (storedPlan) {
+                // Select the stored plan
+                $('.plan input[value="' + storedPlan + '"]').prop('checked', true);
+                $('.plan input[value="' + storedPlan + '"]').parent().addClass('selected');
+            }
+        }
 
-             // Attach click event handler
-             attachClickHandler();
+        function attachClickHandler() {
+            $('.plans .plan').on('click', function () {
+                selectPlan(this);
+            });
+        }
 
-             // Check if there's a postback (assuming you're using ASP.NET WebForms)
-             if (typeof Sys !== 'undefined') {
-                 var prm = Sys.WebForms.PageRequestManager.getInstance();
+        function selectPlan(plan) {
+            // Remove the 'selected' class from all plans
+            $('.plans .plan').removeClass('selected');
 
-                 prm.add_endRequest(function () {
-                     // Reapply event handlers and update selection state after the postback
-                     initializeSelectionState();
-                     attachClickHandler();
-                 });
-             }
-         });
+            // Add the 'selected' class to the clicked plan
+            $(plan).addClass('selected');
 
-         //-------------------------------- TRAVEL DURATION FROM --------------------/
-         $(document).on('click', '[data-datepicker="true"]', function () {
-             var currentDate = new Date();
+            // Update the corresponding radio button
+            var radioInput = $(plan).find('input[type="radio"]');
+            radioInput.prop('checked', true);
 
-             var selectedStartDateField = $("#selectedStartDate");
-             var selectedEndDateField = $("#selectedEndDate");
-             var durationDaysField = $("#durationDays");
+            // Store the selected plan in local storage
+            localStorage.setItem('selectedPlan', radioInput.val());
+        }
 
-             $("#<%=travelFrom.ClientID%>").datepicker({
-             minDate: currentDate,
-             onSelect: function (selectedDate) {
-                 selectedStartDateField.val(selectedDate);
-                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
+        initializeSelectionState();
+        attachClickHandler();
+
+        if (typeof Sys !== 'undefined') {
+            var prm = Sys.WebForms.PageRequestManager.getInstance();
+
+            prm.add_endRequest(function () {
+                initializeSelectionState();
+                attachClickHandler();
+            });
+        }
+
+        //-------------------------------- TRAVEL DURATION FROM --------------------/
+        var currentDate = new Date();
+
+        var selectedStartDateField = $("#selectedStartDate");
+        var selectedEndDateField = $("#selectedEndDate");
+        var durationDaysField = $("#durationDays");
+
+        $("#<%=travelFrom.ClientID%>").datepicker({
+        minDate: currentDate,
+        onSelect: function (selectedDate) {
+            selectedStartDateField.val(selectedDate);
+            $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
 
             var maxDate = new Date(selectedDate);
             maxDate.setDate(maxDate.getDate() + 59);
             $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
 
             $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
-                 calculateDays();
-             },
-             showButtonPanel: false,
-             changeMonth: true,
-             changeYear: true
-         });
+            setTimeout(function () {
+                $("#<%=travelTo.ClientID%>").datepicker("show");
+            }, 100); // Delay to ensure datepicker is properly displayed
+            calculateDays();
+        },
+        showButtonPanel: false,
+        changeMonth: true,
+        changeYear: true
+    });
 
-         $("#<%=travelTo.ClientID%>").datepicker({
-             beforeShow: function (input, inst) {
-                 if ($("#<%=travelFrom.ClientID%>").val() === "") {
+    $("#<%=travelTo.ClientID%>").datepicker({
+        beforeShow: function (input, inst) {
+            if ($("#<%=travelFrom.ClientID%>").val() === "") {
                 $("#<%=travelFrom.ClientID%>").val("");
                 $("#<%=numberOfDays.ClientID%>").val("");
                 $("#<%=travelTo.ClientID%>").val("");
@@ -1385,45 +1378,38 @@ if (categoryid == "11")
         disabled: true
     });
 
-         function calculateDays() {
-             var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
+    function calculateDays() {
+        var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
         var endDate = $("#<%=travelTo.ClientID%>").datepicker("getDate");
 
         if (startDate && endDate) {
-   
             var timezoneOffset = endDate.getTimezoneOffset() - startDate.getTimezoneOffset();
             var timeDiff = Math.abs(endDate.getTime() - startDate.getTime() - timezoneOffset * 60000);
             var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
-            // Add 1 day to include both the start and end dates
             diffDays = diffDays >= 0 ? diffDays + 1 : 0;
 
             if (diffDays > 60) {
-                // If the duration exceeds 60 days, adjust the end date
-                endDate.setDate(startDate.getDate() + 60 - 1); // Set end date to start date + 59 days
+                endDate.setDate(startDate.getDate() + 60 - 1);
                 $("#<%=travelTo.ClientID%>").datepicker("setDate", endDate);
             }
 
-            $("#<%=numberOfDays.ClientID%>").val(diffDays); // Update visible duration input if needed
+            $("#<%=numberOfDays.ClientID%>").val(diffDays);
         }
     }
 
-    // Event listener for change in "number of days" field
     $("#<%=numberOfDays.ClientID%>").on('input', function () {
         var numberOfDaysValue = $(this).val();
         if (numberOfDaysValue === "") {
-            // Clear "Travel Duration From" and "Travel Duration To" datepickers
             $("#<%=travelFrom.ClientID%>").val("");
             $("#<%=travelTo.ClientID%>").val("");
         }
     });
 
-    // Reinitialize datepickers and set values after postback
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
         var storedStartDate = selectedStartDateField.val();
         var storedEndDate = selectedEndDateField.val();
 
-        // Restore values using ViewState
         $("#<%=travelFrom.ClientID%>").val(storedStartDate);
         $("#<%=travelTo.ClientID%>").val(storedEndDate);
 
@@ -1434,12 +1420,14 @@ if (categoryid == "11")
                 selectedStartDateField.val(selectedDate);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
 
-                // Disable dates beyond 60 days from the selected start date
                 var maxDate = new Date(selectedDate);
-                maxDate.setDate(maxDate.getDate() + 59); // Set max date to selected date + 59 days
+                maxDate.setDate(maxDate.getDate() + 59);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
 
                 $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
+                setTimeout(function() {
+                    $("#<%=travelTo.ClientID%>").datepicker("show");
+                }, 100); // Delay to ensure datepicker is properly displayed
                 calculateDays();
             },
             showButtonPanel: false,
@@ -1459,10 +1447,10 @@ if (categoryid == "11")
             disabled: storedStartDate === ""
         });
 
-        // Set the calculated days
         calculateDays();
     });
-     });
+});
+
      }
 // PROPERTY INSURANCE JS
 if (categoryid == "6") {
@@ -1592,30 +1580,30 @@ $("#<%=contactNumber.ClientID%>").on("keyup", function () {
 });
 });
 //-------------------------------- PREVENT FOR INSPECT ELEMENT AND FUNCTION F12 --------------------///
-     $(document).bind("contextmenu", function (e) {
-         e.preventDefault();
-     });
-     $(document).keydown(function (e) {
-         if (e.which === 123) {
-             return false;
-         }
-     });
+     //$(document).bind("contextmenu", function (e) {
+     //    e.preventDefault();
+     //});
+     //$(document).keydown(function (e) {
+     //    if (e.which === 123) {
+     //        return false;
+     //    }
+     //});
 
-     document.addEventListener('contextmenu', event => event.preventDefault());
-     document.onkeydown = function (e) {
-         if (event.keyCode == 123) {
-             return false;
-         }
-         if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-             return false;
-         }
-         if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-             return false;
-         }
-         if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-             return false;
-         }
-     }
+     //document.addEventListener('contextmenu', event => event.preventDefault());
+     //document.onkeydown = function (e) {
+     //    if (event.keyCode == 123) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //}
 
      localStorage.openpages = Date.now();
      window.addEventListener('storage', function (e) {

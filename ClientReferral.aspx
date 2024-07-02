@@ -90,13 +90,13 @@
 <div class="col-12 col-lg-6">
 <div class="form-floating mb-3">
     <input runat="server" placeholder="Referral Transaction Number:" id="rtnLbl" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
-    <label for="s_address">Referral Transaction Number:</label>
+    <label for="s_address" class="text-white">Referral Transaction Number:</label>
 </div>
 </div>
  <div class="col-12 col-lg-6">
  <div class="form-floating mb-3">
  <input runat="server" placeholder="Client Type" id="txt_clienttype" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
- <label for="s_address">Client Type:</label>
+ <label for="s_address" class="text-white">Client Type:</label>
 </div>
 </div>
 </div>
