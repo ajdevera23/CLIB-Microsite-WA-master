@@ -1338,105 +1338,22 @@ if (categoryid == "11")
              }
          });
 
-         //-------------------------------- TRAVEL DURATION FROM --------------------/
-         $(document).on('click', '[data-datepicker="true"]', function () {
-             var currentDate = new Date();
+    //-------------------------------- TRAVEL DURATION FROM --------------------/
+    $(document).ready(function () {
+        var currentDate = new Date();
 
-             var selectedStartDateField = $("#selectedStartDate");
-             var selectedEndDateField = $("#selectedEndDate");
-             var durationDaysField = $("#durationDays");
+        var selectedStartDateField = $("#selectedStartDate");
+        var selectedEndDateField = $("#selectedEndDate");
 
-             $("#<%=travelFrom.ClientID%>").datepicker({
-             minDate: currentDate,
-             onSelect: function (selectedDate) {
-                 selectedStartDateField.val(selectedDate);
-                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
-
-            var maxDate = new Date(selectedDate);
-            maxDate.setDate(maxDate.getDate() + 59);
-            $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
-
-            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
-                 calculateDays();
-             },
-             showButtonPanel: false,
-             changeMonth: true,
-             changeYear: true
-         });
-
-         $("#<%=travelTo.ClientID%>").datepicker({
-             beforeShow: function (input, inst) {
-                 if ($("#<%=travelFrom.ClientID%>").val() === "") {
-                $("#<%=travelFrom.ClientID%>").val("");
-                $("#<%=numberOfDays.ClientID%>").val("");
-                $("#<%=travelTo.ClientID%>").val("");
-                $("#<%=travelFrom.ClientID%>").focus();
-                Swal.fire('Please select Travel Duration From first.');
-                return false;
-            }
-        },
-        onSelect: function (selectedDate) {
-            selectedEndDateField.val(selectedDate);
-            calculateDays();
-        },
-        showButtonPanel: false,
-        changeMonth: true,
-        changeYear: true,
-        disabled: true
-    });
-
-         function calculateDays() {
-             var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
-        var endDate = $("#<%=travelTo.ClientID%>").datepicker("getDate");
-
-        if (startDate && endDate) {
-   
-            var timezoneOffset = endDate.getTimezoneOffset() - startDate.getTimezoneOffset();
-            var timeDiff = Math.abs(endDate.getTime() - startDate.getTime() - timezoneOffset * 60000);
-            var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
-
-            // Add 1 day to include both the start and end dates
-            diffDays = diffDays >= 0 ? diffDays + 1 : 0;
-
-            if (diffDays > 60) {
-                // If the duration exceeds 60 days, adjust the end date
-                endDate.setDate(startDate.getDate() + 60 - 1); // Set end date to start date + 59 days
-                $("#<%=travelTo.ClientID%>").datepicker("setDate", endDate);
-            }
-
-            $("#<%=numberOfDays.ClientID%>").val(diffDays); // Update visible duration input if needed
-        }
-    }
-
-    // Event listener for change in "number of days" field
-    $("#<%=numberOfDays.ClientID%>").on('input', function () {
-        var numberOfDaysValue = $(this).val();
-        if (numberOfDaysValue === "") {
-            // Clear "Travel Duration From" and "Travel Duration To" datepickers
-            $("#<%=travelFrom.ClientID%>").val("");
-            $("#<%=travelTo.ClientID%>").val("");
-        }
-    });
-
-    // Reinitialize datepickers and set values after postback
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-        var storedStartDate = selectedStartDateField.val();
-        var storedEndDate = selectedEndDateField.val();
-
-        // Restore values using ViewState
-        $("#<%=travelFrom.ClientID%>").val(storedStartDate);
-        $("#<%=travelTo.ClientID%>").val(storedEndDate);
-
-        $("#<%=travelFrom.ClientID%>").datepicker({
+        function initializeDatepickers() {
+            $("#<%=travelFrom.ClientID%>").datepicker({
             minDate: currentDate,
-            defaultDate: storedStartDate,
             onSelect: function (selectedDate) {
                 selectedStartDateField.val(selectedDate);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
 
-                // Disable dates beyond 60 days from the selected start date
                 var maxDate = new Date(selectedDate);
-                maxDate.setDate(maxDate.getDate() + 59); // Set max date to selected date + 59 days
+                maxDate.setDate(maxDate.getDate() + 59);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
 
                 $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
@@ -1448,7 +1365,13 @@ if (categoryid == "11")
         });
 
         $("#<%=travelTo.ClientID%>").datepicker({
-            defaultDate: storedEndDate,
+            beforeShow: function (input, inst) {
+                if ($("#<%=travelFrom.ClientID%>").val() === "") {
+                    $("#<%=travelFrom.ClientID%>").focus();
+                    Swal.fire('Please select Travel Duration From first.');
+                    return false;
+                }
+            },
             onSelect: function (selectedDate) {
                 selectedEndDateField.val(selectedDate);
                 calculateDays();
@@ -1456,13 +1379,81 @@ if (categoryid == "11")
             showButtonPanel: false,
             changeMonth: true,
             changeYear: true,
-            disabled: storedStartDate === ""
         });
 
-        // Set the calculated days
+        // Ensure that travelTo datepicker is enabled if travelFrom has a value
+        if ($("#<%=travelFrom.ClientID%>").val() !== "") {
+            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
+        }
+    }
+
+    function calculateDays() {
+        var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
+        var endDate = $("#<%=travelTo.ClientID%>").datepicker("getDate");
+
+        if (startDate && endDate) {
+            var timezoneOffset = endDate.getTimezoneOffset() - startDate.getTimezoneOffset();
+            var timeDiff = Math.abs(endDate.getTime() - startDate.getTime() - timezoneOffset * 60000);
+            var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+            diffDays = diffDays >= 0 ? diffDays + 1 : 0;
+
+            if (diffDays > 60) {
+                endDate.setDate(startDate.getDate() + 60 - 1);
+                $("#<%=travelTo.ClientID%>").datepicker("setDate", endDate);
+            }
+
+            $("#<%=numberOfDays.ClientID%>").val(diffDays);
+        }
+    }
+
+    $("#<%=numberOfDays.ClientID%>").on('input', function () {
+        var numberOfDaysValue = $(this).val();
+        if (numberOfDaysValue === "") {
+            $("#<%=travelFrom.ClientID%>").val("");
+            $("#<%=travelTo.ClientID%>").val("");
+        }
+    });
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+        var storedStartDate = selectedStartDateField.val();
+        var storedEndDate = selectedEndDateField.val();
+
+        $("#<%=travelFrom.ClientID%>").datepicker("destroy");
+        $("#<%=travelTo.ClientID%>").datepicker("destroy");
+
+        initializeDatepickers();
+
+        if (storedStartDate) {
+            $("#<%=travelFrom.ClientID%>").datepicker("setDate", storedStartDate);
+            $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", storedStartDate);
+        }
+
+        if (storedEndDate) {
+            $("#<%=travelTo.ClientID%>").datepicker("setDate", storedEndDate);
+        }
+
+        if (storedStartDate) {
+            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
+        }
+
         calculateDays();
     });
-     });
+
+    initializeDatepickers();
+
+    var storedStartDate = selectedStartDateField.val();
+    var storedEndDate = selectedEndDateField.val();
+    if (storedStartDate) {
+        $("#<%=travelFrom.ClientID%>").datepicker("setDate", storedStartDate);
+        $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", storedStartDate);
+    }
+    if (storedEndDate) {
+        $("#<%=travelTo.ClientID%>").datepicker("setDate", storedEndDate);
+    }
+    calculateDays();
+});
+
  }
 // PROPERTY INSURANCE JS
 if (categoryid == "6") {
