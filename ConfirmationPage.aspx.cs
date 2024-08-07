@@ -47,7 +47,15 @@ public partial class ConfirmationPage : System.Web.UI.Page
                     lbProductName.Text = "Product:";
                     lblReferenceNumber.Text = "COC Number:";
                     lblPremiumText.Text = "Premium:";
+
                 }
+                if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
+                {
+                    FreeInsurance.Text = Session["FreeInsurance"].ToString();
+                    FreeInsuranceCOCNumber.Text = Session["FreeInsuranceCOCNumber"].ToString();
+
+                }
+
 
                 lblNameOfInsured.Text = Session["firstName"].ToString() + " " + Session["lastName"].ToString();
                 lblNameOfProduct.Text = Session["ProductName"].ToString();
@@ -160,6 +168,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
             isActive = true,
             PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"],
             PaymentDetails = paymentdetails,
+            ReferralCode = GetReferralCode(),
 
         };
 
@@ -173,6 +182,11 @@ public partial class ConfirmationPage : System.Web.UI.Page
 
             SMSContent(tagaspaidresult);
 
+            if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
+            {
+                Session["FreeInsurance"] = returnValue.Result[0].FreeInsurance.ToString();
+                Session["FreeInsuranceCOCNumber"] = returnValue.Result[0].FreeInsuranceCOCNumber.ToString();
+            }
         }
         else
         {
@@ -180,6 +194,22 @@ public partial class ConfirmationPage : System.Web.UI.Page
             return;
         }
 
+    }
+
+    private string GetReferralCode()
+    {
+        string selectedValue = string.Empty;
+
+        if (Session["ReferralCode"] != null)
+        {
+            selectedValue = Session["ReferralCode"].ToString();
+        }
+        else
+        {
+            selectedValue = null;
+        }
+
+        return selectedValue;
     }
 
 

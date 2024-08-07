@@ -377,14 +377,12 @@ input::-webkit-inner-spin-button {
         transform: rotate(360deg)
     }
 }
-
 div [class*="col-"] {
-    font-size: 0.9rem;
-    font-weight:600;
-    line-height:2rem;
-    color: #000;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 2rem;
+    color: #00263E;
 }
-
 
 .fade-in {
     opacity: 0;
@@ -535,7 +533,7 @@ body {
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 500px;
-    padding: 20px;
+/*    padding: 20px;*/
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -550,9 +548,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
+    width: 100%;
     max-width: 500px;
-    padding: 20px;
+/*    padding: 20px;*/
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -561,6 +559,10 @@ body {
    
 }
 
+.policy-steps {
+    padding-left: 35px;
+    padding-right: 35px;
+}
 
 .popup-paymentmethod {
     display: none;
@@ -570,7 +572,7 @@ body {
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 500px;
-    padding: 20px;
+    /*    padding: 20px;*/
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -580,15 +582,19 @@ body {
 
 /* Styles for the title */
 .popup-title-container {
-    display: flex;
+    background-color: #00263E;
+    color: white;
     align-items: center;
-    margin-bottom: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 2px;
 }
 
 .popup-title {
-    font-size: 17px;
+    font-size: 10px;
     font-weight: bold;
-    margin-left: 10px;
+    padding-top:10px;
     flex: 1;
 
 }
@@ -605,7 +611,8 @@ body {
 .popup-buttons {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    padding:20px;
 }
 
 .popup-button {
@@ -614,10 +621,15 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
-    width: 100%;
+    width: 90%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.popup-button:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
     .popup-button.proceed {
@@ -996,7 +1008,7 @@ label.radio-card .card-content-wrapper {
   box-shadow: 0 2px 4px 0 rgba(219, 215, 215, 0.04);
   transition: 200ms linear;
   position: relative;
-	 width:210px;
+	 width:200px;
      height:100px;
 
 }
@@ -1076,6 +1088,31 @@ label.radio-card .card-content h5 {
 .btn-outline-light:hover {
   color: #cecece!important;
 }
+.btn-quantity-control {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor:pointer;
+}
+
+hr {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
 
 .img-fluid {
     max-width: 100%;
@@ -1089,17 +1126,69 @@ label.radio-card .card-content h5 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size:1.1rem;
-    margin-bottom:20px;
+    font-size:1rem;
+    margin-bottom:10px;
+    padding:35px;
 }
 
+.btn-apply, .btn-clear {
+    width: 100% !important;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 2px;
+    border:none;
+    cursor: pointer;
 
-/* Style for disabled button */
+}
+
+.btn-apply {
+    background-color: #0070C0 !important;
+    color: #fff !important;
+    border-radius: 4px;
+    transition: box-shadow 0.3s, transform 0.1s;
+}
+.referral-code-textbox, .btn-apply, .btn-clear {
+    height: 32px;
+}
+
+.referral-code-textbox {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center; 
+    font-size: 14px; 
+    color: #888; 
+    font-style: italic;
+}
+    .referral-code-textbox::placeholder {
+        color: #888; 
+        font-style: italic;
+    }
+
+.btn-clear {
+    background-color: #D9D9D9 !important;
+    color: #fff !important;
+    border-radius: 4px;
+    transition: box-shadow 0.3s, transform 0.1s;
+}
 .disabled-button {
-    background-color: gray !important; /* Change the background color to gray when button is disabled */
-    color: white; /* Change the text color to white when button is disabled */
-    cursor: not-allowed; /* Change cursor to not-allowed when button is disabled */
+    background-color: gray !important; 
+    color: white; 
+    cursor: not-allowed; 
 }
+
+/* Hover effects with box shadow */
+.btn-apply:hover, .btn-clear:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active (click) effects */
+.btn-apply:active, .btn-clear:active {
+    transform: scale(0.95);
+}
+
 
 
 /* PET DETAILS */
@@ -1135,13 +1224,13 @@ label.radio-card .card-content h5 {
 }
 
 .numberInput {
-    width: 40px; /* Adjust the width of the textbox as needed */
+    width: 30px; /* Adjust the width of the textbox as needed */
    border:1px solid #00263E;
    border-radius:5px;
     text-align:center;
-    margin: 0 5px; /* Optional: Adjust the margin as needed */
-    padding-top: 1px;
-    padding-bottom: 1px;
+    /*margin: 0 5px;*/ /* Optional: Adjust the margin as needed */
+    /*padding-top: 1px;
+    padding-bottom: 1px;*/
 
 }
 
@@ -1150,6 +1239,9 @@ label.radio-card .card-content h5 {
     color:#fff;
 }
 
+.quantity-section{
+    text-align: right !important;
+}
 
 .button-iqreqr {
     display: inline-block;
@@ -1189,4 +1281,10 @@ label.radio-card .card-content h5 {
             display: block;
             margin: 0 auto;
         }
+}
+
+
+.disabled-element {
+    opacity: 0.5;
+    pointer-events: none;
 }

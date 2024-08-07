@@ -1,5 +1,5 @@
 ﻿.policy-section {
-    padding: 0.6rem 0.7rem;
+    padding: 0.8rem 0.9rem;
     /*/*height: 100vh;*/
 }
 
@@ -10,7 +10,7 @@
 .policy-description {
     font-size: 1rem;
     color: #4D6778;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .payment-gateway {
@@ -35,7 +35,7 @@
     display: initial;
     margin-left: 1rem;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #4D6778;
 }
 

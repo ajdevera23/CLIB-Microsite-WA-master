@@ -49,6 +49,9 @@ public class BaseRequest
     public string VoucherCode { get; set; }
     public string ZipCode { get; set; }
     public string PaymentChannel { get; set; }
+    public string AgentCode {set; get;}
+    public string ReferralCode {set; get;}
+    public string Remarks { get; set; }
 }
 
 

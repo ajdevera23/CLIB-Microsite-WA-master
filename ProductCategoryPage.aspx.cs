@@ -93,9 +93,6 @@ public partial class Public_ProductCategoryPage : System.Web.UI.Page
         }
     }
 
-
-
-
     private IList<CategoryResult> LoadImage(IList<CategoryResult> list)
     {
         //list = list.Select(r => string.Concat("<a href='" + ConfigurationManager.AppSettings["ProductPage"] +"?a="+r+"'><img src='"+ConfigurationManager.AppSettings["productImagePath"], r, "' ></a>")).ToList();

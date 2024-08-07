@@ -9,6 +9,8 @@ public class ResultTagAsPaid
     public string COCNumber { get; set; }
     public string EffectiveDate { get; set; }
     public string TerminationDate { get; set; }
+    public string FreeInsurance { get; set; }
+    public string FreeInsuranceCOCNumber { get; set; }
 }
 
 public class TagInsuraceAsPaidResult
