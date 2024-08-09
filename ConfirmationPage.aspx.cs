@@ -29,39 +29,34 @@ public partial class ConfirmationPage : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-                Session["FirstPageLoad"] = true;
-                if (Session["DistributionChannelId"].ToString() == "CL Branch")
-                {
-                    lblInsurancePolicyMessage.Text = "Your insurance application details have been sent through your registered email. Your application is only valid within 5 days from the date of filing. You may pay at any Cebuana Lhuillier Branch to activate your Insurance Policy.";
-                    lbNameofInsured.Text = "Name of Insured:";
-                    lbProductName.Text = "Product:";
-                    lblReferenceNumber.Text = "Application Reference No.:";
-                    lblPremiumText.Text = "Premium:";
+            Session["FirstPageLoad"] = true;
+            if (Session["DistributionChannelId"].ToString() == "CL Branch")
+            {
+                lblInsurancePolicyMessage.Text = "Your insurance application details have been sent through your registered email. Your application is only valid within 5 days from the date of filing. You may pay at any Cebuana Lhuillier Branch to activate your Insurance Policy.";
+                lbNameofInsured.Text = "Name of Insured:";
+                lbProductName.Text = "Product:";
+                lblReferenceNumber.Text = "Application Reference No.:";
+                lblPremiumText.Text = "Premium:";
 
-                }
-                if (Session["PaymentMethod"].ToString() == "GCASH" || Session["PaymentMethod"].ToString() == "PAYMAYA" || Session["PaymentMethod"].ToString() == "GRABPAY" || Session["PaymentMethod"].ToString() == "DD_BPI" || Session["PaymentMethod"].ToString() == "DD_UBP" || Session["PaymentMethod"].ToString() == "CREDIT_CARD")
-                {
-                    TagAsPaid();
-                    lblInsurancePolicyMessage.Text = "Your policy details will be sent to the email address that you have provided";
-                    lbNameofInsured.Text = "Insured Name:";
-                    lbProductName.Text = "Product:";
-                    lblReferenceNumber.Text = "COC Number:";
-                    lblPremiumText.Text = "Premium:";
+            }
+            if (Session["PaymentMethod"].ToString() == "GCASH" || Session["PaymentMethod"].ToString() == "PAYMAYA" || Session["PaymentMethod"].ToString() == "GRABPAY" || Session["PaymentMethod"].ToString() == "DD_BPI" || Session["PaymentMethod"].ToString() == "DD_UBP" || Session["PaymentMethod"].ToString() == "CREDIT_CARD")
+            {
+                TagAsPaid();
+                lblInsurancePolicyMessage.Text = "Your policy details will be sent to the email address that you have provided";
+                lbNameofInsured.Text = "Insured Name:";
+                lbProductName.Text = "Product:";
+                lblReferenceNumber.Text = "COC Number:";
+                lblPremiumText.Text = "Premium:";
 
-                }
-                if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
-                {
-                    FreeInsurance.Text = Session["FreeInsurance"].ToString();
-                    FreeInsuranceCOCNumber.Text = Session["FreeInsuranceCOCNumber"].ToString();
-
-                }
+            }
 
 
-                lblNameOfInsured.Text = Session["firstName"].ToString() + " " + Session["lastName"].ToString();
-                lblNameOfProduct.Text = Session["ProductName"].ToString();
-                lblRTN.Text = RefrecenNumber();
-                lblPremium.Text = Session["formattedPremium"].ToString();
- 
+
+            lblNameOfInsured.Text = Session["firstName"].ToString() + " " + Session["lastName"].ToString();
+            lblNameOfProduct.Text = Session["ProductName"].ToString();
+            lblRTN.Text = RefrecenNumber();
+            lblPremium.Text = Session["formattedPremium"].ToString();
+
 
         }
         else
@@ -100,7 +95,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
     {
         string result = Session["DistributionChannelId"].ToString();
 
-        if(result == "CL Branch")
+        if (result == "CL Branch")
         {
             result = Session["ReferenceCode"].ToString();
         }
@@ -140,9 +135,8 @@ public partial class ConfirmationPage : System.Web.UI.Page
         return script;
     }
 
-
-
     #region TAG AS PAID
+
     public void TagAsPaid()
     {
         PaymentDetails paymentdetails = new PaymentDetails()
@@ -169,31 +163,35 @@ public partial class ConfirmationPage : System.Web.UI.Page
             PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"],
             PaymentDetails = paymentdetails,
             ReferralCode = GetReferralCode(),
-
         };
 
         var returnValue = getList.TagInsuranceAsPaid(tagaspaidrequest);
         string message = returnValue.Message;
 
-        if(returnValue.Message == "Transaction successful!")
+        if (returnValue.Message == "Transaction successful!")
         {
             string jsonResponse = JsonConvert.SerializeObject(returnValue);
             tagaspaidresult = JsonConvert.DeserializeObject<TagInsuraceAsPaidResult>(jsonResponse);
 
             SMSContent(tagaspaidresult);
 
-            if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
+            if (!string.IsNullOrEmpty(returnValue.Result.FreeInsurance.ToString()) && !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber.ToString()))
             {
-                Session["FreeInsurance"] = returnValue.Result[0].FreeInsurance.ToString();
-                Session["FreeInsuranceCOCNumber"] = returnValue.Result[0].FreeInsuranceCOCNumber.ToString();
+                Session["FreeInsurance"] = returnValue.Result.FreeInsurance != null ? returnValue.Result.FreeInsurance.ToString() : string.Empty;
+                Session["FreeInsuranceCOCNumber"] = returnValue.Result.FreeInsuranceCOCNumber != null ? returnValue.Result.FreeInsuranceCOCNumber.ToString() : string.Empty;
+
+                lbfreeinsurancetitle.Text = "Free Insurance";
+                lbfreeinsurancenumbertitle.Text = "COC Number";
+                FreeInsurance.Text = Session["FreeInsurance"].ToString();
+                FreeInsuranceCOCNumber.Text = Session["FreeInsuranceCOCNumber"].ToString();
             }
+
         }
         else
         {
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
             return;
         }
-
     }
 
     private string GetReferralCode()
@@ -212,34 +210,28 @@ public partial class ConfirmationPage : System.Web.UI.Page
         return selectedValue;
     }
 
-
-
     public void SMSContent(TagInsuraceAsPaidResult tagaspaidresult)
     {
         try
         {
-                string smsproductnamelabel = Session["ProductName"].ToString();
-                string smsfirstname = Session["firstName"].ToString();
+            string smsproductnamelabel = Session["ProductName"].ToString();
+            string smsfirstname = Session["firstName"].ToString();
 
-                decimal premiumStrings = Convert.ToDecimal(Session["Premium"].ToString());
-                string premiumString = premiumStrings.ToString();
-                string formattedPremium = "Php. " + premiumStrings.ToString("N2");
+            decimal premiumStrings = Convert.ToDecimal(Session["Premium"].ToString());
+            string premiumString = premiumStrings.ToString();
+            string formattedPremium = "Php. " + premiumStrings.ToString("N2");
 
-                string smsReferenceCode = Session["ReferenceCode"].ToString();
+            string smsReferenceCode = Session["ReferenceCode"].ToString();
 
+            foreach (var cocItems in tagaspaidresult.Result.insuranceCollection)
+            {
+                string messageContent = "Hi Ka-Cebuana " + smsfirstname + "! Your policy " + smsproductnamelabel + " is now active with COC details: COC No.:" + cocItems.COCNumber + ", Policy Period: " + cocItems.EffectiveDate + " to " + cocItems.TerminationDate + ", T&C apply. For Inquiries, call (02) 7759-9888 or visit https://www.cebuanalhuillier.com/microinsurance.";
 
-                foreach (var cocItems in tagaspaidresult.Result)
-                {
-                    string messageContent = "Hi Ka-Cebuana " + smsfirstname + "! Your policy " + smsproductnamelabel + " is now active with COC details: COC No.:" + cocItems.COCNumber + ", Policy Period: " + cocItems.EffectiveDate + " to " + cocItems.TerminationDate + ", T&C apply. For Inquiries, call (02) 7759-9888 or visit https://www.cebuanalhuillier.com/microinsurance.";
-
-                    SendSMS(smsReferenceCode, messageContent, cocItems.COCNumber);
-
-                }
+                SendSMS(smsReferenceCode, messageContent, cocItems.COCNumber);
+            }
 
             string messageredirection = "Transaction Successfully! We'll redirect you in 5 seconds...";
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + messageredirection + "`, '', 'success').then((result) => { if (result.isConfirmed) { setTimeout(function(){ " + GetRedirectionScript() + " }, 5000); }}); ", true);
-
-
         }
         catch (Exception ex)
         {
@@ -248,7 +240,6 @@ public partial class ConfirmationPage : System.Web.UI.Page
             throw;
         }
     }
-
 
     public void SendSMS(string smsReferenceCode, string messageContent, string cocNumber)
     {
@@ -270,7 +261,5 @@ public partial class ConfirmationPage : System.Web.UI.Page
         string message = returnValue.Message;
     }
 
+    #endregion
 }
-
-#endregion
-

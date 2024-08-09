@@ -1333,7 +1333,7 @@ public partial class Enrollment : System.Web.UI.Page
             {
 
               string purchasepetbirthdate = DateTime.Parse(fld_PetBirthdate.Text.Trim()).ToString("MM/dd/yyyy");
-              #region IQR PET PRODUCTS
+                 #region IQR PET PRODUCTS
                  HealthDeclarationRequest petrequest = new HealthDeclarationRequest();
                 token.Token = generateToken.GenerateTokenAuth();
                 petrequest.Token = token.Token;
@@ -1445,10 +1445,10 @@ public partial class Enrollment : System.Web.UI.Page
                 }
 
             #endregion
-        }
+            }
             if (Session["CategoryId"].ToString() == "10")
             {
-                #region IQR FAMILY PRODUCTS
+                 #region IQR FAMILY PRODUCTS
                 FamilyRequest familyRequest = new FamilyRequest();
                 token.Token = generateToken.GenerateTokenAuth();
                 familyRequest.Token = token.Token;
@@ -1567,7 +1567,7 @@ public partial class Enrollment : System.Web.UI.Page
             }
             if (Session["CategoryId"].ToString() == "11")
             {
-                #region IQR TRAVEL PRODUCTS
+                 #region IQR TRAVEL PRODUCTS
                 List<OptionalCoverageCollection> optionalCoverageList = new List<OptionalCoverageCollection>();
                 TravelRequest travelrequest = new TravelRequest();
                 token.Token = generateToken.GenerateTokenAuth();
@@ -1692,7 +1692,6 @@ public partial class Enrollment : System.Web.UI.Page
             }
             if (Session["CategoryId"].ToString() != "10" && Session["CategoryId"].ToString() != "11" && Session["CategoryId"].ToString() != "8")
             {
-
                  #region IQR PRODUCTS & FIRE PROPERTY
                      FirePropertyRequest firepropertyrequest = new FirePropertyRequest();
                     token.Token = generateToken.GenerateTokenAuth();
@@ -1811,51 +1810,68 @@ public partial class Enrollment : System.Web.UI.Page
             }
            #endregion
       #endregion
-    }
+      }
     #endregion
 
+    #region GET AGENT CODE
     private string GetAgentCode()
     {
         string selectedValue = string.Empty;
 
-        if (Session["SummaryAgentCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+        if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            selectedValue = Session["SummaryAgentCode"].ToString();
-        }
-        else
-        {
-            selectedValue = null;
-        }
 
+            if (Session["SummaryAgentCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+            {
+                selectedValue = Session["SummaryAgentCode"].ToString();
+            }
+            else
+            {
+                selectedValue = null;
+            }
+          
+        }
         return selectedValue;
     }
 
+    #endregion
+
+    #region GET REFERRAL CODE
     private string GetReferralCode()
     {
         string selectedValue = string.Empty;
 
-        if (Session["ReferralCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+        if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            selectedValue = Session["ReferralCode"].ToString();
-        }
-        else
-        {
-            selectedValue = null;
+            if (Session["ReferralCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+            {
+                selectedValue = Session["ReferralCode"].ToString();
+            }
+            else
+            {
+                selectedValue = null;
+            }
         }
         return selectedValue;
     }
 
+    #endregion
+
+    #region REMARK DISCOUNT FORMAT
     public string RemarkDiscountFormat(string referralcode)
     {
         string formattedDiscount = string.Empty;
 
-        if (Session["PaymentMethod"].ToString() != "CL Branch")
+        if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-             formattedDiscount = "Discount of Php " + Session["SummaryTotalAmount"].ToString() + " from Referral Code " + referralcode + "";
+            if (Session["PaymentMethod"].ToString() != "CL Branch")
+            {
+                formattedDiscount = "Discount of Php " + Session["SummaryTotalAmount"].ToString() + " from Referral Code " + referralcode + "";
+            }
         }
         return formattedDiscount;
     }
-
+    #endregion
 
     #region COC NUMBER
     private string NumberOfCOCs()
@@ -1993,7 +2009,6 @@ public partial class Enrollment : System.Web.UI.Page
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Minimum COC limit is 1');", true);
         }
     }
-
     #endregion
 
     #region PaymentMethodType
@@ -2206,7 +2221,7 @@ public partial class Enrollment : System.Web.UI.Page
     }
         #endregion
 
-     #region XenditCreateInvoice
+    #region XenditCreateInvoice
         public void XenditCreateInvoice()
         {
  
@@ -3103,7 +3118,6 @@ public partial class Enrollment : System.Web.UI.Page
 
     #endregion
 
-
     #region GET TRAVEL ORIGIN
     public void GetTravelOrigin()
     {
@@ -3328,6 +3342,183 @@ public partial class Enrollment : System.Web.UI.Page
     }
     #endregion
 
+    #region GET REFERRAL DETAILS
+    public void GetReferralDetails(string referralcodevalue)
+    {
+        string birthdate = DateTime.Parse(birthDateTextBox.Text.Trim()).ToString("MM/dd/yyyy");
+        double summaryPremiumValue = double.Parse(SummaryPremium.Text);
+
+        int AvailableCOCs = int.Parse(lblAvailableCOCs.Text);
+
+        token.Token = generateToken.GenerateTokenAuth();
+        referralcoderequest.Token = token.Token;
+        referralcoderequest.IntegrationId = Convert.ToInt32(Request.QueryString["INTID"].ToString());
+        referralcoderequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
+        referralcoderequest.Premium = summaryPremiumValue;
+        referralcoderequest.ReferralCode = referralcodevalue;
+        referralcoderequest.BirthDate = birthdate;
+        referralcoderequest.FirstName = firstName.Value.ToString();
+        referralcoderequest.LastName = lastName.Value.ToString();
+        referralcoderequest.MiddleName = middleName.Value.ToString();
+
+        var returnValue = getList.GetReferralDetails(referralcoderequest);
+        string message = returnValue.Message;
+
+        bool DiscountPhphasvalue = false;
+        bool DiscountPercenthasvalue = false;
+
+        int SetCOCC = 0;
+
+        if (returnValue.ResultStatus == 1)
+        {
+            fld_ReferralCode.Text = null;
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
+            return;
+        }
+        if (returnValue.ResultStatus == 0)
+        {
+            SetCOCC = returnValue.Result.SetCOC;
+
+            if (SetCOCC > AvailableCOCs)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('You have reached the maximum COC Limit.'); ", true);
+                EnableReferralElements();
+                return;
+            }
+            if (returnValue.Message == "Referral details retrieved successfully.")
+            {
+                Session["SummaryAgentCode"] = returnValue.Result.AgentCode.ToString();
+                Session["SummaryDiscountPHP"] = returnValue.Result.DiscountPHP;
+                Session["SummaryDiscountPercent"] = returnValue.Result.DiscountPercent;
+                Session["SummaryDiscountedPremium"] = returnValue.Result.DiscountedPremium;
+                Session["SummaryFreeInsuranceProductName"] = returnValue.Result.FreeInsuranceProductName;
+                Session["SummaryIsValidFreeInsurance"] = returnValue.Result.IsValidFreeInsurance;
+                Session["ReferralCode"] = fld_ReferralCode.Text.ToString();
+
+                SummaryPremiumPerCOC.Text = Session["SummaryDiscountedPremium"].ToString();
+
+                if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
+                {
+                    SummaryFreeInsurance.Text = "Free Insurance (" + Session["SummaryFreeInsuranceProductName"].ToString() + ")";
+                }
+                if (!string.IsNullOrEmpty(Session["SummaryDiscountPHP"].ToString()))
+                {
+                    SummaryDiscountAmount.Text = "Discount (Php. " + decimal.Parse(Session["SummaryDiscountPHP"].ToString()) + ")";
+                    SummaryDiscountAmountValue.Text = "- " + decimal.Parse(Session["SummaryDiscountPHP"].ToString()).ToString("N2") + "";
+                }
+                if (!string.IsNullOrEmpty(Session["SummaryDiscountPercent"].ToString()))
+                {
+                    SummaryDiscountPercent.Text = "Discount (" + decimal.Parse(Session["SummaryDiscountPercent"].ToString()) + " %)";
+                }
+                if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
+                {
+                    string script = @"
+                        Swal.fire({
+                            title: 'You have reached maximum COC limit for your free insurance (" + Session["SummaryFreeInsuranceProductName"].ToString() + @"). Do you wish to proceed?',
+                            showCancelButton: true,
+                            confirmButtonText: 'CONTINUE',
+                            cancelButtonText: 'CANCEL',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isDismissed) {
+                                document.getElementById('" + btnEnableReferralElements.ClientID + @"').click();
+                            }
+                        });";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+                }
+
+                if (SetCOCC > 0)
+                {
+                    DisableReferralElements();
+                    numberInput.Text = SetCOCC.ToString();
+                    DisplayPreview(SetCOCC);
+                }
+
+                if (SetCOCC == 0)
+                {
+                    DisplayPreview(int.Parse(numberInput.Text));
+                }
+                return;
+
+            }
+        }
+        else
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
+            return;
+        }
+
+    }
+    #endregion
+
+    #region DISABLE REFERRAL ELEMENTS
+    public void DisableReferralElements()
+    {
+        fld_ReferralCode.Attributes["readonly"] = "readonly"; // Set readonly instead of disabled
+        btnMinus.Attributes["disabled"] = "disabled";
+        btnPlus.Attributes["disabled"] = "disabled";
+        numberInput.Attributes["readonly"] = "readonly";
+        btnApply.Attributes["disabled"] = "disabled";
+
+        fld_ReferralCode.CssClass += " disabled-element";
+        btnMinus.CssClass += " disabled-element";
+        btnPlus.CssClass += " disabled-element";
+        numberInput.CssClass += " disabled-element";
+        btnApply.CssClass += " disabled-element";
+    }
+    #endregion
+
+    #region ENABLE REFERRAL ELEMENTS
+    public void EnableReferralElements()
+    {
+        int currentValue = Convert.ToInt32(numberInput.Text);
+        DisplayPreview(currentValue);
+
+        fld_ReferralCode.Attributes.Remove("readonly"); // Remove readonly instead of disabled
+        btnMinus.Attributes.Remove("disabled");
+        btnPlus.Attributes.Remove("disabled");
+        numberInput.Attributes.Remove("readonly");
+        btnApply.Attributes.Remove("disabled");
+
+        fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
+        btnMinus.CssClass = btnMinus.CssClass.Replace("disabled-element", "").Trim();
+        btnPlus.CssClass = btnPlus.CssClass.Replace("disabled-element", "").Trim();
+        numberInput.CssClass = numberInput.CssClass.Replace("disabled-element", "").Trim();
+        btnApply.CssClass = btnApply.CssClass.Replace("disabled-element", "").Trim();
+
+        fld_ReferralCode.Enabled = true;
+        btnMinus.Enabled = true;
+        btnPlus.Enabled = true;
+        numberInput.Enabled = true;
+        btnApply.Enabled = true;
+        fld_ReferralCode.Text = null;
+    }
+    #endregion
+
+    #region PAGE LOAD ENABLE REFERRAL ELEMENTS
+    public void PageLoadEnableReferralElements()
+    {
+        fld_ReferralCode.Attributes.Remove("readonly"); // Remove readonly instead of disabled
+        btnMinus.Attributes.Remove("disabled");
+        btnPlus.Attributes.Remove("disabled");
+        numberInput.Attributes.Remove("readonly");
+        btnApply.Attributes.Remove("disabled");
+
+        fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
+        btnMinus.CssClass = btnMinus.CssClass.Replace("disabled-element", "").Trim();
+        btnPlus.CssClass = btnPlus.CssClass.Replace("disabled-element", "").Trim();
+        numberInput.CssClass = numberInput.CssClass.Replace("disabled-element", "").Trim();
+        btnApply.CssClass = btnApply.CssClass.Replace("disabled-element", "").Trim();
+
+        fld_ReferralCode.Enabled = true;
+        btnMinus.Enabled = true;
+        btnPlus.Enabled = true;
+        numberInput.Enabled = true;
+        btnApply.Enabled = true;
+    }
+    #endregion
+
+
     protected void DDProvince_SelectedIndexChanged(object sender, EventArgs e)
     {
        GetListCity(DDProvince.SelectedValue);
@@ -3383,197 +3574,24 @@ public partial class Enrollment : System.Web.UI.Page
         }  
     }
 
-    public void ClearReferralDetails()
-    {
-
-    }
-
     protected void btnApply_Click(object sender, EventArgs e)
     {
         GetReferralDetails(fld_ReferralCode.Text.ToString());
     }
 
-    public void GetReferralDetails(string referralcodevalue)
-    {
-        string birthdate = DateTime.Parse(birthDateTextBox.Text.Trim()).ToString("MM/dd/yyyy");
-        double summaryPremiumValue = double.Parse(SummaryPremium.Text);
-
-        int AvailableCOCs = int.Parse(lblAvailableCOCs.Text);
-
-        token.Token = generateToken.GenerateTokenAuth();
-        referralcoderequest.Token = token.Token;
-        referralcoderequest.IntegrationId = Convert.ToInt32(Request.QueryString["INTID"].ToString());
-        referralcoderequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
-        referralcoderequest.Premium = summaryPremiumValue;
-        referralcoderequest.ReferralCode = referralcodevalue;
-        referralcoderequest.BirthDate = birthdate;
-        referralcoderequest.FirstName = firstName.Value.ToString();
-        referralcoderequest.LastName = lastName.Value.ToString();
-        referralcoderequest.MiddleName = middleName.Value.ToString();
-
-        var returnValue = getList.GetReferralDetails(referralcoderequest);
-        string message = returnValue.Message;
-
-        bool DiscountPhphasvalue = false;
-        bool DiscountPercenthasvalue = false;
-
-        int SetCOCC = 0;
-
-        if (returnValue.ResultStatus == 1)
-        {
-            fld_ReferralCode.Text = null;
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
-            return;
-        }
-        if(returnValue.ResultStatus == 0)
-        {
-            SetCOCC = returnValue.Result.SetCOC;
-
-            if (SetCOCC > AvailableCOCs)
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('You have reached the maximum COC Limit.'); ", true);
-                EnableReferralElements();
-                return;
-            }
-            if (returnValue.Message == "Referral details retrieved successfully.")
-            {
-                Session["SummaryAgentCode"] = returnValue.Result.AgentCode.ToString();
-                Session["SummaryDiscountPHP"] = returnValue.Result.DiscountPHP;
-                Session["SummaryDiscountPercent"] = returnValue.Result.DiscountPercent;
-                Session["SummaryDiscountedPremium"] = returnValue.Result.DiscountedPremium;
-                Session["SummaryFreeInsuranceProductName"] = returnValue.Result.FreeInsuranceProductName;
-                Session["SummaryIsValidFreeInsurance"] = returnValue.Result.IsValidFreeInsurance;
-                Session["ReferralCode"] = fld_ReferralCode.Text.ToString();
-
-                SummaryPremiumPerCOC.Text = Session["SummaryDiscountedPremium"].ToString();
-
-                if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
-                {
-                    SummaryFreeInsurance.Text = "Free Insurance (" + Session["SummaryFreeInsuranceProductName"].ToString() + ")";
-                }
-                if (!string.IsNullOrEmpty(Session["SummaryDiscountPHP"].ToString()))
-                {
-                    SummaryDiscountAmount.Text = "Discount (Php. " + decimal.Parse(Session["SummaryDiscountPHP"].ToString()) + ")";
-                    SummaryDiscountAmountValue.Text = "- " + decimal.Parse(Session["SummaryDiscountPHP"].ToString()).ToString("N2") + "";
-                }
-                if (!string.IsNullOrEmpty(Session["SummaryDiscountPercent"].ToString()))
-                {
-                    SummaryDiscountPercent.Text = "Discount (" + decimal.Parse(Session["SummaryDiscountPercent"].ToString()) + " %)";
-                }
-                if (bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()))
-                {
-                    string script = @"
-                        Swal.fire({
-                            title: 'You have reached maximum COC limit for your free insurance (" + Session["SummaryFreeInsuranceProductName"].ToString() + @"). Do you wish to proceed?',
-                            showCancelButton: true,
-                            confirmButtonText: 'CONTINUE',
-                            cancelButtonText: 'CANCEL',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.isDismissed) {
-                                document.getElementById('" + btnEnableReferralElements.ClientID + @"').click();
-                            }
-                        });";
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
-                }
-
-                if (SetCOCC > 0)
-                {
-                    DisableReferralElements();
-                    numberInput.Text = SetCOCC.ToString();
-                    DisplayPreview(SetCOCC);
-                }
-
-                if (SetCOCC == 0)
-                {
-                    DisplayPreview(int.Parse(numberInput.Text));
-                }
-                return;
-
-            }
-        }
-        else
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
-            return;
-        }
-
-
-
-    }
     protected void EnableReferralElements_Click(object sender, EventArgs e)
     {
         EnableReferralElements();
     }
-
-    public void DisableReferralElements()
-    {
-        fld_ReferralCode.Attributes["disabled"] = "disabled";
-        btnMinus.Attributes["disabled"] = "disabled";
-        btnPlus.Attributes["disabled"] = "disabled";
-        numberInput.Attributes["disabled"] = "disabled";
-        btnApply.Attributes["disabled"] = "disabled";
-
-        fld_ReferralCode.CssClass += " disabled-element";
-        btnMinus.CssClass += " disabled-element";
-        btnPlus.CssClass += " disabled-element";
-        numberInput.CssClass += " disabled-element";
-        btnApply.CssClass += " disabled-element";
-    }
-
-    public void EnableReferralElements()
-    {
-        int currentValue = Convert.ToInt32(numberInput.Text);
-        DisplayPreview(currentValue);
-
-        fld_ReferralCode.Attributes.Remove("disabled");
-        btnMinus.Attributes.Remove("disabled");
-        btnPlus.Attributes.Remove("disabled");
-        numberInput.Attributes.Remove("disabled");
-        btnApply.Attributes.Remove("disabled");
-
-        fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
-        btnMinus.CssClass = btnMinus.CssClass.Replace("disabled-element", "").Trim();
-        btnPlus.CssClass = btnPlus.CssClass.Replace("disabled-element", "").Trim();
-        numberInput.CssClass = numberInput.CssClass.Replace("disabled-element", "").Trim();
-        btnApply.CssClass = btnApply.CssClass.Replace("disabled-element", "").Trim();
-
-        fld_ReferralCode.Enabled = true;
-        btnMinus.Enabled = true;
-        btnPlus.Enabled = true;
-        numberInput.Enabled = true;
-        btnApply.Enabled = true;
-        fld_ReferralCode.Text = null;
-    }
-
-
-    public void PageLoadEnableReferralElements()
-    {
-        fld_ReferralCode.Attributes.Remove("disabled");
-        btnMinus.Attributes.Remove("disabled");
-        btnPlus.Attributes.Remove("disabled");
-        numberInput.Attributes.Remove("disabled");
-        btnApply.Attributes.Remove("disabled");
-
-        fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
-        btnMinus.CssClass = btnMinus.CssClass.Replace("disabled-element", "").Trim();
-        btnPlus.CssClass = btnPlus.CssClass.Replace("disabled-element", "").Trim();
-        numberInput.CssClass = numberInput.CssClass.Replace("disabled-element", "").Trim();
-        btnApply.CssClass = btnApply.CssClass.Replace("disabled-element", "").Trim();
-
-        fld_ReferralCode.Enabled = true;
-        btnMinus.Enabled = true;
-        btnPlus.Enabled = true;
-        numberInput.Enabled = true;
-        btnApply.Enabled = true;
-    }
-
 
     protected void btnClear_Click(object sender, EventArgs e)
     {
         fld_ReferralCode.Text = null;
         EnableReferralElements();
     }
+
+
+
 
 
 }

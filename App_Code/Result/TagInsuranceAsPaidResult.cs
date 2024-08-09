@@ -4,21 +4,55 @@ using System.Linq;
 using System.Web;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-public class ResultTagAsPaid
+//public class ResultTagAsPaid
+//{
+//    public string COCNumber { get; set; }
+//    public string EffectiveDate { get; set; }
+//    public string TerminationDate { get; set; }
+//}
+
+
+//public class InsuranceTransactionCollectionQRCode
+//{
+//    public InsuranceTransactionCollection insuranceCollection { get; set; }
+//    public string FreeInsurance { get; set; }
+//    public string FreeInsuranceCOCNumber { get; set; }
+//}
+
+//public class TagInsuraceAsPaidResult
+//{
+//    public string Message { get; set; }
+//    public List<ResultTagAsPaid> Result { get; set; }
+//    public string FreeInsurance { get; set; }
+//    public string FreeInsuranceCOCNumber { get; set; }
+//    public int ResultStatus { get; set; }
+//    public long TotalItems { get; set; }
+//    public long TotalPage { get; set; }
+//}
+
+
+
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+public class InsuranceCollection
 {
     public string COCNumber { get; set; }
     public string EffectiveDate { get; set; }
     public string TerminationDate { get; set; }
+}
+
+public class ResultTagAsPaid
+{
     public string FreeInsurance { get; set; }
     public string FreeInsuranceCOCNumber { get; set; }
+    public List<InsuranceCollection> insuranceCollection { get; set; }
 }
 
 public class TagInsuraceAsPaidResult
 {
     public string Message { get; set; }
-    public List<ResultTagAsPaid> Result { get; set; }
+    public ResultTagAsPaid Result { get; set; }
     public int ResultStatus { get; set; }
-    public long TotalItems { get; set; }
-    public long TotalPage { get; set; }
+    public int TotalItems { get; set; }
+    public int TotalPage { get; set; }
 }
 
