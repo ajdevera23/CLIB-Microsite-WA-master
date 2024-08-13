@@ -316,6 +316,8 @@ public partial class ClientReferral : System.Web.UI.Page
             individualPnl.Visible = true;
             FirstName.Attributes.Add("disabled", "disabled");
             LastName.Attributes.Add("disabled", "disabled");
+            fld_GroupName.Attributes.Add("disabled", "disabled");
+            ContactPerson.Attributes.Add("disabled", "disabled");
             birthDateTextBox.Attributes.Add("disabled", "disabled");
             otherDetailsPnl.Visible = true;
             dpaPnl.Visible = true;

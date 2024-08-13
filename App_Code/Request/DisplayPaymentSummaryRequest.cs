@@ -28,4 +28,6 @@ public class DisplayPaymentSummaryRequest
     public int TravelDurationDays { get; set; }
     public string TravelDurationFrom { get; set; }
     public string TravelDurationTo { get; set; }
+    public string ReferralCode { get; set; }
+
 }

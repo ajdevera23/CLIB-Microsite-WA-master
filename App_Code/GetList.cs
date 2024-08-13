@@ -410,8 +410,18 @@ public class GetList
         return returnValue;
     }
 
+    public ReferralCodeDisplayResult GetReferralDetails(ReferralCodeRequest token)
+    {
+        ReferralCodeDisplayResult returnValue = new ReferralCodeDisplayResult();
 
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
 
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetReferralDetails"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<ReferralCodeDisplayResult>(jsonResult);
+
+        return returnValue;
+    }
 
     public CreateInvoiceResult XenditCreateInvoice(CreateInvoiceRequest token)
     {
@@ -437,7 +447,7 @@ public class GetList
         returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<TagInsuraceAsPaidResult>(jsonResult);
 
         return returnValue;
-    }
+        }
 
     public FieldValidationResult FieldValidation(FieldValidationRequest token)
     {

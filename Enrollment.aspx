@@ -870,9 +870,12 @@
        <div class="overlay overlayActive" id="overlay"></div>
        <div class="popup popupactive" id="popup">
           <div class="popup-title-container">
+                   <div class="w-full h-8 px-12 py-1.5 bg-red-600 justify-center items-center inline-flex">
+		            <div class="text-center text-white text-xs font-medium  leading-tight"> <h6><asp:Label ID="Label1" runat="server" Text="Choose <b><i>payment</i></b> method below"></asp:Label></h6></div>
+	              </div>
           </div>
            <center>
-                     <div class="grid-wrapper grid-col-auto">
+            <div class="grid-wrapper grid-col-auto">
               <label for="radio-card-1" class="radio-card">
                 <input type="radio" name="payment-option" id="radio-card-1" value="Cebuana Lhuillier Branch" checked />
                 <div class="card-content-wrapper">
@@ -907,87 +910,153 @@
         </div>
        <%} %>
        <%if (Session["PaymentMethod"].ToString() == "CL Branch" || Session["PaymentMethod"].ToString() == "GCASH" || Session["PaymentMethod"].ToString() == "PAYMAYA" || Session["PaymentMethod"].ToString() == "GRABPAY" || Session["PaymentMethod"].ToString() == "DD_BPI" || Session["PaymentMethod"].ToString() == "DD_UBP" || Session["PaymentMethod"].ToString() == "CREDIT_CARD") {%>
-        <div class="overlay overlayActive-display-summary" id="overlay-display-preview"></div>
-           <div class="popup-display-preview popupactive-display-summary" id="popup-display-summary">
-             <div class="popup-title-container">
-                 <br />
-                 <h4><asp:Label ID="SummaryProductName" runat="server" Text=""></asp:Label></h4>
-             </div>
-              <div class="details">
-               <table style="width:100%;">
-                  <tr>
-                     <td>Premium</td>
-                     <td style="text-align: right;"><asp:Label ID="SummaryPremium" runat="server" Text=""></asp:Label></td>
-                  </tr>
-                   <tr>
-                     <td class="column-left-50"><b>Count of COC</b></td>
-                     <td class="column-right-50">
-                         <div class="quantity">
-                           <asp:Button ID="btnMinus" runat="server" CssClass="btn btn-quantity" Text="-" OnClick="btnMinus_Click" />
-                               <asp:TextBox ID="numberInput" runat="server" Text="1" CssClass="numberInput" Enabled="false"></asp:TextBox>
-                            <asp:Button ID="btnPlus" runat="server" CssClass="btn btn-quantity" Text="+" OnClick="btnPlus_Click" />
+            <div class="overlay overlayActive-display-summary" id="overlay-display-preview"></div>
+            <div class="popup-display-preview popupactive-display-summary" id="popup-display-summary">
+                <div class="popup-title-container">
+                    <div class="w-full h-8 px-12 py-1.5 bg-red-600 justify-center items-center inline-flex">
+                        <div class="text-center text-white text-xs font-medium leading-tight">
+                            <h6><b><asp:Label ID="SummaryProductName" runat="server"></asp:Label></b></h6>
                         </div>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td style="font-size:14px;" colspan="2">Note: You can avail up to a maximum of <b><asp:Label ID="lblAvailableCOCs" runat="server" Text=""></asp:Label></b> COC's</td>
-                  </tr>
-                   <tr>
-                     <td colspan="2"><hr></td>
-                  </tr>
-                   <tr>
-                       <td>Total Premium</td>
-                       <td style="text-align: right;"> <asp:Label ID="SummaryTotalPremium" runat="server" Text=""></asp:Label></td>
-                   </tr>
-                  <tr>
-                     <td>Convenience Fee <b><asp:Label ID="lblPaymentChannel" runat="server" Text=""></asp:Label></b></td>
-                     <td style="text-align: right;"><asp:Label ID="SummaryConvinienceFee" runat="server" Text=""></asp:Label></td>
-                  </tr>
-                  <tr>
-                     <td colspan="2"><hr></td>
-                  </tr>
-                  <tr>
-                     <td><b>Total Amount Due</b></td>
-                     <td style="text-align: right;"><b><asp:Label ID="SummaryTotalAmount" runat="server" Text=""></asp:Label></b></td>
-                  </tr>
-                   <tr>
-                     <td colspan="2"><hr></td>
-                  </tr>
-                   <tr>
-                     <td colspan="2">
-                         <center>
-                         <p style="font-size:14px;"><input type="checkbox" id="confirmpayment">
-                             <%if (Session["PaymentMethod"].ToString() == "CL Branch")
-                                 { %>
-                               I hereby verify and confirm that the information provided is accurate and complete
-                             <%} %>
-                             <%else { %>
-                                 I hereby verify and confirm that the information provided is accurate and complete before proceeding with the purchase.
-                             <%} %>
-                         </p>
-                         </center>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="referral-code-container">
+                    <table class="referral-code-table" style="width:100%;font-size:12px;">
+             
+                  <% if(Session["PaymentMethod"].ToString() != "CL Branch") { %>
+                    <tr>
+                        <td><b>Referral Code</b></td>
+                        <td style="text-align: right;">
+                            <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" Minlength="4" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" placeholder="Enter referral code"></asp:TextBox>
+                        </td>
+                        <td>
+                            <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
+                        </td>
+                        <td>
+                            <asp:Button ID="btnClear" runat="server" CssClass="btn-clear" Text="Clear" OnClick="btnClear_Click" />
+                        </td>
+                    </tr>
+                  <% } %>
+                       <tr>
+                            <td colspan="2">Premium</td>
+                            <td colspan="2" style="text-align: right;"><asp:Label ID="SummaryPremium" runat="server"></asp:Label></td>
+                        </tr>
+                         <tr>
+                             <td colspan="4"><hr /></td>
+                         </tr>
+                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())) { %>
 
-                     </td>
-                  </tr>
-               </table>
-            </div>  
-        <div class="popup-buttons">
-              <button runat="server" type="submit" class="popup-button btn-finalstep proceed" id="gotoFinalStep" disabled>Proceed</button>
-              <button runat="server" type="button" class="popup-button goBackLoad" id="goBackStep1">Go Back</button>
-        </div>
-       </div>
+                        <% if (Session["SummaryDiscountPercent"].ToString() != "0" ||  Session["SummaryDiscountPHP"].ToString() != "0" ||  (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&  bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
+                        <tr>
+                            <td colspan="4">Referral Code Bonus:</td>
+                        </tr>
+                        <%} %>
+                          <%if (Session["SummaryDiscountPercent"].ToString() != "0") { %>
+                        <tr >
+                                <td colspan="2">
+                                <asp:Label ID="SummaryDiscountPercent" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
+                                </td>
+                                <td style="text-align: right;" colspan="2">
+                                <asp:Label ID="SummaryDiscountPercentValue" runat="server" ForeColor="Red"></asp:Label><br>
+                                </td>
+                        </tr>
+                         <%} %>
+                         <%if (Session["SummaryDiscountPHP"].ToString() != "0") { %>
+                        <tr>
+                            <td style="margin-left:20px;" colspan="2">
+                             <asp:Label ID="SummaryDiscountAmount" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
+                            </td>
+                             <td style="text-align:right;" colspan="2">
+                              <asp:Label ID="SummaryDiscountAmountValue" runat="server" ForeColor="Red"></asp:Label><br>
+                            </td>
+                        </tr>
+                        <%} %>
+                        <%if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true ){ %>
+                        <tr>
+                            <td colspan="4" style="margin-left:20px;">
+                            <asp:Label ID="SummaryFreeInsurance" runat="server" style="margin-left:20px;"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><hr></td>
+                        </tr>
+                        <%} %>
+
+                        <tr>
+                            <td colspan="2"><b>Premium per COC</b></td>
+                            <td style="text-align: right;" colspan="2">
+                                <asp:Label ID="SummaryPremiumPerCOC" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                      <% } %>
+                        <tr>
+                            <td class="column-left" colspan="2"><b>Count of COC</b></td>
+                            <td class="column-left"   colspan="2">
+                                <div class="quantity quantity-section">
+                                    <asp:Button ID="btnMinus" runat="server" CssClass="btn-quantity-control btn-quantity" Text="-" OnClick="btnMinus_Click" />
+                                    <asp:TextBox ID="numberInput" runat="server" Text="1" CssClass="numberInput" Enabled="false"></asp:TextBox>
+                                    <asp:Button ID="btnPlus" runat="server" CssClass="btn-quantity-control btn-quantity" Text="+" OnClick="btnPlus_Click" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="font-size:12px;" colspan="2">Note: You can avail up to a maximum of <b><asp:Label ID="lblAvailableCOCs" runat="server" Text="5"></asp:Label></b> COC's</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Total Premium</td>
+                            <td style="text-align: right;" colspan="2"> <asp:Label ID="SummaryTotalPremium" runat="server"></asp:Label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Convenience Fee <b><asp:Label ID="lblPaymentChannel" runat="server"></asp:Label></b></td>
+                            <td style="text-align: right;" colspan="2"><asp:Label ID="SummaryConvinienceFee" runat="server"></asp:Label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><b>Total Amount Due</b></td>
+                            <td style="text-align: right;" colspan="2"><b><asp:Label ID="SummaryTotalAmount" runat="server"></asp:Label></b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <center>
+                                    <p style="font-size:12px;">
+                                        <input type="checkbox" id="confirmpayment">
+                                        <% if (Session["PaymentMethod"].ToString() == "CL Branch") { %>
+                                            I hereby verify and confirm that the information provided is accurate and complete
+                                        <% } else { %>
+                                            I hereby verify and confirm that the information provided is accurate and complete before proceeding with the purchase.
+                                        <% } %>
+                                    </p>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                     </div>
+                    <asp:Button ID="btnEnableReferralElements" runat="server" OnClick="EnableReferralElements_Click" style="display:none;" />
+                </div>
+                <div class="popup-buttons" style="margin-top:-70px;">
+                    <button runat="server" type="submit" class="popup-button btn-finalstep proceed" id="gotoFinalStep" disabled>Proceed</button>
+                    <button runat="server" type="button" class="popup-button goBackLoad" id="goBackStep1">Go Back</button>
+                </div>
+            </div>
         <%} %>
        <% if (Session["PaymentMethod"].ToString() == "CLDigital") { %>
             <div class="overlay overlayActive-paymenthmethod" id="overlay-paymentmethod"></div>
            <div class="popup-paymentmethod popupactive-paymentmethod" id="popup-paymentmethod">
-
+                         <div class="popup-title-container">
+                   <div class="w-full h-8 px-12 py-1.5 bg-red-600 justify-center items-center inline-flex">
+		            <div class="text-center text-white text-xs font-medium  leading-tight"> <h6><asp:Label ID="Label2" runat="server" Text="Select a <b><i>payment</i></b> method"></asp:Label></h6></div>
+	              </div>
+          </div>
                <section class="policy-section">
 	            <div class="policy-steps">
-		            <div class="row">
-			            <div class="col-12 text-center policy-header">
-				            <h3><b>Choose Payment Method</b></h3>
-			            </div>
-		            </div>
 		            <div class="row mt-2rem">
 			            <div class="col-12">
 				            <label class="label-font">eWallet</label>
@@ -1338,105 +1407,22 @@ if (categoryid == "11")
              }
          });
 
-         //-------------------------------- TRAVEL DURATION FROM --------------------/
-         $(document).on('click', '[data-datepicker="true"]', function () {
-             var currentDate = new Date();
+    //-------------------------------- TRAVEL DURATION FROM --------------------/
+    $(document).ready(function () {
+        var currentDate = new Date();
 
-             var selectedStartDateField = $("#selectedStartDate");
-             var selectedEndDateField = $("#selectedEndDate");
-             var durationDaysField = $("#durationDays");
+        var selectedStartDateField = $("#selectedStartDate");
+        var selectedEndDateField = $("#selectedEndDate");
 
-             $("#<%=travelFrom.ClientID%>").datepicker({
-             minDate: currentDate,
-             onSelect: function (selectedDate) {
-                 selectedStartDateField.val(selectedDate);
-                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
-
-            var maxDate = new Date(selectedDate);
-            maxDate.setDate(maxDate.getDate() + 59);
-            $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
-
-            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
-                 calculateDays();
-             },
-             showButtonPanel: false,
-             changeMonth: true,
-             changeYear: true
-         });
-
-         $("#<%=travelTo.ClientID%>").datepicker({
-             beforeShow: function (input, inst) {
-                 if ($("#<%=travelFrom.ClientID%>").val() === "") {
-                $("#<%=travelFrom.ClientID%>").val("");
-                $("#<%=numberOfDays.ClientID%>").val("");
-                $("#<%=travelTo.ClientID%>").val("");
-                $("#<%=travelFrom.ClientID%>").focus();
-                Swal.fire('Please select Travel Duration From first.');
-                return false;
-            }
-        },
-        onSelect: function (selectedDate) {
-            selectedEndDateField.val(selectedDate);
-            calculateDays();
-        },
-        showButtonPanel: false,
-        changeMonth: true,
-        changeYear: true,
-        disabled: true
-    });
-
-         function calculateDays() {
-             var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
-        var endDate = $("#<%=travelTo.ClientID%>").datepicker("getDate");
-
-        if (startDate && endDate) {
-   
-            var timezoneOffset = endDate.getTimezoneOffset() - startDate.getTimezoneOffset();
-            var timeDiff = Math.abs(endDate.getTime() - startDate.getTime() - timezoneOffset * 60000);
-            var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
-
-            // Add 1 day to include both the start and end dates
-            diffDays = diffDays >= 0 ? diffDays + 1 : 0;
-
-            if (diffDays > 60) {
-                // If the duration exceeds 60 days, adjust the end date
-                endDate.setDate(startDate.getDate() + 60 - 1); // Set end date to start date + 59 days
-                $("#<%=travelTo.ClientID%>").datepicker("setDate", endDate);
-            }
-
-            $("#<%=numberOfDays.ClientID%>").val(diffDays); // Update visible duration input if needed
-        }
-    }
-
-    // Event listener for change in "number of days" field
-    $("#<%=numberOfDays.ClientID%>").on('input', function () {
-        var numberOfDaysValue = $(this).val();
-        if (numberOfDaysValue === "") {
-            // Clear "Travel Duration From" and "Travel Duration To" datepickers
-            $("#<%=travelFrom.ClientID%>").val("");
-            $("#<%=travelTo.ClientID%>").val("");
-        }
-    });
-
-    // Reinitialize datepickers and set values after postback
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-        var storedStartDate = selectedStartDateField.val();
-        var storedEndDate = selectedEndDateField.val();
-
-        // Restore values using ViewState
-        $("#<%=travelFrom.ClientID%>").val(storedStartDate);
-        $("#<%=travelTo.ClientID%>").val(storedEndDate);
-
-        $("#<%=travelFrom.ClientID%>").datepicker({
+        function initializeDatepickers() {
+            $("#<%=travelFrom.ClientID%>").datepicker({
             minDate: currentDate,
-            defaultDate: storedStartDate,
             onSelect: function (selectedDate) {
                 selectedStartDateField.val(selectedDate);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", selectedDate);
 
-                // Disable dates beyond 60 days from the selected start date
                 var maxDate = new Date(selectedDate);
-                maxDate.setDate(maxDate.getDate() + 59); // Set max date to selected date + 59 days
+                maxDate.setDate(maxDate.getDate() + 59);
                 $("#<%=travelTo.ClientID%>").datepicker("option", "maxDate", maxDate);
 
                 $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
@@ -1448,7 +1434,13 @@ if (categoryid == "11")
         });
 
         $("#<%=travelTo.ClientID%>").datepicker({
-            defaultDate: storedEndDate,
+            beforeShow: function (input, inst) {
+                if ($("#<%=travelFrom.ClientID%>").val() === "") {
+                    $("#<%=travelFrom.ClientID%>").focus();
+                    Swal.fire('Please select Travel Duration From first.');
+                    return false;
+                }
+            },
             onSelect: function (selectedDate) {
                 selectedEndDateField.val(selectedDate);
                 calculateDays();
@@ -1456,14 +1448,82 @@ if (categoryid == "11")
             showButtonPanel: false,
             changeMonth: true,
             changeYear: true,
-            disabled: storedStartDate === ""
         });
 
-        // Set the calculated days
+        // Ensure that travelTo datepicker is enabled if travelFrom has a value
+        if ($("#<%=travelFrom.ClientID%>").val() !== "") {
+            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
+        }
+    }
+
+    function calculateDays() {
+        var startDate = $("#<%=travelFrom.ClientID%>").datepicker("getDate");
+        var endDate = $("#<%=travelTo.ClientID%>").datepicker("getDate");
+
+        if (startDate && endDate) {
+            var timezoneOffset = endDate.getTimezoneOffset() - startDate.getTimezoneOffset();
+            var timeDiff = Math.abs(endDate.getTime() - startDate.getTime() - timezoneOffset * 60000);
+            var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+            diffDays = diffDays >= 0 ? diffDays + 1 : 0;
+
+            if (diffDays > 60) {
+                endDate.setDate(startDate.getDate() + 60 - 1);
+                $("#<%=travelTo.ClientID%>").datepicker("setDate", endDate);
+            }
+
+            $("#<%=numberOfDays.ClientID%>").val(diffDays);
+        }
+    }
+
+    $("#<%=numberOfDays.ClientID%>").on('input', function () {
+        var numberOfDaysValue = $(this).val();
+        if (numberOfDaysValue === "") {
+            $("#<%=travelFrom.ClientID%>").val("");
+            $("#<%=travelTo.ClientID%>").val("");
+        }
+    });
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+        var storedStartDate = selectedStartDateField.val();
+        var storedEndDate = selectedEndDateField.val();
+
+        $("#<%=travelFrom.ClientID%>").datepicker("destroy");
+        $("#<%=travelTo.ClientID%>").datepicker("destroy");
+
+        initializeDatepickers();
+
+        if (storedStartDate) {
+            $("#<%=travelFrom.ClientID%>").datepicker("setDate", storedStartDate);
+            $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", storedStartDate);
+        }
+
+        if (storedEndDate) {
+            $("#<%=travelTo.ClientID%>").datepicker("setDate", storedEndDate);
+        }
+
+        if (storedStartDate) {
+            $("#<%=travelTo.ClientID%>").datepicker("option", "disabled", false);
+        }
+
         calculateDays();
     });
-     });
-     }
+
+    initializeDatepickers();
+
+    var storedStartDate = selectedStartDateField.val();
+    var storedEndDate = selectedEndDateField.val();
+    if (storedStartDate) {
+        $("#<%=travelFrom.ClientID%>").datepicker("setDate", storedStartDate);
+        $("#<%=travelTo.ClientID%>").datepicker("option", "minDate", storedStartDate);
+    }
+    if (storedEndDate) {
+        $("#<%=travelTo.ClientID%>").datepicker("setDate", storedEndDate);
+    }
+    calculateDays();
+});
+
+ }
 // PROPERTY INSURANCE JS
 if (categoryid == "6") {
 function addFixedDecimalFloorArea() {
@@ -1592,30 +1652,30 @@ $("#<%=contactNumber.ClientID%>").on("keyup", function () {
 });
 });
 //-------------------------------- PREVENT FOR INSPECT ELEMENT AND FUNCTION F12 --------------------///
-     $(document).bind("contextmenu", function (e) {
-         e.preventDefault();
-     });
-     $(document).keydown(function (e) {
-         if (e.which === 123) {
-             return false;
-         }
-     });
+     //$(document).bind("contextmenu", function (e) {
+     //    e.preventDefault();
+     //});
+     //$(document).keydown(function (e) {
+     //    if (e.which === 123) {
+     //        return false;
+     //    }
+     //});
 
-     document.addEventListener('contextmenu', event => event.preventDefault());
-     document.onkeydown = function (e) {
-         if (event.keyCode == 123) {
-             return false;
-         }
-         if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-             return false;
-         }
-         if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-             return false;
-         }
-         if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-             return false;
-         }
-     }
+     //document.addEventListener('contextmenu', event => event.preventDefault());
+     //document.onkeydown = function (e) {
+     //    if (event.keyCode == 123) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+     //        return false;
+     //    }
+     //}
 
      localStorage.openpages = Date.now();
      window.addEventListener('storage', function (e) {

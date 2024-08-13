@@ -28,7 +28,7 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
     IList<ProductList> productSet; // get product by code and integration id
 
 
-    protected void Page_Load(object sender, EventArgs e)
+     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.QueryString["PART"] != null && Request.QueryString["PROD"] == null && Request.QueryString["REFNUM"] == null)
         {
@@ -382,10 +382,10 @@ public partial class Public_ProductRegistration : System.Web.UI.Page
         }
         catch (Exception)
         {
-
+    
             throw;
         }
-
+                
     }
     #endregion
     public void InvalidUrl()

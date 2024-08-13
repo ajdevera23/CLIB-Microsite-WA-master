@@ -27,5 +27,6 @@ public class TagInsuranceAsPaidRequest
     public bool isActive { get; set; }
     public string PlatformKey { get; set; }
     public PaymentDetails PaymentDetails { get; set; }
+    public string ReferralCode { get; set; }
 }
 

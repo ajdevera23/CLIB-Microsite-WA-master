@@ -215,3 +215,9 @@ body.modal-open {
         opacity: 0;
         cursor: pointer;
     }
+
+.text-white {
+    color: #fff;
+}
+
+

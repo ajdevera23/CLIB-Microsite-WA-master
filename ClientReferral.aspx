@@ -90,13 +90,13 @@
 <div class="col-12 col-lg-6">
 <div class="form-floating mb-3">
     <input runat="server" placeholder="Referral Transaction Number:" id="rtnLbl" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
-    <label for="s_address">Referral Transaction Number:</label>
+    <label for="s_address" class="text-white">Referral Transaction Number:</label>
 </div>
 </div>
  <div class="col-12 col-lg-6">
  <div class="form-floating mb-3">
  <input runat="server" placeholder="Client Type" id="txt_clienttype" type="text" value="" class="form-control" disabled="disabled" style="background-color:#242147; color:#FFF; font-weight:600;"/>
- <label for="s_address">Client Type:</label>
+ <label for="s_address" class="text-white">Client Type:</label>
 </div>
 </div>
 </div>
@@ -152,7 +152,7 @@
 <label for="s_address"> Group / Business Name:</label>
 </div>
 <div class="form-floating mb-3">
-<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="100" minlength="1" required="required" />
+<input type="text" id="ContactPerson" class="form-control" onpaste="return false" onkeypress="return characterAndNumbers(event)" runat="server" maxlength="50" minlength="1" required="required" />
 <label for="s_address">  Contact Person Designation:</label>
 </div>
 
