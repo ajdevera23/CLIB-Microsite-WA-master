@@ -1816,36 +1816,37 @@ public partial class Enrollment : System.Web.UI.Page
     #region GET AGENT CODE
     private string GetAgentCode()
     {
-        string selectedValue = string.Empty;
+        string selectedValue = null;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-
             if (Session["SummaryAgentCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
             {
-                selectedValue = Session["SummaryAgentCode"].ToString();
+                selectedValue = !string.IsNullOrEmpty(Session["SummaryAgentCode"].ToString())
+                       ? Session["SummaryAgentCode"].ToString()
+                       : null;
             }
             else
             {
                 selectedValue = null;
             }
-          
         }
         return selectedValue;
     }
-
     #endregion
 
     #region GET REFERRAL CODE
     private string GetReferralCode()
     {
-        string selectedValue = string.Empty;
+        string selectedValue = null;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
             if (Session["ReferralCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
             {
-                selectedValue = Session["ReferralCode"].ToString();
+                selectedValue = !string.IsNullOrEmpty(Session["ReferralCode"].ToString())
+                    ? Session["ReferralCode"].ToString()
+                    : null;
             }
             else
             {
@@ -1854,17 +1855,16 @@ public partial class Enrollment : System.Web.UI.Page
         }
         return selectedValue;
     }
-
     #endregion
 
     #region REMARK DISCOUNT FORMAT
     public string RemarkDiscountFormat(string referralcode)
     {
-        string formattedDiscount = string.Empty;
+        string formattedDiscount = null;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            if (Session["PaymentMethod"].ToString() != "CL Branch" &&  !string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) && Session["SummaryTotalDiscount"].ToString() != "0.00")
+            if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) && Session["SummaryTotalDiscount"].ToString() != "0.00")
             {
                 formattedDiscount = "Discount of Php " + Session["SummaryTotalDiscount"].ToString() + " from Referral Code " + referralcode + "";
             }

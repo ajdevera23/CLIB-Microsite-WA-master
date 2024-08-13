@@ -164,20 +164,20 @@ public partial class ConfirmationPage : System.Web.UI.Page
     {
         PaymentDetails paymentdetails = new PaymentDetails()
         {
-            DatePaid = Session["XenditDatePaid"].ToString(),
-            NotificationDate = Session["XenditNotificationDate"].ToString(),
-            NumberOfCOCsPaid = long.Parse(Session["XenditNumberOfCOCsPaid"].ToString()),
-            ORNumber = Session["XenditORNumber"].ToString(),
-            PaymentGatewayFee = double.Parse(Session["XenditPaymentGatewayFee"].ToString()),
-            PaymentMethod = Session["XenditPaymentMethod"].ToString(),
-            PaymentNotes = Session["XenditPaymentNotes"].ToString(),
-            PaymentOption = Session["XenditPaymentOption"].ToString(),
-            PaymentOrigin = Session["XenditPaymentOrigin"].ToString(),
-            PaymentReferenceNo = Session["XenditPaymentReferenceNo"].ToString(),
-            ProductAmount = double.Parse(Session["XenditProductAmount"].ToString()),
-            ReferenceNo = Session["XenditReferenceNo"].ToString(),
-            TotalAmountPaid = double.Parse(Session["XenditTotalAmountPaid"].ToString()),
-            TransactionCheckNumber = Session["XenditORNumber"].ToString(),
+            DatePaid = Session["XenditDatePaid"] != null ? Session["XenditDatePaid"].ToString() : null,
+            NotificationDate = Session["XenditNotificationDate"] != null ? Session["XenditNotificationDate"].ToString() : null,
+            NumberOfCOCsPaid = Session["XenditNumberOfCOCsPaid"] != null ? long.Parse(Session["XenditNumberOfCOCsPaid"].ToString()) : 0,
+            ORNumber = Session["XenditORNumber"] != null ? Session["XenditORNumber"].ToString() : null,
+            PaymentGatewayFee = Session["XenditPaymentGatewayFee"] != null ? double.Parse(Session["XenditPaymentGatewayFee"].ToString()) : 0.0,
+            PaymentMethod = Session["XenditPaymentMethod"] != null ? Session["XenditPaymentMethod"].ToString() : null,
+            PaymentNotes = Session["XenditPaymentNotes"] != null ? Session["XenditPaymentNotes"].ToString() : null,
+            PaymentOption = Session["XenditPaymentOption"] != null ? Session["XenditPaymentOption"].ToString() : null,
+            PaymentOrigin = Session["XenditPaymentOrigin"] != null ? Session["XenditPaymentOrigin"].ToString() : null,
+            PaymentReferenceNo = Session["XenditPaymentReferenceNo"] != null ? Session["XenditPaymentReferenceNo"].ToString() : null,
+            ProductAmount = Session["XenditProductAmount"] != null ? double.Parse(Session["XenditProductAmount"].ToString()) : 0.0,
+            ReferenceNo = Session["XenditReferenceNo"] != null ? Session["XenditReferenceNo"].ToString() : null,
+            TotalAmountPaid = Session["XenditTotalAmountPaid"] != null ? double.Parse(Session["XenditTotalAmountPaid"].ToString()) : 0.0,
+            TransactionCheckNumber = Session["XenditORNumber"] != null ? Session["XenditORNumber"].ToString() : null,
         };
         TagInsuranceAsPaidRequest tagaspaidrequest = new TagInsuranceAsPaidRequest()
         {
@@ -187,6 +187,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
             PaymentDetails = paymentdetails,
             ReferralCode = GetReferralCode(),
         };
+
 
         var returnValue = getList.TagInsuranceAsPaid(tagaspaidrequest);
         string message = returnValue.Message;
