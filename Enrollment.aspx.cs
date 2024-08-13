@@ -1816,7 +1816,7 @@ public partial class Enrollment : System.Web.UI.Page
     #region GET AGENT CODE
     private string GetAgentCode()
     {
-        string selectedValue = null;
+        string selectedValue = string.Empty;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
@@ -1839,7 +1839,7 @@ public partial class Enrollment : System.Web.UI.Page
     #region GET REFERRAL CODE
     private string GetReferralCode()
     {
-        string selectedValue = null;
+        string selectedValue = string.Empty;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
@@ -1860,7 +1860,7 @@ public partial class Enrollment : System.Web.UI.Page
     #region REMARK DISCOUNT FORMAT
     public string RemarkDiscountFormat(string referralcode)
     {
-        string formattedDiscount = null;
+        string formattedDiscount = string.Empty;
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
