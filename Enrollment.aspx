@@ -915,7 +915,7 @@
                 <div class="popup-title-container">
                     <div class="w-full h-8 px-12 py-1.5 bg-red-600 justify-center items-center inline-flex">
                         <div class="text-center text-white text-xs font-medium leading-tight">
-                            <h6><b><asp:Label ID="SummaryProductName" runat="server" Text="CL ProtectMax (12 Mos)"></asp:Label></b></h6>
+                            <h6><b><asp:Label ID="SummaryProductName" runat="server"></asp:Label></b></h6>
                         </div>
                     </div>
                 </div>
@@ -937,17 +937,20 @@
                         </td>
                     </tr>
                   <% } %>
-                 <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())) { %>
-                        <tr>
-                            <td colspan="4"><hr></td>
-                        </tr>
-                        <tr>
+                       <tr>
                             <td colspan="2">Premium</td>
                             <td colspan="2" style="text-align: right;"><asp:Label ID="SummaryPremium" runat="server"></asp:Label></td>
                         </tr>
+                         <tr>
+                             <td colspan="4"><hr /></td>
+                         </tr>
+                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())) { %>
+
+                        <% if (Session["SummaryDiscountPercent"].ToString() != "0" ||  Session["SummaryDiscountPHP"].ToString() != "0" ||  (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&  bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
                         <tr>
                             <td colspan="4">Referral Code Bonus:</td>
                         </tr>
+                        <%} %>
                           <%if (Session["SummaryDiscountPercent"].ToString() != "0") { %>
                         <tr >
                                 <td colspan="2">
@@ -968,23 +971,24 @@
                             </td>
                         </tr>
                         <%} %>
-                        <%if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString())){ %>
+                        <%if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true ){ %>
                         <tr>
                             <td colspan="4" style="margin-left:20px;">
                             <asp:Label ID="SummaryFreeInsurance" runat="server" style="margin-left:20px;"></asp:Label>
                             </td>
                         </tr>
-                        <%} %>
-                         <tr>
+                        <tr>
                             <td colspan="4"><hr></td>
                         </tr>
+                        <%} %>
+
                         <tr>
                             <td colspan="2"><b>Premium per COC</b></td>
                             <td style="text-align: right;" colspan="2">
                                 <asp:Label ID="SummaryPremiumPerCOC" runat="server"></asp:Label>
                             </td>
                         </tr>
-                        <% } %>
+                      <% } %>
                         <tr>
                             <td class="column-left" colspan="2"><b>Count of COC</b></td>
                             <td class="column-left"   colspan="2">

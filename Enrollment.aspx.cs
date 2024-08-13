@@ -1864,9 +1864,9 @@ public partial class Enrollment : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            if (Session["PaymentMethod"].ToString() != "CL Branch")
+            if (Session["PaymentMethod"].ToString() != "CL Branch" &&  !string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) && Session["SummaryTotalDiscount"].ToString() != "0.00")
             {
-                formattedDiscount = "Discount of Php " + Session["SummaryTotalAmount"].ToString() + " from Referral Code " + referralcode + "";
+                formattedDiscount = "Discount of Php " + Session["SummaryTotalDiscount"].ToString() + " from Referral Code " + referralcode + "";
             }
         }
         return formattedDiscount;
@@ -2132,6 +2132,8 @@ public partial class Enrollment : System.Web.UI.Page
                 totalPremiumWithReferral = currentpremium - totalDiscountPhp;                 
                 totalAmountWithReferral = (totalPremiumWithReferral * currentValue) + convenienceFee;
                 totalPremiumWithDiscount = (totalPremiumWithReferral * currentValue);
+
+                Session["SummaryTotalDiscount"] = totalDiscountPhp.ToString("N2");
             }
             else
             {

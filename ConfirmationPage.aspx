@@ -141,8 +141,8 @@
             <h5 class="reference-number"><b><asp:Label ID="lblReferenceNumber" runat="server" Text=""></asp:Label></b> <asp:Label ID="lblRTN" runat="server" Text=""></asp:Label></h5>
             <h5 class="reference-number"><b><asp:Label ID="lblPremiumText" runat="server" Text=""></asp:Label></b> <asp:Label ID="lblPremium" runat="server" Text=""></asp:Label></h5>
             <hr />
-            <h5 class="reference-number"><b><asp:Label ID="lbfreeinsurancetitle" runat="server"></asp:Label></b> <asp:Label ID="FreeInsurance" runat="server" Text=""></asp:Label></h5>
-            <h5 class="reference-number"><b><asp:Label ID="lbfreeinsurancenumbertitle" runat="server"></asp:Label></b> <asp:Label ID="FreeInsuranceCOCNumber" runat="server" Text=""></asp:Label></h5>
+            <h5 class="reference-number"><b><asp:Label ID="lbfreeinsurancetitle" runat="server"></asp:Label></b> <asp:Label ID="lblFreeInsurance" runat="server" Text=""></asp:Label></h5>
+            <h5 class="reference-number"><b><asp:Label ID="lbfreeinsurancenumbertitle" runat="server"></asp:Label></b> <asp:Label ID="lblFreeInsuranceCOCNumber" runat="server" Text=""></asp:Label></h5>
             <br />
             <h6 class="animated-message">You may take a screenshot of this page for easy payment reference</h6>
             <br />
