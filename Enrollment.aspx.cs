@@ -1559,7 +1559,7 @@ public partial class Enrollment : System.Web.UI.Page
                 else
                 {
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
-                    fld_ReferralCode.Text = null;
+                    fld_ReferralCode.Text = null; 
                     EnableReferralElements();
                     return;
                 }
@@ -1864,15 +1864,19 @@ public partial class Enrollment : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) && Session["SummaryTotalDiscount"].ToString() != "0.00")
+            if (Session["PaymentMethod"].ToString() != "CL Branch" && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == false && (!string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) || Session["SummaryTotalDiscount"].ToString() != "0.00"))
             {
                 formattedDiscount = "Discount of Php " + Session["SummaryTotalDiscount"].ToString() + " from Referral Code " + referralcode + "";
+            }
+            if (Session["PaymentMethod"].ToString() != "CL Branch" && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true && (!string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) || Session["SummaryTotalDiscount"].ToString() != "0.00"))
+            {
+                formattedDiscount = "Discount of Php " + Session["SummaryTotalDiscount"].ToString() + " from Referral Code " + referralcode + " Free Insurance";
             }
         }
         return formattedDiscount;
     }
     #endregion
-
+        
     #region COC NUMBER
     private string NumberOfCOCs()
     {
