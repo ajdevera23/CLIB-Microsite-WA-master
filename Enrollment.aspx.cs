@@ -1424,8 +1424,9 @@ public partial class Enrollment : System.Web.UI.Page
                     {
                         cocNumbers.Remove(cocNumbers.Length - 2, 2);
                     }
+
                     Session["cocNumber"] = cocNumbers.ToString();
-                    Session["cocNumber"] = returnValue.Result[0].COCNumber.ToString();
+                    //Session["cocNumber"] = returnValue.Result[0].COCNumber.ToString();
                     Session["COCEffectiveDateBasis"] = returnValue.Result[0].EffectiveDate.ToString();
                     Session["Premium"] = returnValue.Result[0].Premium;
                     Session["TerminationDate"] = returnValue.Result[0].TerminationDate.ToString();
@@ -1871,6 +1872,11 @@ public partial class Enrollment : System.Web.UI.Page
             if (Session["PaymentMethod"].ToString() != "CL Branch" && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true && (!string.IsNullOrEmpty(Session["SummaryTotalDiscount"].ToString()) || Session["SummaryTotalDiscount"].ToString() != "0.00"))
             {
                 formattedDiscount = "Discount of Php " + Session["SummaryTotalDiscount"].ToString() + " from Referral Code " + referralcode + " Free Insurance";
+            }
+            if(Session["PaymentMethod"].ToString() != "CL Branch" && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true && (Session["SummaryTotalDiscount"].ToString() == "0.00"))
+            {
+                formattedDiscount =  "Referral Code " + referralcode + " Free Insurance";
+
             }
         }
         return formattedDiscount;
