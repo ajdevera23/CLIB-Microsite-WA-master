@@ -204,11 +204,19 @@ public partial class ConfirmationPage : System.Web.UI.Page
             ShowResponseResults();
             SMSContent(tagaspaidresult);
 
-            if (!string.IsNullOrEmpty(returnValue.Result.FreeInsurance.ToString()) && !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber.ToString()))
-            {
-                GotoFreeInsuranceDetails(returnValue.Result.FreeInsurance.ToString(), returnValue.Result.FreeInsuranceCOCNumber.ToString());
-            }
+            
+            string freeInsurance = returnValue.Result.FreeInsurance != null && !string.IsNullOrEmpty(returnValue.Result.FreeInsurance.ToString())
+              ? returnValue.Result.FreeInsurance.ToString()
+              : null;
 
+            string freeInsuranceCOCNumber = returnValue.Result.FreeInsuranceCOCNumber != null && !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber.ToString())
+                ? returnValue.Result.FreeInsuranceCOCNumber.ToString()
+                : null;
+
+            if (freeInsurance != null && freeInsuranceCOCNumber != null)
+            {
+                GotoFreeInsuranceDetails(freeInsurance, freeInsuranceCOCNumber);
+            }
             ClearSpecificSessionVariables();
         }
         else
