@@ -1821,7 +1821,7 @@ public partial class Enrollment : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            if (Session["SummaryAgentCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+            if (Session["SummaryAgentCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch" && (!string.IsNullOrEmpty(Session["ResultStatus"].ToString()) && Session["ResultStatus"].ToString() == "0"))
             {
                 selectedValue = !string.IsNullOrEmpty(Session["SummaryAgentCode"].ToString())
                        ? Session["SummaryAgentCode"].ToString()
@@ -1843,7 +1843,7 @@ public partial class Enrollment : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(fld_ReferralCode.Text))
         {
-            if (Session["ReferralCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch")
+            if (Session["ReferralCode"] != null && Session["PaymentMethod"].ToString() != "CL Branch" && (!string.IsNullOrEmpty(Session["ResultStatus"].ToString()) && Session["ResultStatus"].ToString() == "0"))
             {
                 selectedValue = !string.IsNullOrEmpty(Session["ReferralCode"].ToString())
                     ? Session["ReferralCode"].ToString()
@@ -1852,6 +1852,7 @@ public partial class Enrollment : System.Web.UI.Page
             else
             {
                 selectedValue = null;
+                fld_ReferralCode.Text = null;
             }
         }
         return selectedValue;
@@ -2072,7 +2073,7 @@ public partial class Enrollment : System.Web.UI.Page
             displayPreviewRequest.CategoryCode = categoryCode;
             displayPreviewRequest.IntegrationId = Convert.ToInt32(Request.QueryString["INTID"].ToString());
             displayPreviewRequest.NumberOfCOCs = currentValue;
-            displayPreviewRequest.ReferralCode = fld_ReferralCode.Text.ToString();
+            displayPreviewRequest.ReferralCode = GetReferralCode();
 
             if (Session["CategoryId"].ToString() == "11")
             {
@@ -2116,6 +2117,7 @@ public partial class Enrollment : System.Web.UI.Page
 
             var returnValue = getList.DisplayPaymentSummary(displayPreviewRequest);
             string message = returnValue.Message;
+
             decimal currentpremium = decimal.Parse(returnValue.Result[0].CurrentPremium.ToString());
             decimal premium = decimal.Parse(returnValue.Result[0].Premium.ToString());
             decimal convenienceFee = decimal.Parse(returnValue.Result[0].ConvenienceFee.ToString());
@@ -2132,7 +2134,10 @@ public partial class Enrollment : System.Web.UI.Page
             decimal totalDiscountPercent = 0;
             decimal totalPremiumWithDiscount = 0;
 
-            if (!string.IsNullOrEmpty(fld_ReferralCode.Text.ToString()))
+            if (!string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())
+                && Session["ResultStatus"] != null
+                && !string.IsNullOrEmpty(Session["ResultStatus"].ToString())
+                && Session["ResultStatus"].ToString() == "0")
             {
                 decimal discountPhp = decimal.Parse(Session["SummaryDiscountPHP"].ToString());
                 decimal discountPercent = decimal.Parse(Session["SummaryDiscountPercent"].ToString());
@@ -3378,6 +3383,9 @@ public partial class Enrollment : System.Web.UI.Page
 
         bool DiscountPhphasvalue = false;
         bool DiscountPercenthasvalue = false;
+
+
+        Session["ResultStatus"] = returnValue.ResultStatus.ToString();
 
         int SetCOCC = 0;
 

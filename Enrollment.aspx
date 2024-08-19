@@ -944,14 +944,14 @@
                          <tr>
                              <td colspan="4"><hr /></td>
                          </tr>
-                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())) { %>
+                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString()) && (!string.IsNullOrEmpty(Session["ResultStatus"].ToString()) && Session["ResultStatus"].ToString() == "0")) { %>
 
-                        <% if (Session["SummaryDiscountPercent"].ToString() != "0" ||  Session["SummaryDiscountPHP"].ToString() != "0" ||  (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&  bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
+                        <% if (Session["SummaryDiscountPercent"] != null && Session["SummaryDiscountPercent"].ToString() != "0" || Session["SummaryDiscountPHP"] != null && Session["SummaryDiscountPHP"].ToString() != "0"  || (Session["SummaryFreeInsuranceProductName"] != null && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString())  && Session["SummaryIsValidFreeInsurance"] != null && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
                         <tr>
                             <td colspan="4">Referral Code Bonus:</td>
                         </tr>
                         <%} %>
-                          <%if (Session["SummaryDiscountPercent"].ToString() != "0") { %>
+                          <%if (Session["SummaryDiscountPercent"] != null && Session["SummaryDiscountPercent"].ToString() != "0") { %>
                         <tr >
                                 <td colspan="2">
                                 <asp:Label ID="SummaryDiscountPercent" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
@@ -961,7 +961,7 @@
                                 </td>
                         </tr>
                          <%} %>
-                         <%if (Session["SummaryDiscountPHP"].ToString() != "0") { %>
+                         <%if (Session["SummaryDiscountPHP"] != null && Session["SummaryDiscountPHP"].ToString() != "0") { %>
                         <tr>
                             <td style="margin-left:20px;" colspan="2">
                              <asp:Label ID="SummaryDiscountAmount" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
@@ -971,7 +971,7 @@
                             </td>
                         </tr>
                         <%} %>
-                        <%if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true ){ %>
+                        <%if (Session["SummaryFreeInsuranceProductName"] != null && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && Session["SummaryIsValidFreeInsurance"] != null && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true){ %>
                         <tr>
                             <td colspan="4" style="margin-left:20px;">
                             <asp:Label ID="SummaryFreeInsurance" runat="server" style="margin-left:20px;"></asp:Label>
@@ -1645,7 +1645,7 @@ document.addEventListener('DOMContentLoaded', function () {
               });
           });
 
-     function disableplusandminusbutton() {
+<%--     function disableplusandminusbutton() {
 
          // Get the Apply and Clear buttons by their IDs
          var applyMinus = document.getElementById('<%= btnMinus.ClientID %>');
@@ -1659,7 +1659,7 @@ document.addEventListener('DOMContentLoaded', function () {
          } else {
        
          }
-     }
+     }--%>
 
 //-------------------------------- KEY UP FOR CONTACT NUMBER 09 --------------------///
 $(document).ready(function () {
