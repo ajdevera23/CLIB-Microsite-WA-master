@@ -189,6 +189,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
             PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"],
             PaymentDetails = paymentdetails,
             ReferralCode = GetReferralCode(),
+            IsValidFreeInsurance = GetIsValidInsurance(),
         };
 
 
@@ -307,6 +308,34 @@ public partial class ConfirmationPage : System.Web.UI.Page
         return selectedValue;
     }
     #endregion
+
+    #region GET IS VALID INSURANCE
+    public bool GetIsValidInsurance()
+    {
+        bool isValidInsurance = false;
+
+        if (Session["SummaryIsValidFreeInsurance"] != null)
+        {
+            string sessionValue = Session["SummaryIsValidFreeInsurance"].ToString();
+
+            if (!string.IsNullOrEmpty(sessionValue))
+            {
+                try
+                {
+                    isValidInsurance = bool.Parse(sessionValue);
+                }
+                catch (FormatException)
+                {
+                    // Handle the exception if the session value cannot be parsed to a boolean
+                    isValidInsurance = false;
+                }
+            }
+        }
+
+        return isValidInsurance;
+    }
+    #endregion
+
 
     #region GENERATE SMS CONTENT
     public void SMSContent(TagInsuraceAsPaidResult tagaspaidresult)
