@@ -1655,8 +1655,8 @@ document.addEventListener('DOMContentLoaded', function () {
          // Check if buttons exist before disabling
          if (applyMinus && applyPlus) {
              // Disable the buttons
-             applyButton.disabled = true;
-             clearButton.disabled = true;
+             applyMinus.disabled = true;
+             applyPlus.disabled = true;
          } else {
              alert("Buttons not found!");
          }
