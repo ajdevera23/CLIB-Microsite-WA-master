@@ -1649,11 +1649,11 @@ document.addEventListener('DOMContentLoaded', function () {
          alert("disableplusandminusbutton called");
 
          // Get the Apply and Clear buttons by their IDs
-         var applyButton = document.getElementById('<%= btnApply.ClientID %>');
-         var clearButton = document.getElementById('<%= btnClear.ClientID %>');
+         var applyMinus = document.getElementById('<%= btnMinus.ClientID %>');
+         var applyPlus = document.getElementById('<%= btnPlus.ClientID %>');
 
          // Check if buttons exist before disabling
-         if (applyButton && clearButton) {
+         if (applyMinus && applyPlus) {
              // Disable the buttons
              applyButton.disabled = true;
              clearButton.disabled = true;
