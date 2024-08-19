@@ -103,28 +103,31 @@ public partial class ConfirmationPage : System.Web.UI.Page
 
     private string GetCOCNumber()
     {
-        string result = Session["cocNumber"].ToString();
+        // Check if the session value exists and is not null before converting it to a string
+        string result = Session["cocNumber"] != null ? Session["cocNumber"].ToString() : string.Empty;
 
-        if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&
+        // Check if the session values exist and are not null before proceeding
+        if (Session["SummaryFreeInsuranceProductName"] != null &&
+            !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&
+            Session["SummaryIsValidFreeInsurance"] != null &&
             bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)
         {
             // Split the COC numbers by comma
             var cocNumbers = result.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Remove the first COC number
-            if (cocNumbers.Length > 1)  // Ensure there is more than one COC number
+            // Remove the first COC number if there is more than one
+            if (cocNumbers.Length > 1)
             {
                 result = string.Join(",", cocNumbers.Skip(1).ToArray());
             }
             else
             {
-                result = Session["cocNumber"].ToString();
+                result = Session["cocNumber"] != null ? Session["cocNumber"].ToString() : string.Empty;
             }
         }
 
         return result;
     }
-
 
     #region REDIRECTION METHOD SCRIPT
     private string GetRedirectionScript()
