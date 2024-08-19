@@ -1646,7 +1646,6 @@ document.addEventListener('DOMContentLoaded', function () {
           });
 
      function disableplusandminusbutton() {
-         alert("disableplusandminusbutton called");
 
          // Get the Apply and Clear buttons by their IDs
          var applyMinus = document.getElementById('<%= btnMinus.ClientID %>');
@@ -1658,7 +1657,7 @@ document.addEventListener('DOMContentLoaded', function () {
              applyMinus.disabled = true;
              applyPlus.disabled = true;
          } else {
-             alert("Buttons not found!");
+       
          }
      }
 
