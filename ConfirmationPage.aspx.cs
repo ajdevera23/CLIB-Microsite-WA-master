@@ -204,14 +204,41 @@ public partial class ConfirmationPage : System.Web.UI.Page
             if (!string.IsNullOrEmpty(returnValue.Result.FreeInsurance.ToString()) && !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber.ToString()))
             {
                 GotoFreeInsuranceDetails(returnValue.Result.FreeInsurance.ToString(), returnValue.Result.FreeInsuranceCOCNumber.ToString());
-
-
             }
+
+            ClearSpecificSessionVariables();
         }
         else
         {
+            Response.Redirect(ConfigurationManager.AppSettings["ErrorPage"].Trim());
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
             return;
+        }
+    }
+
+    private void ClearSpecificSessionVariables()
+    {
+        string[] sessionKeys = new string[]
+        {
+        "XenditDatePaid",
+        "XenditNotificationDate",
+        "XenditNumberOfCOCsPaid",
+        "XenditORNumber",
+        "XenditPaymentGatewayFee",
+        "XenditPaymentMethod",
+        "XenditPaymentNotes",
+        "XenditPaymentOption",
+        "XenditPaymentOrigin",
+        "XenditPaymentReferenceNo",
+        "XenditProductAmount",
+        "XenditReferenceNo",
+        "XenditTotalAmountPaid",
+        "ReferralCode"
+        };
+
+        foreach (string key in sessionKeys)
+        {
+            Session.Remove(key);
         }
     }
 

@@ -925,16 +925,16 @@
              
                   <% if(Session["PaymentMethod"].ToString() != "CL Branch") { %>
                     <tr>
-                        <td><b>Referral Code</b></td>
-                        <td style="text-align: right;">
-                            <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" Minlength="4" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" placeholder="Enter referral code"></asp:TextBox>
-                        </td>
-                        <td>
-                            <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
-                        </td>
-                        <td>
-                            <asp:Button ID="btnClear" runat="server" CssClass="btn-clear" Text="Clear" OnClick="btnClear_Click" />
-                        </td>
+                            <td><b>Referral Code</b></td>
+                            <td style="text-align: right;">
+                                <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" Minlength="4" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" onblur="disableplusandminusbutton()" placeholder="Enter referral code"></asp:TextBox>
+                            </td>
+                            <td>
+                                <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btnClear" runat="server" CssClass="btn-clear" Text="Clear" OnClick="btnClear_Click" />
+                            </td>
                     </tr>
                   <% } %>
                        <tr>
@@ -1135,6 +1135,7 @@
     <script src="JScript/Plugins/Datepicker/datetimepicker_ajax_libs_jquery-validate_1.19.5_additional-methods.min.js"></script>
  <script>
 var categoryid = '<%= Session["CategoryId"] %>';
+
 // PET INSURANCE JS
 if (categoryid == "8")
      {
@@ -1643,6 +1644,23 @@ document.addEventListener('DOMContentLoaded', function () {
                   }
               });
           });
+
+     function disableplusandminusbutton() {
+         alert("disableplusandminusbutton called");
+
+         // Get the Apply and Clear buttons by their IDs
+         var applyButton = document.getElementById('<%= btnApply.ClientID %>');
+         var clearButton = document.getElementById('<%= btnClear.ClientID %>');
+
+         // Check if buttons exist before disabling
+         if (applyButton && clearButton) {
+             // Disable the buttons
+             applyButton.disabled = true;
+             clearButton.disabled = true;
+         } else {
+             alert("Buttons not found!");
+         }
+     }
 
 //-------------------------------- KEY UP FOR CONTACT NUMBER 09 --------------------///
 $(document).ready(function () {
