@@ -1645,22 +1645,6 @@ document.addEventListener('DOMContentLoaded', function () {
               });
           });
 
-<%--     function disableplusandminusbutton() {
-
-         // Get the Apply and Clear buttons by their IDs
-         var applyMinus = document.getElementById('<%= btnMinus.ClientID %>');
-         var applyPlus = document.getElementById('<%= btnPlus.ClientID %>');
-
-         // Check if buttons exist before disabling
-         if (applyMinus && applyPlus) {
-             // Disable the buttons
-             applyMinus.disabled = true;
-             applyPlus.disabled = true;
-         } else {
-       
-         }
-     }--%>
-
 //-------------------------------- KEY UP FOR CONTACT NUMBER 09 --------------------///
 $(document).ready(function () {
 $("#<%=contactNumber.ClientID%>").on("keyup", function () {
@@ -1669,30 +1653,30 @@ $("#<%=contactNumber.ClientID%>").on("keyup", function () {
 });
 });
 //-------------------------------- PREVENT FOR INSPECT ELEMENT AND FUNCTION F12 --------------------///
-     //$(document).bind("contextmenu", function (e) {
-     //    e.preventDefault();
-     //});
-     //$(document).keydown(function (e) {
-     //    if (e.which === 123) {
-     //        return false;
-     //    }
-     //});
+     $(document).bind("contextmenu", function (e) {
+         e.preventDefault();
+     });
+     $(document).keydown(function (e) {
+         if (e.which === 123) {
+             return false;
+         }
+     });
 
-     //document.addEventListener('contextmenu', event => event.preventDefault());
-     //document.onkeydown = function (e) {
-     //    if (event.keyCode == 123) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //}
+     document.addEventListener('contextmenu', event => event.preventDefault());
+     document.onkeydown = function (e) {
+         if (event.keyCode == 123) {
+             return false;
+         }
+         if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+             return false;
+         }
+         if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+             return false;
+         }
+         if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+             return false;
+         }
+     }
 
      localStorage.openpages = Date.now();
      window.addEventListener('storage', function (e) {
