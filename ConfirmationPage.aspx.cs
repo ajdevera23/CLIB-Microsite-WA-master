@@ -223,7 +223,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect(ConfigurationManager.AppSettings["ErrorPage"].Trim());
+            //Response.Redirect(ConfigurationManager.AppSettings["ErrorPage"].Trim());
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
             return;
         }

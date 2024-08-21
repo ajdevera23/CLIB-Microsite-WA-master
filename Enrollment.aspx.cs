@@ -3503,7 +3503,7 @@ public partial class Enrollment : System.Web.UI.Page
         fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
         btnMinus.CssClass = btnMinus.CssClass.Replace("disabled-element", "").Trim();
         btnPlus.CssClass = btnPlus.CssClass.Replace("disabled-element", "").Trim();
-        numberInput.CssClass = numberInput.CssClass.Replace("disabled-element", "").Trim();
+        numberInput.CssClass += " disabled-element";
         btnApply.CssClass = btnApply.CssClass.Replace("disabled-element", "").Trim();
 
         fld_ReferralCode.Enabled = true;
@@ -3521,7 +3521,7 @@ public partial class Enrollment : System.Web.UI.Page
         fld_ReferralCode.Attributes.Remove("readonly"); // Remove readonly instead of disabled
         btnMinus.Attributes.Remove("disabled");
         btnPlus.Attributes.Remove("disabled");
-        numberInput.Attributes.Remove("readonly");
+        numberInput.Attributes["readonly"] = "readonly";
         btnApply.Attributes.Remove("disabled");
 
         fld_ReferralCode.CssClass = fld_ReferralCode.CssClass.Replace("disabled-element", "").Trim();
