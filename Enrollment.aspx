@@ -927,7 +927,7 @@
                     <tr>
                             <td><b>Referral Code</b></td>
                             <td style="text-align: right;">
-                                <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" Minlength="4" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" onblur="disableplusandminusbutton()" placeholder="Enter referral code"></asp:TextBox>
+                                <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" onblur="disableplusandminusbutton()" placeholder="Enter referral code"></asp:TextBox>
                             </td>
                             <td>
                                 <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
@@ -944,7 +944,7 @@
                          <tr>
                              <td colspan="4"><hr /></td>
                          </tr>
-                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString()) && (!string.IsNullOrEmpty(Session["ResultStatus"].ToString()) && Session["ResultStatus"].ToString() == "0")) { %>
+                   <% if (Session["PaymentMethod"] != null &&  Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text) && fld_ReferralCode.Text != null) { %>
 
                         <% if (Session["SummaryDiscountPercent"] != null && Session["SummaryDiscountPercent"].ToString() != "0" || Session["SummaryDiscountPHP"] != null && Session["SummaryDiscountPHP"].ToString() != "0"  || (Session["SummaryFreeInsuranceProductName"] != null && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString())  && Session["SummaryIsValidFreeInsurance"] != null && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
                         <tr>
