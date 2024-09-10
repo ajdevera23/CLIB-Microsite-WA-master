@@ -925,16 +925,16 @@
              
                   <% if(Session["PaymentMethod"].ToString() != "CL Branch") { %>
                     <tr>
-                        <td><b>Referral Code</b></td>
-                        <td style="text-align: right;">
-                            <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" Minlength="4" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" placeholder="Enter referral code"></asp:TextBox>
-                        </td>
-                        <td>
-                            <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
-                        </td>
-                        <td>
-                            <asp:Button ID="btnClear" runat="server" CssClass="btn-clear" Text="Clear" OnClick="btnClear_Click" />
-                        </td>
+                            <td><b>Referral Code</b></td>
+                            <td style="text-align: right;">
+                                <asp:TextBox ID="fld_ReferralCode" runat="server" CssClass="referral-code-textbox" onkeypress="return characterAndNumbers(event)" Maxlength="25" onkeydown="return /[A-Za-z0-9 ' ]/.test(event.key)" onblur="disableplusandminusbutton()" placeholder="Enter referral code"></asp:TextBox>
+                            </td>
+                            <td>
+                                <asp:Button ID="btnApply" runat="server" CssClass="btn-apply" Text="Apply" OnClick="btnApply_Click" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btnClear" runat="server" CssClass="btn-clear" Text="Clear" OnClick="btnClear_Click" />
+                            </td>
                     </tr>
                   <% } %>
                        <tr>
@@ -944,14 +944,14 @@
                          <tr>
                              <td colspan="4"><hr /></td>
                          </tr>
-                   <% if (Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text.ToString())) { %>
+                   <% if (Session["PaymentMethod"] != null &&  Session["PaymentMethod"].ToString() != "CL Branch" && !string.IsNullOrEmpty(fld_ReferralCode.Text) && fld_ReferralCode.Text != null) { %>
 
-                        <% if (Session["SummaryDiscountPercent"].ToString() != "0" ||  Session["SummaryDiscountPHP"].ToString() != "0" ||  (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&  bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
+                        <% if (Session["SummaryDiscountPercent"] != null && Session["SummaryDiscountPercent"].ToString() != "0" || Session["SummaryDiscountPHP"] != null && Session["SummaryDiscountPHP"].ToString() != "0"  || (Session["SummaryFreeInsuranceProductName"] != null && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString())  && Session["SummaryIsValidFreeInsurance"] != null && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)){ %>
                         <tr>
                             <td colspan="4">Referral Code Bonus:</td>
                         </tr>
                         <%} %>
-                          <%if (Session["SummaryDiscountPercent"].ToString() != "0") { %>
+                          <%if (Session["SummaryDiscountPercent"] != null && Session["SummaryDiscountPercent"].ToString() != "0") { %>
                         <tr >
                                 <td colspan="2">
                                 <asp:Label ID="SummaryDiscountPercent" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
@@ -961,7 +961,7 @@
                                 </td>
                         </tr>
                          <%} %>
-                         <%if (Session["SummaryDiscountPHP"].ToString() != "0") { %>
+                         <%if (Session["SummaryDiscountPHP"] != null && Session["SummaryDiscountPHP"].ToString() != "0") { %>
                         <tr>
                             <td style="margin-left:20px;" colspan="2">
                              <asp:Label ID="SummaryDiscountAmount" runat="server" ForeColor="Red" style="margin-left:20px;"></asp:Label>
@@ -971,7 +971,7 @@
                             </td>
                         </tr>
                         <%} %>
-                        <%if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true ){ %>
+                        <%if (Session["SummaryFreeInsuranceProductName"] != null && !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) && Session["SummaryIsValidFreeInsurance"] != null && bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true){ %>
                         <tr>
                             <td colspan="4" style="margin-left:20px;">
                             <asp:Label ID="SummaryFreeInsurance" runat="server" style="margin-left:20px;"></asp:Label>
@@ -1135,6 +1135,7 @@
     <script src="JScript/Plugins/Datepicker/datetimepicker_ajax_libs_jquery-validate_1.19.5_additional-methods.min.js"></script>
  <script>
 var categoryid = '<%= Session["CategoryId"] %>';
+
 // PET INSURANCE JS
 if (categoryid == "8")
      {
@@ -1652,30 +1653,30 @@ $("#<%=contactNumber.ClientID%>").on("keyup", function () {
 });
 });
 //-------------------------------- PREVENT FOR INSPECT ELEMENT AND FUNCTION F12 --------------------///
-     //$(document).bind("contextmenu", function (e) {
-     //    e.preventDefault();
-     //});
-     //$(document).keydown(function (e) {
-     //    if (e.which === 123) {
-     //        return false;
-     //    }
-     //});
+     $(document).bind("contextmenu", function (e) {
+         e.preventDefault();
+     });
+     $(document).keydown(function (e) {
+         if (e.which === 123) {
+             return false;
+         }
+     });
 
-     //document.addEventListener('contextmenu', event => event.preventDefault());
-     //document.onkeydown = function (e) {
-     //    if (event.keyCode == 123) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-     //        return false;
-     //    }
-     //}
+     document.addEventListener('contextmenu', event => event.preventDefault());
+     document.onkeydown = function (e) {
+         if (event.keyCode == 123) {
+             return false;
+         }
+         if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+             return false;
+         }
+         if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+             return false;
+         }
+         if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+             return false;
+         }
+     }
 
      localStorage.openpages = Date.now();
      window.addEventListener('storage', function (e) {

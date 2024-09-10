@@ -103,28 +103,31 @@ public partial class ConfirmationPage : System.Web.UI.Page
 
     private string GetCOCNumber()
     {
-        string result = Session["cocNumber"].ToString();
+        // Check if the session value exists and is not null before converting it to a string
+        string result = Session["cocNumber"] != null ? Session["cocNumber"].ToString() : string.Empty;
 
-        if (!string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&
+        // Check if the session values exist and are not null before proceeding
+        if (Session["SummaryFreeInsuranceProductName"] != null &&
+            !string.IsNullOrEmpty(Session["SummaryFreeInsuranceProductName"].ToString()) &&
+            Session["SummaryIsValidFreeInsurance"] != null &&
             bool.Parse(Session["SummaryIsValidFreeInsurance"].ToString()) == true)
         {
             // Split the COC numbers by comma
             var cocNumbers = result.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Remove the first COC number
-            if (cocNumbers.Length > 1)  // Ensure there is more than one COC number
+            // Remove the first COC number if there is more than one
+            if (cocNumbers.Length > 1)
             {
                 result = string.Join(",", cocNumbers.Skip(1).ToArray());
             }
             else
             {
-                result = Session["cocNumber"].ToString();
+                result = Session["cocNumber"] != null ? Session["cocNumber"].ToString() : string.Empty;
             }
         }
 
         return result;
     }
-
 
     #region REDIRECTION METHOD SCRIPT
     private string GetRedirectionScript()
@@ -186,6 +189,7 @@ public partial class ConfirmationPage : System.Web.UI.Page
             PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"],
             PaymentDetails = paymentdetails,
             ReferralCode = GetReferralCode(),
+            IsValidFreeInsurance = GetIsValidInsurance(),
         };
 
 
@@ -201,17 +205,53 @@ public partial class ConfirmationPage : System.Web.UI.Page
             ShowResponseResults();
             SMSContent(tagaspaidresult);
 
-            if (!string.IsNullOrEmpty(returnValue.Result.FreeInsurance.ToString()) && !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber.ToString()))
+
+            string freeInsurance = !string.IsNullOrEmpty(returnValue.Result.FreeInsurance != null ? returnValue.Result.FreeInsurance.ToString() : null)
+                ? returnValue.Result.FreeInsurance.ToString()
+                : null;
+
+            string freeInsuranceCOCNumber = !string.IsNullOrEmpty(returnValue.Result.FreeInsuranceCOCNumber != null ? returnValue.Result.FreeInsuranceCOCNumber.ToString() : null)
+                ? returnValue.Result.FreeInsuranceCOCNumber.ToString()
+                : null;
+
+            if (freeInsurance != null && freeInsuranceCOCNumber != null)
             {
-                GotoFreeInsuranceDetails(returnValue.Result.FreeInsurance.ToString(), returnValue.Result.FreeInsuranceCOCNumber.ToString());
-
-
+                GotoFreeInsuranceDetails(freeInsurance, freeInsuranceCOCNumber);
             }
+
+            ClearSpecificSessionVariables();
         }
         else
         {
+            //Response.Redirect(ConfigurationManager.AppSettings["ErrorPage"].Trim());
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + returnValue.Message + "`); ", true);
             return;
+        }
+    }
+
+    private void ClearSpecificSessionVariables()
+    {
+        string[] sessionKeys = new string[]
+        {
+        "XenditDatePaid",
+        "XenditNotificationDate",
+        "XenditNumberOfCOCsPaid",
+        "XenditORNumber",
+        "XenditPaymentGatewayFee",
+        "XenditPaymentMethod",
+        "XenditPaymentNotes",
+        "XenditPaymentOption",
+        "XenditPaymentOrigin",
+        "XenditPaymentReferenceNo",
+        "XenditProductAmount",
+        "XenditReferenceNo",
+        "XenditTotalAmountPaid",
+        "ReferralCode"
+        };
+
+        foreach (string key in sessionKeys)
+        {
+            Session.Remove(key);
         }
     }
 
@@ -268,6 +308,34 @@ public partial class ConfirmationPage : System.Web.UI.Page
         return selectedValue;
     }
     #endregion
+
+    #region GET IS VALID INSURANCE
+    public bool GetIsValidInsurance()
+    {
+        bool isValidInsurance = false;
+
+        if (Session["SummaryIsValidFreeInsurance"] != null)
+        {
+            string sessionValue = Session["SummaryIsValidFreeInsurance"].ToString();
+
+            if (!string.IsNullOrEmpty(sessionValue))
+            {
+                try
+                {
+                    isValidInsurance = bool.Parse(sessionValue);
+                }
+                catch (FormatException)
+                {
+                    // Handle the exception if the session value cannot be parsed to a boolean
+                    isValidInsurance = false;
+                }
+            }
+        }
+
+        return isValidInsurance;
+    }
+    #endregion
+
 
     #region GENERATE SMS CONTENT
     public void SMSContent(TagInsuraceAsPaidResult tagaspaidresult)
