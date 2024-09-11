@@ -1,0 +1,108 @@
+﻿body {
+    background-color: #f8f9fa;
+}
+.lead{
+    font-weight:500;
+}
+.service-box {
+    padding: 20px;
+    border: 3px solid #354E5A;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+    .service-box:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-10px);
+    }
+
+    .service-box.disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+        .service-box.disabled .service-title {
+            color: #adb5bd;
+        }
+
+    .service-box.active {
+        cursor: pointer;
+        border-color: #28a745;
+    }
+
+.navBar {
+    height: 100px;
+    width: 100%;
+    background: #00263E;
+    position: fixed;
+    top: 0px;
+    overflow: hidden;
+    left: 0px;
+}
+
+.center-logo {
+    margin: auto;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    /*border-radius: 50%;*/
+}
+
+#clibLogo {
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bodyContent {
+    /*width: 80%;*/
+    margin: auto;
+    height: 100%;
+    padding:20px;
+    margin-top:150px;
+    background: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius:20px;
+}
+
+
+.icon-container {
+    margin-bottom: 10px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-icon {
+    width: 80px;
+}
+
+.coming-soon-text {
+    font-size: 1.5rem;
+    color: #dc3545;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    font-weight: bold;
+}
+
+.service-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.disabled .coming-soon-text {
+    display: block;
+}
