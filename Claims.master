@@ -10,8 +10,7 @@
     <title>Cebuana Lhuillier Insurance Brokers | Microsite - Enrollment Page</title>
     <!--=============== BOOTSRAP 4 ===============-->
     <link href="<%= ResolveUrl("~/Style/Bootstrap/bootstrap.css") %>" rel="stylesheet" />
-    <!--=============== ENROLLMENT ===============-->
-    <link href="<%= ResolveUrl("~/Style/claims.css") %>" rel="stylesheet"/>
+
      <!--=============== BOXICONS ===============-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!--=============== FONTAWESOME ===============-->
