@@ -129,19 +129,17 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
-    // List to keep track of selected BenefitCodes
+
     private List<string> selectedBenefitCodes = new List<string>();
 
     #region GetDocumentsForSelectedBenefits
     public void GetDocumentsForSelectedBenefits()
-    {
-        // Clear the document container before appending new ones
+
         documentContainer.Controls.Clear();
 
-        // Loop through all the selected benefit codes and make requests for each
         foreach (string benefitCode in selectedBenefitCodes)
         {
-            // Call the method to fetch documents for each BenefitCode
+       
             GetDocumentBasedOnBenefitRequest(benefitCode);
         }
     }
@@ -163,74 +161,68 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
-                // Display or append the documents in the UI if the request is successful
+       
                 DisplayDocuments(returnValue.Result, benefitCode);
             }
             else
             {
-                // Optional: Handle the case when no documents are found
-                // Example: Show a message to the user
+     
             }
         }
         catch (Exception ex)
         {
-            // Handle the exception
+     
             ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Error: " + ex.Message + "');", true);
         }
     }
     #endregion
 
-    // Method to append documents to the UI
+
     private void DisplayDocuments(List<GetDocumentBasedOnBenefit> documents, string benefitCode)
     {
         foreach (var document in documents)
         {
-            // Add the documents to a Literal or Placeholder control with a unique ID based on BenefitCode
             Literal litDocuments = new Literal();
             litDocuments.Text = "<div id='doc_" + benefitCode + "'>Document Name: " + document.ClaimsDocumentsName + "</div>";
             documentContainer.Controls.Add(litDocuments); // Assuming documentContainer is a placeholder in your UI
         }
     }
 
-    // Method to clear specific documents from the UI based on BenefitCode
     private void ClearDocuments(string benefitCode)
     {
-        // Prepare a list to store the controls to be removed
+
         List<Control> controlsToRemove = new List<Control>();
 
         foreach (Control control in documentContainer.Controls)
         {
-            // Check if the control is a Literal and has the corresponding BenefitCode in its ID
+
             Literal literal = control as Literal;
             if (literal != null && literal.Text.Contains("id='doc_" + benefitCode + "'"))
             {
                 controlsToRemove.Add(literal);
             }
         }
-
-        // Remove all the controls related to the unchecked BenefitCode
         foreach (Control controlToRemove in controlsToRemove)
         {
             documentContainer.Controls.Remove(controlToRemove);
         }
     }
 
-    // Event handler when a checkbox is checked or unchecked
+
     protected void chkBenefit_CheckedChanged(object sender, EventArgs e)
     {
-        // Get the checkbox that triggered the event
+
         CheckBox chkBenefit = (CheckBox)sender;
         RepeaterItem item = (RepeaterItem)chkBenefit.NamingContainer;
 
-        // Get the BenefitCode from the current item (assuming it is stored in a hidden field)
         string benefitCode = ((HiddenField)item.FindControl("hiddenBenefitCode")).Value;
 
-        // Determine if the checkbox is checked or unchecked
+       
         bool isChecked = chkBenefit.Checked;
 
         if (isChecked)
         {
-            // Add the checked BenefitCode to the list
+       
             if (!selectedBenefitCodes.Contains(benefitCode))
             {
                 selectedBenefitCodes.Add(benefitCode);
@@ -238,7 +230,7 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         else
         {
-            // Remove the unchecked BenefitCode from the list and clear its documents
+
             if (selectedBenefitCodes.Contains(benefitCode))
             {
                 selectedBenefitCodes.Remove(benefitCode);
@@ -246,7 +238,6 @@ public partial class ClientReferral : System.Web.UI.Page
             }
         }
 
-        // After updating the selectedBenefitCodes list, call the method to append or clear documents
         GetDocumentsForSelectedBenefits();
     }
 
