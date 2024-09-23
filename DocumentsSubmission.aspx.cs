@@ -129,19 +129,28 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
-    // List to keep track of selected BenefitCodes
-    private List<string> selectedBenefitCodes = new List<string>();
+    private List<string> SelectedBenefitCodes
+    {
+        get
+        {
+            // Return the list from ViewState if available, otherwise initialize a new list
+            return ViewState["SelectedBenefitCodes"] as List<string> ?? new List<string>();
+        }
+        set
+        {
+            // Store the list in ViewState
+            ViewState["SelectedBenefitCodes"] = value;
+        }
+    }
+
 
     #region GetDocumentsForSelectedBenefits
     public void GetDocumentsForSelectedBenefits()
     {
-        // Clear the document container before appending new ones
-        documentContainer.Controls.Clear();
-
-        // Loop through all the selected benefit codes and make requests for each
-        foreach (string benefitCode in selectedBenefitCodes)
+        // Loop through the selected benefit codes and append documents for each
+        foreach (string benefitCode in SelectedBenefitCodes)
         {
-            // Call the method to fetch documents for each BenefitCode
+            // Fetch and display documents for the benefit
             GetDocumentBasedOnBenefitRequest(benefitCode);
         }
     }
@@ -218,35 +227,35 @@ public partial class ClientReferral : System.Web.UI.Page
     // Event handler when a checkbox is checked or unchecked
     protected void chkBenefit_CheckedChanged(object sender, EventArgs e)
     {
-        // Get the checkbox that triggered the event
         CheckBox chkBenefit = (CheckBox)sender;
         RepeaterItem item = (RepeaterItem)chkBenefit.NamingContainer;
 
-        // Get the BenefitCode from the current item (assuming it is stored in a hidden field)
         string benefitCode = ((HiddenField)item.FindControl("hiddenBenefitCode")).Value;
-
-        // Determine if the checkbox is checked or unchecked
         bool isChecked = chkBenefit.Checked;
+
+        // Access the persisted list
+        List<string> selectedCodes = SelectedBenefitCodes;
 
         if (isChecked)
         {
-            // Add the checked BenefitCode to the list
-            if (!selectedBenefitCodes.Contains(benefitCode))
+            if (!selectedCodes.Contains(benefitCode))
             {
-                selectedBenefitCodes.Add(benefitCode);
+                selectedCodes.Add(benefitCode);
             }
         }
         else
         {
-            // Remove the unchecked BenefitCode from the list and clear its documents
-            if (selectedBenefitCodes.Contains(benefitCode))
+            if (selectedCodes.Contains(benefitCode))
             {
-                selectedBenefitCodes.Remove(benefitCode);
+                selectedCodes.Remove(benefitCode);
                 ClearDocuments(benefitCode);
             }
         }
 
-        // After updating the selectedBenefitCodes list, call the method to append or clear documents
+        // Update the ViewState-stored list
+        SelectedBenefitCodes = selectedCodes;
+
+        // Append or clear documents based on the current list
         GetDocumentsForSelectedBenefits();
     }
 
