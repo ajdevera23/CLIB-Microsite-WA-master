@@ -47,7 +47,7 @@
         <div class="row" id="title">
           <div class="center-logo" >
             <%
-                string redirectUrl = ConfigurationManager.AppSettings["ProductRegistration"];
+                string redirectUrl = ConfigurationManager.AppSettings["Claims"];
             %>
             <a href="<%= redirectUrl %>"><img id="clibLogo" src="/Images/CLIB.png" alt="CLIB LOGO"/></a>
           </div>
