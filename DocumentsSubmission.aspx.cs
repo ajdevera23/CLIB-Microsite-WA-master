@@ -129,6 +129,7 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
+    #region  SelectedBenefitCodes
     private List<string> SelectedBenefitCodes
     {
         get
@@ -142,7 +143,7 @@ public partial class ClientReferral : System.Web.UI.Page
             ViewState["SelectedBenefitCodes"] = value;
         }
     }
-
+    #endregion
 
     #region GetDocumentsForSelectedBenefits
     public void GetDocumentsForSelectedBenefits()
@@ -188,6 +189,7 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
+
 
     // Method to append documents to the UI
     private void DisplayDocuments(List<GetDocumentBasedOnBenefit> documents, string benefitCode)

@@ -72,7 +72,7 @@
                                     </td>
                                     <td><%# Eval("Benefit") %></td>
                                     <td><%# "PHP " + String.Format("{0:N2}", Eval("CoverageAmount")) %></td>
-                                    <td>
+                                    <td style="display:none;">
                                         <asp:HiddenField ID="hiddenBenefitCode" runat="server" Value='<%# Eval("BenefitCode") %>' />
                                     </td>
                                 </tr>
