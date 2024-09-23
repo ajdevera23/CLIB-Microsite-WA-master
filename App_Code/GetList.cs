@@ -358,6 +358,58 @@ public class GetList
         return returnValue;
     }
 
+    public GetClaimsIfExistResult GetClaimsIfExists(GetClaimsIfExistRequest token)
+    {
+        GetClaimsIfExistResult returnValue = new GetClaimsIfExistResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetClaimsIfExists"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<GetClaimsIfExistResult>(jsonResult);
+
+        return returnValue;
+    }
+
+    public GetNatureofClaimResult GetNatureofClaimRequest(GetNatureofClaimRequest token)
+    {
+        GetNatureofClaimResult returnValue = new GetNatureofClaimResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetNatureofClaimRequest"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<GetNatureofClaimResult>(jsonResult);
+
+        return returnValue;
+    }
+
+    public GetBenefitByNatureOfClaimResult GetBenefitByNatureOfClaimRequest(GetBenefitByNatureOfClaimRequest token)
+    {
+        GetBenefitByNatureOfClaimResult returnValue = new GetBenefitByNatureOfClaimResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetBenefitByNatureOfClaimRequest"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<GetBenefitByNatureOfClaimResult>(jsonResult);
+
+        return returnValue;
+    }
+
+    public GetDocumentBasedOnBenefitResult GetDocumentBasedOnBenefitRequest(GetDocumentBasedOnBenefitRequest token)
+    {
+        GetDocumentBasedOnBenefitResult returnValue = new GetDocumentBasedOnBenefitResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetDocumentBasedOnBenefitRequest"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<GetDocumentBasedOnBenefitResult>(jsonResult);
+
+        return returnValue;
+    }
+
     public AgentReferralResult IQRSaveClientReferral(AgentReferralRequest token)
     {
         AgentReferralResult returnValue = new AgentReferralResult();
