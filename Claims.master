@@ -6,61 +6,62 @@
 <head runat="server">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="Images/favicon.png" type="image/gif" sizes="16x16"/>
+    <link rel="icon" href="Images/favicon.png" type="image/gif" sizes="16x16" />
     <title>Cebuana Lhuillier Insurance Brokers | Microsite - Enrollment Page</title>
     <!--=============== BOOTSRAP 4 ===============-->
     <link href="<%= ResolveUrl("~/Style/Bootstrap/bootstrap.css") %>" rel="stylesheet" />
 
-     <!--=============== BOXICONS ===============-->
+    <!--=============== BOXICONS ===============-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!--=============== FONTAWESOME ===============-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <!--=============== SWEETALERT ===============-->
     <link href="<%= ResolveUrl("~/Style/sweetalert/sweetalert2.min.css") %>" rel="stylesheet" />
     <script src="<%= ResolveUrl("~/Scripts/sweetalert/sweetalert2.all.min.js") %>"></script>
-    <asp:ContentPlaceHolder id="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body runat="server">
-    
-<div class="container">
-    <div class="bodyContent">
-          <div style="margin-left:auto; margin-right:auto">
+
+    <div class="container">
+        <div class="bodyContent">
+            <div style="margin-left: auto; margin-right: auto">
                 <div class="row" align="center">
-                     <div class="col-md-6 mb-4">
-                           <asp:ContentPlaceHolder ID="productLogo" runat="server" >
-                           </asp:ContentPlaceHolder>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                            <asp:ContentPlaceHolder ID="partnerLogo" runat="server" >
-                            </asp:ContentPlaceHolder>
-                      </div>
-                 </div>
-           </div>
-          <div class="infoFormBar">
-                <asp:ContentPlaceHolder ID="infoForm" runat="server" >
+                    <div class="col-md-6 mb-4">
+                        <asp:ContentPlaceHolder ID="productLogo" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <asp:ContentPlaceHolder ID="partnerLogo" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+            </div>
+            <div class="infoFormBar">
+                <asp:ContentPlaceHolder ID="infoForm" runat="server">
                 </asp:ContentPlaceHolder>
-           </div>
-      </div>
-</div>
+            </div>
+        </div>
+    </div>
     <div class="navBar">
         <div class="row" id="title">
-          <div class="center-logo" >
-            <%
-                string redirectUrl = ConfigurationManager.AppSettings["Claims"];
-            %>
-            <a href="<%= redirectUrl %>"><img id="clibLogo" src="/Images/CLIB.png" alt="CLIB LOGO"/></a>
-          </div>
+            <div class="center-logo">
+                <%
+                    string redirectUrl = ConfigurationManager.AppSettings["Claims"];
+                %>
+                <a href="<%= redirectUrl %>">
+                    <img id="clibLogo" src="/Images/CLIB.png" alt="CLIB LOGO" /></a>
+            </div>
         </div>
         <div id="below-title">
-            <div id="navButtons"> 
+            <div id="navButtons">
             </div>
-        </div>   
+        </div>
     </div>
- <script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>
- <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
- <script src="https://www.google.com/recaptcha/api.js?"></script>
-
+    <script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>
+    <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
+    <script src="<%= ResolveUrl("~/JScript/ClaimsAI/documentsubmission.js") %>"></script>
+    <script src="https://www.google.com/recaptcha/api.js?"></script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server">
     </asp:ContentPlaceHolder>
