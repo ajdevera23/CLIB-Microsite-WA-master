@@ -240,8 +240,8 @@ public partial class ClientReferral : System.Web.UI.Page
                             "</svg> Upload " +
                         "</button>" +
 
-                        "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\" class=\"button\"" + (document.ClaimsDocumentsName != null ? "" : "disabled") + " style =\"margin-inline-end: 5px\">" +
-                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (document.ClaimsDocumentsName != null ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
+                        "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\" class=\"button\"" + (string.IsNullOrEmpty(document.ClaimsDocumentsName) ? "" : "disabled") + " style =\"margin-inline-end: 5px\">" +
+                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (string.IsNullOrEmpty(document.ClaimsDocumentsName) ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
                             "<path d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
                             "<path d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
                             "</svg> Download " +
@@ -249,8 +249,8 @@ public partial class ClientReferral : System.Web.UI.Page
 
                         "<button type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
                             "\" data-value=\"" + document.ClaimsDocumentsId +
-                            "\" class=\"button\"" + (document.ClaimsDocumentsName != null ? "" : "disabled") + ">" +
-                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" + (document.ClaimsDocumentsName != null  ? "fill: #00263E;" : "fill: gray; opacity: 0.5;")  + "\">" +
+                            "\" class=\"button\"" + (string.IsNullOrEmpty(document.ClaimsDocumentsName) ? "" : "disabled") + ">" +
+                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" + (string.IsNullOrEmpty(document.ClaimsDocumentsName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;")  + "\">" +
                             "<path d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
                             "<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
                             "</svg> Show " +
