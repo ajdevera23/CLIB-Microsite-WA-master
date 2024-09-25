@@ -230,7 +230,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 litDocuments.Text = "<div class='col-md-12 mt-3 mb-3'>" +
                         "<div id='doc_" + benefitCode + "'>" +
                         "<b>" + document.ClaimsDocumentsName + "</b> <br>File: " +
-                        "<span style='color:#f39c12;'>" + document + "</span>" +
+                        "<span style='color:#f39c12;'>" + document.FileName + "</span>" +
                         "</div>" +
 
                         "<button type=\"button\" id=\"btn_upload_" + document.ClaimsDocumentsId + "\" class=\"button\" style=\"margin-inline-end: 5px\">" +
