@@ -230,7 +230,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 litDocuments.Text = "<div class='col-md-12 mt-3'>" +
                         "<div id='doc_" + benefitCode + "'>" +
                         "<b>" + document.ClaimsDocumentsName + "</b> <br>File: " +
-                        "<span style='color:#f39c12;'>" + document.FileName + "</span>" +
+                        "<span style='color:#f39c12;'>" + document. + "</span>" +
                         "</div>" + Environment.NewLine + button + "</div>";
 
                 documentContainer.Controls.Add(litDocuments); // Assuming documentContainer is a placeholder in your UI
