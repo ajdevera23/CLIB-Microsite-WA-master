@@ -10,6 +10,8 @@ public class GetDocumentBasedOnBenefit
     public long ClaimsDocumentsId { get; set; }
     public string ClaimsDocumentsName { get; set; }
     public string DocumentType { get; set; }
+    public string FileName { get; set; }
+
 }
 public class GetDocumentBasedOnBenefitResult
 {

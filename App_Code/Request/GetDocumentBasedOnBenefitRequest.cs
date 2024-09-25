@@ -7,6 +7,7 @@ public class GetDocumentBasedOnBenefitRequest
 {
     public string Token { get; set; }
     public string BenefitCode { get; set; }
+    public string ClaimsReferenceNumber { get; set; }
     public string PlatformKey { get; set; }
 }
 
