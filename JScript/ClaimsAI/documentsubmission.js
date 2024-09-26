@@ -28,15 +28,37 @@
     });
 
     $('[id^="btn_upload_"]').click(function (e) {
-        e.preventDefault(); // Prevent the default button action
+        e.preventDefault(); 
         var docId = this.id.split('_')[2];
-        $('#file_upload_' + docId).click(); // Simulate a click on the hidden file input
+        $('#file_upload_' + docId).click(); 
     });
 
     $('[id^="file_upload_"]').change(function () {
         var id = this.id.split('_')[2];
-        var fileName = $(this).val().split('\\').pop(); // Get the file name
-        $('#file_name_' + id).text(fileName);
-    });
+        var fileName = $(this).val().split('\\').pop(); 
+        var fileInput = $(this)[0];
+        var file = fileInput.files[0];
 
+        var maxSize = 3 * 1024 * 1024;
+
+        var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+
+        if (file) {
+            if (!allowedTypes.includes(file.type)) {
+                alert('Invalid file type. Please select a JPG, PNG, GIF, or PDF.'); //change to swal
+                fileInput.value = '';
+                $('#file_name_' + id).text('');
+                return;
+            }
+
+            if (file.size > maxSize) {
+                alert('File size exceeds 3MB. Please select a smaller file.'); //change to swal
+                fileInput.value = '';
+                $('#file_name_' + id).text('');
+                return;
+            }
+
+            $('#file_name_' + id).text(fileName);
+        }
+    });
 })
