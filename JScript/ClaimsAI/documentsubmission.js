@@ -22,8 +22,21 @@
     collapses.forEach(collapse => collapse.addEventListener('click', handleExpandToggle));
 
     $('[id^="btn_show_"]').on('click', function () {
-        var docId = $(this).attr('data-value')
+        var docId = this.id.split('_')[2];
         //alert(docId)
         myModal.modal('show')
     });
+
+    $('[id^="btn_upload_"]').click(function (e) {
+        e.preventDefault(); // Prevent the default button action
+        var docId = this.id.split('_')[2];
+        $('#file_upload_' + docId).click(); // Simulate a click on the hidden file input
+    });
+
+    $('[id^="file_upload_"]').change(function () {
+        var id = this.id.split('_')[2];
+        var fileName = $(this).val().split('\\').pop(); // Get the file name
+        $('#file_name_' + id).text(fileName);
+    });
+
 })

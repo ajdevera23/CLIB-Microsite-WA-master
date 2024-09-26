@@ -11,7 +11,6 @@ public class GetDocumentBasedOnBenefit
     public string ClaimsDocumentsName { get; set; }
     public string DocumentType { get; set; }
     public string FileName { get; set; }
-
 }
 public class GetDocumentBasedOnBenefitResult
 {
