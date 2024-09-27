@@ -368,6 +368,49 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
+
+    #region GetExistingDocuments
+    public void GetExistingDocuments(int ClaimsDocumentID)
+    {
+        try
+        {
+            GetExistingDocumentsRequest getExistingDocumentsRequest = new GetExistingDocumentsRequest();
+
+            token.Token = generateToken.GenerateTokenAuth();
+            getExistingDocumentsRequest.Token = token.Token;
+            getExistingDocumentsRequest.ClaimsDocumentsId = ClaimsDocumentID;
+            getExistingDocumentsRequest.ClaimsReferenceNumber = referenceNumber.Text.ToString();
+            getExistingDocumentsRequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
+
+            var returnValue = getList.GetExistingDocuments(getExistingDocumentsRequest);
+            string message = returnValue.Message;
+
+            if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
+            {
+                //Success
+            }
+            else
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
+            throw;
+
+            throw;
+        }
+
+
+
+
+    }
+
+
+    #endregion
+
+
     public void generateCaptcha()
     {
         #region Captcha

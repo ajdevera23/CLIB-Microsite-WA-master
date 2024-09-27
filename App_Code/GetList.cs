@@ -410,6 +410,20 @@ public class GetList
         return returnValue;
     }
 
+    public GetExistingDocumentsResults GetExistingDocuments(GetExistingDocumentsRequest token)
+    {
+        GetExistingDocumentsResults returnValue = new GetExistingDocumentsResults();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["GetExistingDocuments"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<GetExistingDocumentsResults>(jsonResult);
+
+        return returnValue;
+    }
+
+
     public AgentReferralResult IQRSaveClientReferral(AgentReferralRequest token)
     {
         AgentReferralResult returnValue = new AgentReferralResult();
