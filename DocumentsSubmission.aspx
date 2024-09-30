@@ -7,6 +7,9 @@
        <input type="hidden" name="docId" id="docIdInput" value="">
         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" style="display:none;" />
+
+        <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" style="display:none;" />
+
         <div class="container">
             <div class="app-accordion" id="accordian1id" app-accordian>
                 <!-- Accordion Item 1 -->
@@ -159,36 +162,22 @@
         </div>
     </div>
 </div>
-
     <script>
-        function showDocument(documentId) {
-            // Set the hidden field value to the selected documentId
-            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-    
-        // Trigger the hidden button to perform a server-side postback
-               document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-           }
+            function showDocument(documentId) {
+                // Set the hidden field value to the selected documentId
+                document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+
+                // Trigger the hidden button to perform a server-side postback
+                document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+            }
+            
+             function OpenFileDialog(documentId) {
+                // Set the hidden field value to the selected documentId
+                document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+                // Trigger the hidden button to perform a server-side postback
+                document.getElementById('<%= btnHiddenUpload.ClientID %>').click();
+
+                $('#file_upload_' + documentId).click();
+            }
     </script>
-
-
-</asp:Content>
-
-<asp:Content ContentPlaceHolderID="ScriptContent" runat="server">
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var base64PDF = "<%= Session["pdfBase64"] %>";
-
-                if (base64PDF !== null) {
-                   
-
-                    alert(base64PDF);
-
-                    var modalfilepreview = document.getElementById("myModal");
-
-                 modalfilepreview.style.display = "block";  // Show the modal manually
-                 document.getElementById("filePreview").src = "data:application/pdf;base64," + base64PDF; // Set the PDF base64 data as source
-             }
-         });
-        </script>
-
 </asp:Content>

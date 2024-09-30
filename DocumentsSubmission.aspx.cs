@@ -26,7 +26,7 @@ public partial class ClientReferral : System.Web.UI.Page
         else
         {
             // Rebuild the document container on postback
-
+           
             foreach (string benefitCode in SelectedBenefitCodes)
             {
                 if (Session[benefitCode] != null)
@@ -248,7 +248,8 @@ public partial class ClientReferral : System.Web.UI.Page
                         "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
                         "</div>" +
 
-                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + "' class='button' style='margin-inline-end: 5px;'>" +
+                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " +
+                        " onclick='OpenFileDialog(" + document.ClaimsDocumentsId + ")'>" +
                         "<svg class='icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' style='fill: #00263E;'>" +
                         "<path d='M13 19v-4h3l-4-5-4 5h3v4z'></path>" +
                         "<path d='M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z'></path>" +
@@ -281,7 +282,6 @@ public partial class ClientReferral : System.Web.UI.Page
             }
         }
     }
-
     //Method to append documents to the UI
     //private void DisplayDocuments(List<GetDocumentBasedOnBenefit> documents, string benefitCode)
     //{
@@ -322,18 +322,11 @@ public partial class ClientReferral : System.Web.UI.Page
     //                  //      "<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
     //                  //      "</svg> Show " +    
     //                  // "</button>"
-
-
-
     //                    + "</div>";
-
     //            documentContainer.Controls.Add(litDocuments); // Assuming documentContainer is a placeholder in your UI
-
-
     //        }
     //    }
     //}
-
     protected void btnHiddenShow_Click(object sender, EventArgs e)
     {
         // Get the document ID from the hidden field
@@ -442,7 +435,60 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
+    protected void btnHiddenUpload_Click(object sender, EventArgs e)
+    {
+        int documentId = int.Parse(hiddenDocumentId.Value);
+     
+    }
+    public void OpenFileDialogFile()
+    {
+        string script = @"
+        document.querySelectorAll('[id^=""file_upload_""]').forEach(function(fileInput) {
+            fileInput.addEventListener('change', function(event) {
+                var id = event.target.id.split('_').pop(); // Extract the id from the input element
+                var fileName = event.target.value.split('\\').pop(); // Get the file name
+                var file = event.target.files[0]; // Get the selected file
 
+                var maxSize = 3 * 1024 * 1024; // 3MB file size limit
+                var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']; // Allowed file types
+
+                if (file) {
+                    // Check if the file type is allowed
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Invalid file type. Please select a JPG, PNG, GIF, or PDF.');
+                        event.target.value = ''; // Clear file input
+                        document.getElementById('file_name_' + id).textContent = ''; // Clear displayed file name
+                        document.getElementById('previewContainer').style.display = 'none'; // Hide preview container
+                        selectedFile = null; // Clear selected file
+                        return;
+                    }
+
+                    // Check if the file size exceeds the maximum limit
+                    if (file.size > maxSize) {
+                        alert('File size exceeds 3MB. Please select a smaller file.');
+                        event.target.value = ''; // Clear file input
+                        document.getElementById('file_name_' + id).textContent = ''; // Clear displayed file name
+                        document.getElementById('previewContainer').style.display = 'none'; // Hide preview container
+                        selectedFile = null; // Clear selected file
+                        return;
+                    }
+
+                    // If everything is okay, store the selected file for later preview
+                    document.getElementById('file_name_' + id).textContent = fileName;
+                    selectedFile = file; // Store the file for the modal preview
+
+                    // Optional: Show a success message
+                    alert('File selected: ' + fileName);
+                } else {
+                    document.getElementById('previewContainer').style.display = 'none';
+                    selectedFile = null; // Clear selected file
+                }
+            });
+        });
+    ";
+
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
+    }
 
     #region GetExistingDocuments
     public void GetExistingDocuments(int ClaimsDocumentID)
@@ -462,10 +508,20 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
-
                 Session["pdfBase64"] = returnValue.Result[0].FileData.ToString();
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModalScript", "$('#myModal').modal('show');", true);
-                //ScriptManager1.RegisterStartupScritps(this, this.GetType(), "ShowModalScript", "$('myModal').modal('show');", true);
+
+                if (Session["pdfBase64"] != null)
+                {
+                    string script = @"
+                        var base64PDF = '" + Session["pdfBase64"] + @"';
+                        if (base64PDF !== null && base64PDF.trim() !== '') {
+                            var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
+                            document.getElementById('filePreview').src = 'data:application/pdf;base64,' + base64PDF;
+                            modalfilepreview.show();
+                        }";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
+                }
+
             }
             else
             {
@@ -476,13 +532,10 @@ public partial class ClientReferral : System.Web.UI.Page
         {
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
             throw;
-
-            throw;
         }
 
     }
     #endregion
-
 
     public void generateCaptcha()
     {
