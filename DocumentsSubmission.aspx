@@ -142,7 +142,7 @@
             </div>
         </div>  
     </form>
-<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -159,15 +159,36 @@
         </div>
     </div>
 </div>
+
     <script>
         function showDocument(documentId) {
             // Set the hidden field value to the selected documentId
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
     
         // Trigger the hidden button to perform a server-side postback
-            document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-        }
-
+               document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+           }
     </script>
+
+
+</asp:Content>
+
+<asp:Content ContentPlaceHolderID="ScriptContent" runat="server">
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var base64PDF = "<%= Session["pdfBase64"] %>";
+
+                if (base64PDF !== null) {
+                   
+
+                    alert(base64PDF);
+
+                    var modalfilepreview = document.getElementById("myModal");
+
+                 modalfilepreview.style.display = "block";  // Show the modal manually
+                 document.getElementById("filePreview").src = "data:application/pdf;base64," + base64PDF; // Set the PDF base64 data as source
+             }
+         });
+        </script>
 
 </asp:Content>

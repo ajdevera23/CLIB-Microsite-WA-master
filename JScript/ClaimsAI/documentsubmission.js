@@ -58,7 +58,7 @@
             $('#docIdInput').val(docId);
 
             // Submit the form to trigger the server-side action
-            $('#enrollmentForm').submit();
+            //$('#enrollmentForm').submit();
         } else {
             Swal.fire({
                 title: 'No file selected',
@@ -157,4 +157,6 @@ btncheckeligibility.click(function () {
         Swal.close(); // Close the Swal alert if needed
     }, 1000);
 });
+
+
 
