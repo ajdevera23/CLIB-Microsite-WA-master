@@ -3,6 +3,10 @@
 <asp:Content ContentPlaceHolderID="infoForm" runat="server">
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
     <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="off" runat="server" novalidate>
+
+       <input type="hidden" name="docId" id="docIdInput" value="">
+        <asp:HiddenField ID="hiddenDocumentId" runat="server" />
+        <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" style="display:none;" />
         <div class="container">
             <div class="app-accordion" id="accordian1id" app-accordian>
                 <!-- Accordion Item 1 -->
@@ -37,6 +41,9 @@
                         </div>
                     </div>
                 </div>
+                 <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                 <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
+                 <ContentTemplate>
                 <% if (Session["EnableClaims"] != null && (bool)Session["EnableClaims"] == true)
                     { %>
                 <!-- Accordion Item 2 -->
@@ -126,35 +133,41 @@
                     </div>
                 </div>
                 <%} %>
-            </div>
-        </div>
-        <%--<asp:ScriptManager runat="server">
-            <Scripts>
-                <asp:ScriptReference Path="~/JScript/ClaimsAI/documentsubmission.js" />
-            </Scripts>
-        </asp:ScriptManager>--%>
-    </form>
 
-    <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Modal Title</h5>
-                    <%--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--%>
-                </div>
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    This is a basic Bootstrap 5 modal.
-       
-                </div>
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-soft-secondary" data-bs-dismiss="modal">Close</button>
-                    <%--<button type="button" class="btn btn-primary">Save changes</button>--%>
+              </ContentTemplate>
+                   <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="btnHiddenShow" EventName="Click" />
+                </Triggers>
+            </asp:UpdatePanel>
+            </div>
+        </div>  
+    </form>
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <span class="close" data-bs-dismiss="modal">X</span>
+                <div class="content">
+                
+                    <div class="preview-container" id="previewContainer">
+                        <h5>File Preview:</h5>
+                        <img id="filePreview" alt="Image Preview"/>
+                        <iframe id="pdfPreview"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</asp:Content>
+</div>
+    <script>
+        function showDocument(documentId) {
+            // Set the hidden field value to the selected documentId
+            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+    
+        // Trigger the hidden button to perform a server-side postback
+            document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+        }
 
+    </script>
+
+</asp:Content>

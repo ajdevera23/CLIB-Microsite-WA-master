@@ -21,7 +21,28 @@ public partial class ClientReferral : System.Web.UI.Page
             SessionDisable();
             generateCaptcha();
         }
+        else
+        {
+            // Rebuild the document container on postback
+
+            foreach (string benefitCode in SelectedBenefitCodes)
+            {
+                if (Session[benefitCode] != null)
+                {
+                    // Retrieve the stored documents from session
+                    List<GetDocumentBasedOnBenefit> documents = (List<GetDocumentBasedOnBenefit>)Session[benefitCode];
+
+                    // Display the documents for this benefit code
+                    DisplayDocuments(documents, benefitCode);
+                }
+            }
+        }
     }
+
+
+
+
+
     #region GET VALIDATE CLAIMS
     public void GetValidateClaims()
     {
@@ -47,10 +68,11 @@ public partial class ClientReferral : System.Web.UI.Page
             }
             else
             {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
                 DisplayValidateButton();
                 SessionDisable();
                 ClearAllFields();
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
+               
             }
         }
         catch (Exception ex)
@@ -181,8 +203,17 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
-                // Display or append the documents in the UI if the request is successful
-                DisplayDocuments(returnValue.Result, benefitCode);
+                // Retrieve or initialize document list from session
+                List<GetDocumentBasedOnBenefit> currentDocuments = Session[benefitCode] as List<GetDocumentBasedOnBenefit> ?? new List<GetDocumentBasedOnBenefit>();
+
+                // Append the new documents
+                currentDocuments.AddRange(returnValue.Result);
+
+                // Store the updated list in Session
+                Session[benefitCode] = currentDocuments;
+
+                // Call DisplayDocuments to render them in the UI
+                DisplayDocuments(currentDocuments, benefitCode);
             }
             else
             {
@@ -199,27 +230,11 @@ public partial class ClientReferral : System.Web.UI.Page
     #endregion
 
 
-    // Method to append documents to the UI
+
+   //Method to append documents to the UI
     private void DisplayDocuments(List<GetDocumentBasedOnBenefit> documents, string benefitCode)
     {
-        //string button = "<button type=\"button\" class=\"button\" style=\"margin-inline-end: 5px\">" +
-        //"<svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"fill: #00263E;transform: ;msFilter:;\">" +
-        //"<path d=\"M13 19v-4h3l-4-5-4 5h3v4z\"></path>" +
-        //"<path d=\"M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z\"></path>" +
-        //"</svg> Upload </button>" +
-
-        //"<button type=\"button\" class=\"button\"  style=\"margin-inline-end: 5px\">" +
-        //"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"fill: #00263E;transform: ;msFilter:;\">" +
-        //"<path d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
-        //"<path d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
-        //"</svg> Download </button>" +
-
-        //"<button type=\"button\" class=\"button\">" +
-        //"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"fill: #00263E;transform: ;msFilter:;\">" +
-        //"<path d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
-        //"<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
-        //"</svg> Show </button>";
-
+   
         foreach (var document in documents)
         {
             // Perform counter check to see if ClaimsDocumentsName already exists in the container
@@ -234,11 +249,11 @@ public partial class ClientReferral : System.Web.UI.Page
                         "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
                         "</div>" +
 
-                        "<button type=\"button\" id=\"btn_upload_" + document.ClaimsDocumentsId + "\" data-value=\"" + document.ClaimsDocumentsId +"\" class=\"button\" style=\"margin-inline-end: 5px\">" +
-                            "<svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"fill: #00263E;\">" +
-                            "<path d=\"M13 19v-4h3l-4-5-4 5h3v4z\"></path>" +
-                            "<path d=\"M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z\"></path>" +
-                            "</svg> Upload " +
+                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + "' class='button' style='margin-inline-end: 5px;'>" +
+                        "<svg class='icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' style='fill: #00263E;'>" +
+                        "<path d='M13 19v-4h3l-4-5-4 5h3v4z'></path>" +
+                        "<path d='M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z'></path>" +
+                        "</svg> Upload" +
                         "</button>" +
 
                         "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") + " style =\"margin-inline-end: 5px\">" +
@@ -248,24 +263,31 @@ public partial class ClientReferral : System.Web.UI.Page
                             "</svg> Download " +
                         "</button>" +
 
-                        "<button type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
-                            "\" data-value=\"" + document.ClaimsDocumentsId +
-                            "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") + ">" +
-                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" + (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;")  + "\">" +
-                            "<path d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
-                            "<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
-                            "</svg> Show " +
+                       "<button type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
+                        "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
+                        " onclick='showDocument(" + document.ClaimsDocumentsId + ")'>" +  // Passing document ID to JavaScript
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" +
+                        (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;") + "\">" +
+                        "<path d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
+                        "<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
+                        "</svg> Show " +
                         "</button>"
 
-                +"</div>";
+                + "</div>";
 
                 documentContainer.Controls.Add(litDocuments); // Assuming documentContainer is a placeholder in your UI
+
+
             }
         }
     }
-
-
-
+    protected void btnHiddenShow_Click(object sender, EventArgs e)
+    {
+        // Get the document ID from the hidden field
+        int documentId = int.Parse(hiddenDocumentId.Value);
+        // Call your existing C# logic to retrieve or display the document
+        GetExistingDocuments(documentId);
+    }
     // Method to clear specific documents from the UI based on BenefitCode
     private void ClearDocuments(string benefitCode)
     {
@@ -387,7 +409,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
-                //Success
+                
             }
             else
             {
@@ -402,12 +424,7 @@ public partial class ClientReferral : System.Web.UI.Page
             throw;
         }
 
-
-
-
     }
-
-
     #endregion
 
 
@@ -448,5 +465,6 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void natureofclaimDropdownlist_SelectedIndexChanged(object sender, EventArgs e)
     {
         GetBenefitByNatureOfClaimRequest(natureofclaimDropdownlist.SelectedValue);
+       UpdatePanel1.Update();
     }
 }
