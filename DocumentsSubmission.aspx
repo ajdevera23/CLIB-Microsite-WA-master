@@ -7,7 +7,7 @@
        <input type="hidden" name="docId" id="docIdInput" value="">
         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" style="display:none;" />
-
+        <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" style="display:none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" style="display:none;" />
 
         <div class="container">

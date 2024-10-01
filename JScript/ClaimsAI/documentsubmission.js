@@ -154,22 +154,26 @@
 
 var btncheckeligibility = $('.validate-btn');
 
-btncheckeligibility.click(function () {
-    Swal.fire({
-        title: 'Please wait while we process your details...',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false
+    btncheckeligibility.click(function () {
+        Swal.fire({
+            title: 'Please wait while we process your details...',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
+
+        // Set a timer for 2 seconds (2000 milliseconds)
+        setTimeout(function () {
+            // Code to execute after the delay
+            // For example, you can make an AJAX call or any other function
+            console.log('Processing completed.'); // Placeholder for your next action
+            Swal.close(); // Close the Swal alert if needed
+        }, 1000);
     });
 
-    // Set a timer for 2 seconds (2000 milliseconds)
-    setTimeout(function () {
-        // Code to execute after the delay
-        // For example, you can make an AJAX call or any other function
-        console.log('Processing completed.'); // Placeholder for your next action
-        Swal.close(); // Close the Swal alert if needed
-    }, 1000);
 });
+
+
 
 
 
