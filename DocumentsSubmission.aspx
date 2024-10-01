@@ -169,7 +169,35 @@
 
                 // Trigger the hidden button to perform a server-side postback
                 document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+                
+                Swal.fire({
+                     title: 'Generating preview, Please wait..',
+                     showConfirmButton: false,
+                     allowOutsideClick: false,
+                     allowEscapeKey: false
+                 });
+                 setTimeout(function () {
+                     console.log('Processing completed.'); 
+                     Swal.close();
+                 }, 2000);
             }
+
+            function DownloadDocument(documentId) {
+
+             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+             document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
+
+             Swal.fire({
+                 title: 'Downloading, Please wait..',
+                 showConfirmButton: false,
+                 allowOutsideClick: false,
+                 allowEscapeKey: false
+             });
+             setTimeout(function () {
+                 console.log('Processing completed.');
+                  Swal.close();
+              }, 2000);
+            }         
             
            
 

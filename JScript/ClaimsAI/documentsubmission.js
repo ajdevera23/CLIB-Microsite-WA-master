@@ -84,7 +84,7 @@
         var fileInput = $(this)[0];
         var file = fileInput.files[0];
 
-        var maxSize = 10 * 1024 * 1024; // 3MB file size limit
+        var maxSize = 10 * 1024 * 1024; // 10MB file size limit
         var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']; // Allowed file types
 
         if (file) {
