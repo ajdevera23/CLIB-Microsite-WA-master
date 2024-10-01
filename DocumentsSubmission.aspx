@@ -8,6 +8,7 @@
         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" style="display:none;" />
 
+        <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" style="display:none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" style="display:none;" />
 
         <div class="container">
@@ -169,7 +170,15 @@
 
                 // Trigger the hidden button to perform a server-side postback
                 document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-            }
+        }
+
+        function DownloadDocument(documentId) {
+            // Set the hidden field value to the selected documentId
+            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+
+                // Trigger the hidden button to perform a server-side postback
+                        document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
+                    }
             
              function OpenFileDialog(documentId) {
                 // Set the hidden field value to the selected documentId
@@ -179,5 +188,6 @@
 
                 $('#file_upload_' + documentId).click();
             }
+
     </script>
 </asp:Content>
