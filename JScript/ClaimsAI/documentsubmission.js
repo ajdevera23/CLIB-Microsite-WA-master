@@ -78,14 +78,12 @@
         $('#file_upload_' + docId).click();
     });
 
-    $(document).on('click', '[id^="file_upload_"]', function () {
-        // Store the currently selected file when clicking the file input
-        if (this.files.length > 0) {
-            previousFile = this.files[0];  // Save previous file data
-        }
-
-        console.log(previousFile)
-    });
+    //$(document).on('click', '[id^="file_upload_"]', function () {
+    //    // Store the currently selected file when clicking the file input
+    //    if (this.files.length > 0) {
+    //        previousFile = this.files[0];  // Save previous file data
+    //    }
+    //});
 
 
     // Handle file upload input change

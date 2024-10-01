@@ -20,7 +20,7 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 
-    <style>
+    <%--<style>
         #modalImage {
             transition: transform 0.2s; /* Smooth transition for zoom */
         }
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: center;
         }
-    </style>
+    </style>--%>
 </head>
 <body runat="server">
 

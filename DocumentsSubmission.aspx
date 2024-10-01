@@ -150,11 +150,11 @@
         <div class="modal-content">
             <div class="modal-body">
                 <span class="close" data-bs-dismiss="modal">X</span>
-                <div class="content">
+               <%-- <div class="content">
                     <div class="zoom-buttons mb-4">
                     <button id="zoomIn" class="btn btn-sm btn-primary m-1">Zoom In</button>
                     <button id="zoomOut" class="btn btn-sm btn-secondary m-1">Zoom Out</button>
-                </div>
+                </div>--%>
                     <div class="preview-container" id="previewContainer">
                         <h5>File Preview:</h5>
                         <img id="filePreview" alt="Image Preview"/>
@@ -165,73 +165,42 @@
         </div>
     </div>
 </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>--%>
     <script>
-        let zoomLevel = 1;
+       <%-- let zoomLevel = 1;
         const modalImage = document.getElementById('filePreview');
         const zoomInButton = document.getElementById('zoomIn');
         const zoomOutButton = document.getElementById('zoomOut');
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';--%>
         function showDocument(documentId) {
-            // Set the hidden field value to the selected documentId
+            let selectedFile = null;
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
             var fileUploadControl = document.getElementById('file_upload_' + documentId);
             var file = fileUploadControl.files[0];
             var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+
             if(file){
                 var fileType = file.type;
 
                 if (fileType === 'application/pdf') {
-                    var fileReader = new FileReader();
+                    pdfPreview.style.display = "block";
+                    filePreview.style.display = "none";
 
-                    fileReader.onload = function() {
-                        var typedarray = new Uint8Array(this.result);
-
-                        // Load the PDF using PDF.js
-                        pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
-                            // Get the first page of the PDF
-                            pdf.getPage(1).then(function(page) {
-                                var scale = 1.5;
-                                var viewport = page.getViewport({ scale: scale });
-
-                                // Create a canvas to render the PDF page
-                                var canvas = document.createElement('canvas');
-                                var context = canvas.getContext('2d');
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-
-                                // Render the PDF page into the canvas
-                                var renderContext = {
-                                    canvasContext: context,
-                                    viewport: viewport
-                                };
-
-                                page.render(renderContext).promise.then(function() {
-                                    // Convert the canvas to a data URL and display it in the img tag
-                                    var imgElement = document.getElementById('filePreview');
-                                    imgElement.src = canvas.toDataURL();
-                                });
-                            });
-                        });
-                    };
-
-                    // Read the PDF file as an ArrayBuffer
-                    fileReader.readAsArrayBuffer(file);
-
+                    const fileURL = URL.createObjectURL(file);
+                    pdfPreview.src = fileURL;
                     myModal.show();
 
                     return;     
                 } 
                 else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif') {
-                    var imgReader = new FileReader();
+                    filePreview.style.display = "block";
+                    pdfPreview.style.display = "none";
 
-                    imgReader.onload = function(e) {
-                        var imgElement = document.getElementById('filePreview');
-                        imgElement.src = e.target.result;
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                    filePreview.src = e.target.result;
                     };
-
-                    // Read the image file as a data URL
-                    imgReader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
 
                     myModal.show();
 
@@ -272,18 +241,5 @@
               }, 2000);
             }         
             
-        zoomInButton.addEventListener('click', function() {
-            zoomLevel += 0.1;  // Increase zoom level
-            modalImage.style.transform = `scale(${zoomLevel})`;
-        });
-
-        // Zoom Out button click handler
-        zoomOutButton.addEventListener('click', function() {
-            if (zoomLevel > 0.1) {  // Prevent zooming out too much
-                zoomLevel -= 0.1;  // Decrease zoom level
-                modalImage.style.transform = `scale(${zoomLevel})`;
-            }
-        });
-
     </script>
 </asp:Content>
