@@ -4,6 +4,7 @@
     const filePreview = document.getElementById("filePreview");
     const pdfPreview = document.getElementById("pdfPreview");
     let selectedFile = null; // Store the selected file for later preview
+    let previousFile = null;
 
     const collapses = document.querySelectorAll("[app-collapse-header-btn]");
 
@@ -77,6 +78,16 @@
         $('#file_upload_' + docId).click();
     });
 
+    $(document).on('click', '[id^="file_upload_"]', function () {
+        // Store the currently selected file when clicking the file input
+        if (this.files.length > 0) {
+            previousFile = this.files[0];  // Save previous file data
+        }
+
+        console.log(previousFile)
+    });
+
+
     // Handle file upload input change
     $(document).on('change', '[id^="file_upload_"]', function (event) {
         var id = this.id.split('_')[2]; // Extract the id from the input element
@@ -126,6 +137,8 @@
             $("#path2_" + id).css("fill", "#00263E");
             selectedFile = file; // Store the file for the modal preview
 
+            previousFile = file;
+
             // Optional: Show a success message
             Swal.fire({
                 title: 'File selected',
@@ -136,19 +149,24 @@
         } else {
             previewContainer.style.display = "none";
             selectedFile = null; // Clear selected file
+
+            $('#file_name_' + id).text('');
+            $('#btn_show_' + id).attr({ disabled: true });
+            $("#mata_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
+            $("#path1_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
+            $("#path2_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
+
         }
     });
-
-    //$(document).on('click', function () {
-    //    Swal.fire({
-    //        title: 'You got it!',
-    //        text: 'Eeyy',
-    //        icon: 'info',
-    //        showConfirmButton: false,
-    //        allowOutsideClick: false,
-    //        allowEscapeKey: false
-    //    });
-    //});
 
 });
 
