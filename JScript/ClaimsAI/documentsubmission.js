@@ -84,7 +84,7 @@
         var fileInput = $(this)[0];
         var file = fileInput.files[0];
 
-        var maxSize = 3 * 1024 * 1024; // 3MB file size limit
+        var maxSize = 10 * 1024 * 1024; // 3MB file size limit
         var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']; // Allowed file types
 
         if (file) {
@@ -106,7 +106,7 @@
             // Check if the file size exceeds the maximum limit
             if (file.size > maxSize) {
                 Swal.fire({
-                    title: 'File size exceeds 3MB',
+                    title: 'File size exceeds 10MB',
                     text: 'Please select a smaller file.',
                     icon: 'error',
                     confirmButtonText: 'OK'
@@ -171,7 +171,6 @@ var btncheckeligibility = $('.validate-btn');
         }, 1000);
     });
 
-});
 
 
 
