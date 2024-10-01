@@ -146,7 +146,7 @@
         </div>  
     </form>
 <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-fullwidth">
         <div class="modal-content">
             <div class="modal-body">
                 <span class="close" data-bs-dismiss="modal">X</span>
@@ -171,13 +171,7 @@
                 document.getElementById('<%= btnHiddenShow.ClientID %>').click();
             }
             
-             function OpenFileDialog(documentId) {
-                // Set the hidden field value to the selected documentId
-                document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-                // Trigger the hidden button to perform a server-side postback
-                document.getElementById('<%= btnHiddenUpload.ClientID %>').click();
+           
 
-                $('#file_upload_' + documentId).click();
-            }
     </script>
 </asp:Content>

@@ -67,75 +67,88 @@
     //            confirmButtonText: 'OK'
     //        });
     //    }
-    });
+    //});
 
 
     // Trigger file upload when btn_upload is clicked
-    //$('[id^="btn_upload_"]').click(function (e) {
-    //    e.preventDefault();
-    //    var docId = this.id.split('_')[2];
-    //    $('#file_upload_' + docId).click();
-    //});
+    $(document).on('click', '[id^="btn_upload_"]', function (e) {
+        e.preventDefault();
+        var docId = this.id.split('_')[2];
+        $('#file_upload_' + docId).click();
+    });
 
     // Handle file upload input change
-    //$('[id^="file_upload_"]').change(function (event) {
-    //    var id = this.id.split('_')[2]; // Extract the id from the input element
-    //    var fileName = $(this).val().split('\\').pop(); // Get the file name
-    //    var fileInput = $(this)[0];
-    //    var file = fileInput.files[0];
+    $(document).on('change', '[id^="file_upload_"]', function (event) {
+        var id = this.id.split('_')[2]; // Extract the id from the input element
+        var fileName = $(this).val().split('\\').pop(); // Get the file name
+        var fileInput = $(this)[0];
+        var file = fileInput.files[0];
 
-    //    var maxSize = 3 * 1024 * 1024; // 3MB file size limit
-    //    var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']; // Allowed file types
+        var maxSize = 3 * 1024 * 1024; // 3MB file size limit
+        var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']; // Allowed file types
 
-    //    if (file) {
-    //        // Check if the file type is allowed
-    //        if (!allowedTypes.includes(file.type)) {
-    //            Swal.fire({
-    //                title: 'Invalid file type',
-    //                text: 'Please select a JPG, PNG, GIF, or PDF.',
-    //                icon: 'error',
-    //                confirmButtonText: 'OK'
-    //            });
-    //            fileInput.value = ''; // Clear file input
-    //            $('#file_name_' + id).text(''); // Clear displayed file name
-    //            previewContainer.style.display = 'none'; // Hide preview container
-    //            selectedFile = null; // Clear selected file
-    //            return;
-    //        }
+        if (file) {
+            // Check if the file type is allowed
+            if (!allowedTypes.includes(file.type)) {
+                Swal.fire({
+                    title: 'Invalid file type',
+                    text: 'Please select a JPG, PNG, GIF, or PDF.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                fileInput.value = ''; // Clear file input
+                $('#file_name_' + id).text(''); // Clear displayed file name
+                previewContainer.style.display = 'none'; // Hide preview container
+                selectedFile = null; // Clear selected file
+                return;
+            }
 
-    //        // Check if the file size exceeds the maximum limit
-    //        if (file.size > maxSize) {
-    //            Swal.fire({
-    //                title: 'File size exceeds 3MB',
-    //                text: 'Please select a smaller file.',
-    //                icon: 'error',
-    //                confirmButtonText: 'OK'
-    //            });
-    //            fileInput.value = ''; // Clear file input
-    //            $('#file_name_' + id).text(''); // Clear displayed file name
-    //            previewContainer.style.display = 'none'; // Hide preview container
-    //            selectedFile = null; // Clear selected file
-    //            return;
-    //        }
+            // Check if the file size exceeds the maximum limit
+            if (file.size > maxSize) {
+                Swal.fire({
+                    title: 'File size exceeds 3MB',
+                    text: 'Please select a smaller file.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                fileInput.value = ''; // Clear file input
+                $('#file_name_' + id).text(''); // Clear displayed file name
+                previewContainer.style.display = 'none'; // Hide preview container
+                selectedFile = null; // Clear selected file
+                return;
+            }
 
-    //        // If everything is okay, store the selected file for later preview
-    //        $('#file_name_' + id).text(fileName);
-    //        selectedFile = file; // Store the file for the modal preview
+            // If everything is okay, store the selected file for later preview
+            $('#file_name_' + id).text(fileName);
+            $('#btn_show_' + id).attr({ disabled: false });
+            $("#mata_" + id).css("fill", "#00263E");
+            $("#path1_" + id).css("fill", "#00263E");
+            $("#path2_" + id).css("fill", "#00263E");
+            selectedFile = file; // Store the file for the modal preview
 
-    //        // Optional: Show a success message
-    //        Swal.fire({
-    //            title: 'File selected',
-    //            text: 'You have selected: ' + fileName,
-    //            icon: 'success',
-    //            confirmButtonText: 'OK'
-    //        });
-    //    } else {
-    //        previewContainer.style.display = "none";
-    //        selectedFile = null; // Clear selected file
-    //    }
+            // Optional: Show a success message
+            Swal.fire({
+                title: 'File selected',
+                text: 'You have selected: ' + fileName,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            previewContainer.style.display = "none";
+            selectedFile = null; // Clear selected file
+        }
+    });
+
+    //$(document).on('click', function () {
+    //    Swal.fire({
+    //        title: 'You got it!',
+    //        text: 'Eeyy',
+    //        icon: 'info',
+    //        showConfirmButton: false,
+    //        allowOutsideClick: false,
+    //        allowEscapeKey: false
+    //    });
     //});
-
-
 
 });
 

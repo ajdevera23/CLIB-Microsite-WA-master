@@ -26,7 +26,18 @@ public partial class ClientReferral : System.Web.UI.Page
         else
         {
             // Rebuild the document container on postback
-           
+            if (Request.Files.Count > 0)
+            {
+                HttpPostedFile uploadedFile = Request.Files[0];
+                if (uploadedFile != null && uploadedFile.ContentLength > 0)
+                {
+                    string filePath = Server.MapPath("~/UploadedFiles/") + uploadedFile.FileName;
+                    uploadedFile.SaveAs(filePath);
+
+                    Response.Write("File uploaded successfully!");
+                }
+            }
+
             foreach (string benefitCode in SelectedBenefitCodes)
             {
                 if (Session[benefitCode] != null)
@@ -245,11 +256,11 @@ public partial class ClientReferral : System.Web.UI.Page
                         "<div id='doc_" + benefitCode + "'>" +
                         "<b>" + document.ClaimsDocumentsName + "</b> <br>File: " +
                         "<span id=\"file_name_" + document.ClaimsDocumentsId + "\" style='color:#f39c12;'>" + document.FileName + "</span>" +
+                        //"<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" onchange="UploadFile(123)" hidden />" +
                         "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
                         "</div>" +
 
-                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " +
-                        " onclick='OpenFileDialog(" + document.ClaimsDocumentsId + ")'>" +
+                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " + ">" +
                         "<svg class='icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' style='fill: #00263E;'>" +
                         "<path d='M13 19v-4h3l-4-5-4 5h3v4z'></path>" +
                         "<path d='M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z'></path>" +
@@ -267,10 +278,10 @@ public partial class ClientReferral : System.Web.UI.Page
                             "<button AutoPostBack=\"true\" type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
                             "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
                             " onclick='showDocument(" + document.ClaimsDocumentsId + ")'>" +
-                            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" +
+                            "<svg id=\"mata_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" +
                             (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;") + "\">" +
-                            "<path d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
-                            "<path d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
+                            "<path id=\"path1_" + document.ClaimsDocumentsId + "\" d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
+                            "<path id=\"path2_" + document.ClaimsDocumentsId + "\" d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
                             "</svg> Show " +
                             "</button>" +
                     "</div>";
