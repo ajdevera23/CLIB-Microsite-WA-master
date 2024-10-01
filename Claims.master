@@ -19,17 +19,6 @@
     <script src="<%= ResolveUrl("~/Scripts/sweetalert/sweetalert2.all.min.js") %>"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-
-    <%--<style>
-        #modalImage {
-            transition: transform 0.2s; /* Smooth transition for zoom */
-        }
-        .zoom-buttons {
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-        }
-    </style>--%>
 </head>
 <body runat="server">
 
