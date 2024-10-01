@@ -7,9 +7,9 @@
        <input type="hidden" name="docId" id="docIdInput" value="">
         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" style="display:none;" />
-
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" style="display:none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" style="display:none;" />
+
         <div class="container">
             <div class="app-accordion" id="accordian1id" app-accordian>
                 <!-- Accordion Item 1 -->
@@ -162,31 +162,42 @@
         </div>
     </div>
 </div>
-    <script>
-            function showDocument(documentId) {
-                // Set the hidden field value to the selected documentId
-                document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+ <script>
+ function showDocument(documentId) {
+     document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+     document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+     Swal.fire({
+         title: 'Generating preview, Please wait..',
+         showConfirmButton: false,
+         allowOutsideClick: false,
+         allowEscapeKey: false
+     });
+     setTimeout(function () {
+         console.log('Processing completed.'); 
+         Swal.close();
+     }, 2000);
+ }
 
-                // Trigger the hidden button to perform a server-side postback
-                document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-        }
+function DownloadDocument(documentId) {
 
-        function DownloadDocument(documentId) {
-            // Set the hidden field value to the selected documentId
-            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+ document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+ document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
 
-                // Trigger the hidden button to perform a server-side postback
-                        document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
-                    }
-            
-             function OpenFileDialog(documentId) {
-                // Set the hidden field value to the selected documentId
-                document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-                // Trigger the hidden button to perform a server-side postback
-                document.getElementById('<%= btnHiddenUpload.ClientID %>').click();
-
-                $('#file_upload_' + documentId).click();
-            }
-
-    </script>
+ Swal.fire({
+     title: 'Downloading, Please wait..',
+     showConfirmButton: false,
+     allowOutsideClick: false,
+     allowEscapeKey: false
+ });
+ setTimeout(function () {
+     console.log('Processing completed.');
+      Swal.close();
+  }, 2000);
+}            
+function OpenFileDialog(documentId) {
+   document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+   document.getElementById('<%= btnHiddenUpload.ClientID %>').click();
+    $('#file_upload_' + documentId).click();
+}
+ </script>
 </asp:Content>

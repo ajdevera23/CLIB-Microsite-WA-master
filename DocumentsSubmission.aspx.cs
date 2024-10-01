@@ -439,13 +439,15 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
+
+    #region OPEN FILE DIALOG
     protected void btnHiddenUpload_Click(object sender, EventArgs e)
     {
         int documentId = int.Parse(hiddenDocumentId.Value);
      
     }
     public void OpenFileDialogFile()
-    {
+        {
         string script = @"
         document.querySelectorAll('[id^=""file_upload_""]').forEach(function(fileInput) {
             fileInput.addEventListener('change', function(event) {
@@ -494,6 +496,7 @@ public partial class ClientReferral : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
     }
 
+    #endregion
 
     #region GetExistingDocuments
     public void GetExistingDocuments(int ClaimsDocumentID)
@@ -560,7 +563,6 @@ public partial class ClientReferral : System.Web.UI.Page
         // Trigger the file download
         DownloadBase64File(base64FileString, fileName, contentType);
     }
-
     protected void DownloadBase64File(string base64String, string fileName, string contentType)
     {
         // Convert Base64 string to byte array
