@@ -660,4 +660,11 @@ public partial class ClientReferral : System.Web.UI.Page
         GetBenefitByNatureOfClaimRequest(natureofclaimDropdownlist.SelectedValue);
         UpdatePanel1.Update();
     }
+
+    protected void btn_Submit_Click(object sender, EventArgs e)
+    {
+
+        int counter = 1;
+        SaveClaimsRequirementsRequest(counter);
+    }
 }

@@ -126,7 +126,7 @@
                                                     <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" />
                                                 </div>
 
-                                                <asp:Button ID="btn_Submit" runat="server" Text="Submit" CssClass="validate-btn" />
+                                                <asp:Button ID="btn_Submit" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />
                                                 <br />
                                                 <br />
                                             </div>
