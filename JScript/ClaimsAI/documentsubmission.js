@@ -130,7 +130,20 @@
             // If everything is okay, store the selected file for later preview
             $('#file_name_' + id).text(fileName);
             $('#btn_show_' + id).attr({ disabled: false });
+            $('#btn_download_' + id).attr({ disabled: true });
             $("#mata_" + id).css("fill", "#00263E");
+            $("#dl_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
+            $("#path1_dl_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
+            $("#path2_dl_" + id).css({
+                "fill": "gray",
+                "opacity": "0.5"
+            });
             $("#path1_" + id).css("fill", "#00263E");
             $("#path2_" + id).css("fill", "#00263E");
             selectedFile = file; // Store the file for the modal preview
@@ -162,7 +175,6 @@
                 "fill": "gray",
                 "opacity": "0.5"
             });
-
         }
     });
 
