@@ -330,13 +330,12 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
-    public void SaveClaimsRequirementsRequest()
+    public void SaveClaimsRequirementsRequest(int counter)
     {
         try
         {
             SaveClaimsRequirementsRequest saveClaimsRequirementsRequest = new SaveClaimsRequirementsRequest();
             token.Token = generateToken.GenerateTokenAuth();
-
 
             saveClaimsRequirementsRequest.Token = token.Token;
             saveClaimsRequirementsRequest.ClaimsDocumentsId = 1;
