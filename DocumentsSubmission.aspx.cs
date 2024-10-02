@@ -143,6 +143,7 @@ public partial class ClientReferral : System.Web.UI.Page
             else
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
+                ClearAllDocuments();
             }
 
         }
@@ -348,7 +349,11 @@ public partial class ClientReferral : System.Web.UI.Page
     }
 
 
-
+    private void ClearAllDocuments()
+    {
+        // Clear all the controls in the documentContainer
+        documentContainer.Controls.Clear();
+    }
 
     // Method to clear specific documents from the UI based on BenefitCode
     private void ClearDocuments(string benefitCode)
@@ -531,6 +536,8 @@ public partial class ClientReferral : System.Web.UI.Page
                 Session["FileName"] = returnValue.Result[0].FileName.ToString();
                 Session["FileType"] = returnValue.Result[0].FileType.ToString();
                 Session["FileLocation"] = returnValue.Result[0].FileLocation.ToString();
+
+                
 
                 if (Session["pdfBase64"] != null)
                 {
