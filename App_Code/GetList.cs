@@ -423,6 +423,19 @@ public class GetList
         return returnValue;
     }
 
+    public SaveClaimsRequirementsResult SaveClaimsRequirementsRequest(SaveClaimsRequirementsRequest token)
+    {
+        SaveClaimsRequirementsResult returnValue = new SaveClaimsRequirementsResult();
+
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["SaveClaimsRequirementsRequest"].Trim());
+
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveClaimsRequirementsResult>(jsonResult);
+
+        return returnValue;
+    }
+
 
     public AgentReferralResult IQRSaveClientReferral(AgentReferralRequest token)
     {
