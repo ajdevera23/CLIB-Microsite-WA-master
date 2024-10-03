@@ -12,6 +12,7 @@ public partial class ClientReferral : System.Web.UI.Page
     TokenRequest token = new TokenRequest();
     GenerateToken generateToken = new GenerateToken();
     GetList getList = new GetList();
+    string hiddenFieldValue = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -23,6 +24,14 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         else
         {
+
+            hiddenFieldValue = Request.Form["save_me_name"];
+
+            if(hiddenFieldValue == "sawakas")
+            {
+                SaveMe();
+            }
+
             // Rebuild the document container on postback
             if (Request.Files.Count > 0)
             {
@@ -356,7 +365,7 @@ public partial class ClientReferral : System.Web.UI.Page
             saveClaimsRequirementsRequest.FileType = fileType;
             saveClaimsRequirementsRequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"]; ;
             saveClaimsRequirementsRequest.CreatedBy = "";
-            saveClaimsRequirementsRequest.FileType = base64data; // ITO UNG BASE 64
+            saveClaimsRequirementsRequest.FileData = base64data; // ITO UNG BASE 64
 
             var returnValue = getList.SaveClaimsRequirementsRequest(saveClaimsRequirementsRequest);
             string message = returnValue.Message;
@@ -364,17 +373,19 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null)
             {
-                //Success
+                hiddenFieldValue = string.Empty;
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
             }
             else
             {
-                // Failed
+                hiddenFieldValue = string.Empty;
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
             }
 
         }
         catch (Exception ex)
         {
-
+            hiddenFieldValue = string.Empty;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
             throw;
         }
@@ -674,9 +685,51 @@ public partial class ClientReferral : System.Web.UI.Page
         UpdatePanel1.Update();
     }
 
-    protected void btn_Submit_Click(object sender, EventArgs e)
-    {
+    //protected void btn_Submit_Click(object sender, EventArgs e)
+    //{
 
+    //    List<long> documentIds = new List<long>();
+
+    //    foreach (string key in Request.Form.Keys)
+    //    {
+    //        if (key == "documentId")
+    //        {
+    //            string documentIdValues = Request.Form[key];
+    //            string[] documentIdArray = documentIdValues.Split(',');
+    //            foreach (string documentIdValue in documentIdArray)
+    //            {
+    //                long documentId;
+    //                if (long.TryParse(documentIdValue, out documentId))
+    //                {
+    //                    documentIds.Add(documentId);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    foreach (string key in Request.Form)
+    //    {
+    //        string value = Request.Form[key];
+    //    }
+
+    //    foreach (var documentId in documentIds)
+    //    {
+    //        string fileUploadControlId = "file_upload_" + documentId;
+
+    //        // Find the FileUpload control in documentContainer.Controls
+    //        FileUpload fileUploadControl = documentContainer.FindControl(fileUploadControlId) as FileUpload;
+
+    //        // Check if the control exists and has a file
+    //        if (fileUploadControl != null && fileUploadControl.HasFile)
+    //        {
+    //            // Process the uploaded file
+    //            SaveClaimsRequirementsRequest(fileUploadControl.PostedFile, documentId);
+    //        }
+    //    }
+    //}
+
+    protected void SaveMe()
+    {
         List<long> documentIds = new List<long>();
 
         foreach (string key in Request.Form.Keys)
@@ -695,7 +748,6 @@ public partial class ClientReferral : System.Web.UI.Page
                 }
             }
         }
-
         foreach (var documentId in documentIds)
         {
             string fileInputName = "file_upload_" + documentId;
@@ -706,6 +758,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 SaveClaimsRequirementsRequest(uploadedFile, documentId);
             }
         }
+        hiddenFieldValue = string.Empty;
     }
 
 
