@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -262,10 +260,11 @@ public partial class ClientReferral : System.Web.UI.Page
                 Literal litDocuments = new Literal();
                 litDocuments.Text = "<div class='col-md-12 mt-3 mb-3'>" +
                         "<div id='doc_" + benefitCode + "'>" +
-                        "<b>" + document.ClaimsDocumentsName + "</b> <br>File: " +
-                        "<span id=\"file_name_" + document.ClaimsDocumentsId + "\" style='color:#f39c12;'>" + document.FileName + "</span>" +
-                        //"<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" onchange="UploadFile(123)" hidden />" +
-                        "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
+                            "<b>" + document.ClaimsDocumentsName + "</b> <br>File: " +
+                            "<span id=\"file_name_" + document.ClaimsDocumentsId + "\" style='color:#f39c12;'>" + document.FileName + "</span>" +
+                            //"<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" onchange="UploadFile(123)" hidden />" +
+                            "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" name=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
+                            "<input type=\"hidden\" name=\"documentId\" value=" + document.ClaimsDocumentsId + " />" +
                         "</div>" +
 
                         "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " + ">" +
@@ -337,37 +336,42 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
-    public void SaveClaimsRequirementsRequest(int counter)
+    public void SaveClaimsRequirementsRequest(HttpPostedFile httpPostedFile, long documentId)
     {
         try
         {
             SaveClaimsRequirementsRequest saveClaimsRequirementsRequest = new SaveClaimsRequirementsRequest();
             token.Token = generateToken.GenerateTokenAuth();
 
+            string fileName = System.IO.Path.GetFileName(httpPostedFile.FileName);
+            string fileType = System.IO.Path.GetExtension(httpPostedFile.FileName);
+
+            string base64data = Base64Encoding(httpPostedFile);
+
             saveClaimsRequirementsRequest.Token = token.Token;
-            saveClaimsRequirementsRequest.ClaimsDocumentsId = 1;
+            saveClaimsRequirementsRequest.ClaimsDocumentsId = documentId;
             saveClaimsRequirementsRequest.ClaimsReferenceNumber = referenceNumber.Text.ToString();
             saveClaimsRequirementsRequest.FileLocation = "Not Applicable";
-            saveClaimsRequirementsRequest.FileName = "";
-            saveClaimsRequirementsRequest.FileType = "";
-            saveClaimsRequirementsRequest.PlatformKey= ConfigurationManager.AppSettings["CLIBAPIKey"]; ;
+            saveClaimsRequirementsRequest.FileName = fileName;
+            saveClaimsRequirementsRequest.FileType = fileType;
+            saveClaimsRequirementsRequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"]; ;
             saveClaimsRequirementsRequest.CreatedBy = "";
-            saveClaimsRequirementsRequest.FileType = "itoungBASE64"; // ITO UNG BASE 64
+            saveClaimsRequirementsRequest.FileType = base64data; // ITO UNG BASE 64
 
             var returnValue = getList.SaveClaimsRequirementsRequest(saveClaimsRequirementsRequest);
             string message = returnValue.Message;
 
 
-                if (returnValue.ResultStatus == 0 && returnValue.Result != null)
-                {
-                    //Success
-                }
-                else
-                {
-                    // Failed
-                }
-
+            if (returnValue.ResultStatus == 0 && returnValue.Result != null)
+            {
+                //Success
             }
+            else
+            {
+                // Failed
+            }
+
+        }
         catch (Exception ex)
         {
 
@@ -488,10 +492,10 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void btnHiddenUpload_Click(object sender, EventArgs e)
     {
         int documentId = int.Parse(hiddenDocumentId.Value);
-     
+
     }
     public void OpenFileDialogFile()
-        {
+    {
         string script = @"
         document.querySelectorAll('[id^=""file_upload_""]').forEach(function(fileInput) {
             fileInput.addEventListener('change', function(event) {
@@ -564,7 +568,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 Session["FileType"] = returnValue.Result[0].FileType.ToString();
                 Session["FileLocation"] = returnValue.Result[0].FileLocation.ToString();
 
-                
+
 
                 if (Session["pdfBase64"] != null)
                 {
@@ -673,7 +677,48 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void btn_Submit_Click(object sender, EventArgs e)
     {
 
-        int counter = 1;
-        SaveClaimsRequirementsRequest(counter);
+        List<long> documentIds = new List<long>();
+
+        foreach (string key in Request.Form.Keys)
+        {
+            if (key == "documentId")
+            {
+                string documentIdValues = Request.Form[key];
+                string[] documentIdArray = documentIdValues.Split(',');
+                foreach (string documentIdValue in documentIdArray)
+                {
+                    long documentId;
+                    if (long.TryParse(documentIdValue, out documentId))
+                    {
+                        documentIds.Add(documentId);
+                    }
+                }
+            }
+        }
+
+        foreach (var documentId in documentIds)
+        {
+            string fileInputName = "file_upload_" + documentId;
+            HttpPostedFile uploadedFile = Request.Files[fileInputName];
+
+            if (uploadedFile != null && uploadedFile.ContentLength > 0)
+            {
+                SaveClaimsRequirementsRequest(uploadedFile, documentId);
+            }
+        }
+    }
+
+
+    public string Base64Encoding(HttpPostedFile httpPostedFile)
+    {
+        using (var binaryReader = new System.IO.BinaryReader(httpPostedFile.InputStream))
+        {
+            byte[] fileBytes = binaryReader.ReadBytes(httpPostedFile.ContentLength);
+
+            string base64String = Convert.ToBase64String(fileBytes);
+
+            return base64String;
+        }
+
     }
 }

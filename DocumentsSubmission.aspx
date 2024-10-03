@@ -2,8 +2,7 @@
 
 <asp:Content ContentPlaceHolderID="infoForm" runat="server">
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
-    <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="off" runat="server" novalidate>
-
+    <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="off" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
@@ -126,7 +125,7 @@
                                                     <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" />
                                                 </div>
 
-                                                <asp:Button ID="btn_Submit" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />
+                                                <asp:Button ID="btn_Submit" AutoPostBack="true" runat="server"  Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />
                                                 <br />
                                                 <br />
                                             </div>
