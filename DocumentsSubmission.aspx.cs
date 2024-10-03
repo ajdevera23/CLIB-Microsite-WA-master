@@ -143,7 +143,6 @@ public partial class ClientReferral : System.Web.UI.Page
             else
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
-                ClearAllDocuments();
             }
 
         }
@@ -152,6 +151,14 @@ public partial class ClientReferral : System.Web.UI.Page
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
             throw;
         }
+    }
+    #endregion
+
+    #region CLEAR ALL DOCUMENTS
+    private void ClearAllDocuments()
+    {
+        // Clear all the controls in the documentContainer
+        documentContainer.Controls.Clear();
     }
     #endregion
 
@@ -369,12 +376,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
-    private void ClearAllDocuments()
-    {
-        // Clear all the controls in the documentContainer
-        documentContainer.Controls.Clear();
-    }
-
     // Method to clear specific documents from the UI based on BenefitCode
     private void ClearDocuments(string benefitCode)
     {
@@ -438,6 +439,9 @@ public partial class ClientReferral : System.Web.UI.Page
     {
         try
         {
+
+       
+
             GetBenefitByNatureOfClaimRequest getBenefitByNatureOfClaimRequest = new GetBenefitByNatureOfClaimRequest();
             token.Token = generateToken.GenerateTokenAuth();
             getBenefitByNatureOfClaimRequest.Token = token.Token;
@@ -458,8 +462,7 @@ public partial class ClientReferral : System.Web.UI.Page
             }
             else
             {
-                // Hide the header if no data
-                tableHeader.Style["display"] = "none";
+                ClearAllElements();
                 // Clear the Repeater table by setting the DataSource to null and binding it
                 rptBenefits.DataSource = null;
                 rptBenefits.DataBind();
@@ -475,6 +478,11 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
+    public void ClearAllElements()
+    {
+        ClearAllDocuments();
+        tableHeader.Style["display"] = "none";
+    }
 
     #region OPEN FILE DIALOG
     protected void btnHiddenUpload_Click(object sender, EventArgs e)
@@ -657,6 +665,7 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     protected void natureofclaimDropdownlist_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ClearAllElements();
         GetBenefitByNatureOfClaimRequest(natureofclaimDropdownlist.SelectedValue);
         UpdatePanel1.Update();
     }
