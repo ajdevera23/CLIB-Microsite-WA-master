@@ -4,7 +4,8 @@
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
     <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="off" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
-        <asp:HiddenField ID="hiddenDocumentId" runat="server" />
+        <input type="hidden" id="save_me_na" name="save_me_name" />
+         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" Style="display: none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" Style="display: none;" />
@@ -125,7 +126,8 @@
                                                     <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" />
                                                 </div>
 
-                                                <asp:Button ID="btn_Submit" AutoPostBack="true" runat="server"  Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />
+                                                <%--<asp:Button ID="btn_Submit" AutoPostBack="true" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />--%>
+                                                <button type="button" id="btn_Submit" class="validate-btn">Submit</button>
                                                 <br />
                                                 <br />
                                             </div>
@@ -150,17 +152,17 @@
                     <span class="close" data-bs-dismiss="modal">X</span>
                     <div class="content">
                         <div class="zoom-buttons mb-4">
-                        <div class="preview-container" id="previewContainer">
-                            <h5>File Preview:</h5>
-                            <img id="filePreview" alt="Image Preview" />
-                            <iframe id="pdfPreview"></iframe>
+                            <div class="preview-container" id="previewContainer">
+                                <h5>File Preview:</h5>
+                                <img id="filePreview" alt="Image Preview" />
+                                <iframe id="pdfPreview"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
+        <script>
         function showDocument(documentId) {
             let selectedFile = null;
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
@@ -230,5 +232,5 @@
               }, 2000);
             }         
             
-    </script>
+        </script>
 </asp:Content>

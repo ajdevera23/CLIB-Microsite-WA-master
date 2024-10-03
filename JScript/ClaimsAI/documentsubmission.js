@@ -167,6 +167,11 @@
         }
     });
 
+    $(document).on('click', '#btn_Submit', function () {
+        $('#save_me_na').val('sawakas');
+        $('#enrollmentForm').submit();
+    })
+
 });
 
 var btncheckeligibility = $('.validate-btn');
