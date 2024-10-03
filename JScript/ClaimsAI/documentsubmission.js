@@ -4,7 +4,6 @@
     const filePreview = document.getElementById("filePreview");
     const pdfPreview = document.getElementById("pdfPreview");
     let selectedFile = null; // Store the selected file for later preview
-    let previousFile = null;
 
     const collapses = document.querySelectorAll("[app-collapse-header-btn]");
 
@@ -78,14 +77,6 @@
         $('#file_upload_' + docId).click();
     });
 
-    //$(document).on('click', '[id^="file_upload_"]', function () {
-    //    // Store the currently selected file when clicking the file input
-    //    if (this.files.length > 0) {
-    //        previousFile = this.files[0];  // Save previous file data
-    //    }
-    //});
-
-
     // Handle file upload input change
     $(document).on('change', '[id^="file_upload_"]', function (event) {
         var id = this.id.split('_')[2]; // Extract the id from the input element
@@ -148,8 +139,6 @@
             $("#path2_" + id).css("fill", "#00263E");
             selectedFile = file; // Store the file for the modal preview
 
-            previousFile = file;
-
             // Optional: Show a success message
             Swal.fire({
                 title: 'File selected',
@@ -182,22 +171,22 @@
 
 var btncheckeligibility = $('.validate-btn');
 
-    btncheckeligibility.click(function () {
-        Swal.fire({
-            title: 'Please wait while we process your details...',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        });
-
-        // Set a timer for 2 seconds (2000 milliseconds)
-        setTimeout(function () {
-            // Code to execute after the delay
-            // For example, you can make an AJAX call or any other function
-            console.log('Processing completed.'); // Placeholder for your next action
-            Swal.close(); // Close the Swal alert if needed
-        }, 1000);
+btncheckeligibility.click(function () {
+    Swal.fire({
+        title: 'Please wait while we process your details...',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false
     });
+
+    // Set a timer for 2 seconds (2000 milliseconds)
+    setTimeout(function () {
+        // Code to execute after the delay
+        // For example, you can make an AJAX call or any other function
+        console.log('Processing completed.'); // Placeholder for your next action
+        Swal.close(); // Close the Swal alert if needed
+    }, 1000);
+});
 
 
 
