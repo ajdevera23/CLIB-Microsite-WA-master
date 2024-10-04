@@ -2,7 +2,7 @@
 
 <asp:Content ContentPlaceHolderID="infoForm" runat="server">
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
-    <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="off" runat="server" enctype="multipart/form-data" novalidate>
+    <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="On" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
         <input type="hidden" id="save_me_na" name="save_me_name" />
          <asp:HiddenField ID="hiddenDocumentId" runat="server" />

@@ -341,6 +341,9 @@ public partial class ClientReferral : System.Web.UI.Page
             if (returnValue.ResultStatus == 0 && returnValue.Result != null)
             {
                 hiddenFieldValue = string.Empty;
+
+
+                
                 string script = @"
                     Swal.fire({
                         title: '" + message + @"',
