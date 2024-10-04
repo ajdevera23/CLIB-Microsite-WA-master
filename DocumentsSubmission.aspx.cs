@@ -341,7 +341,17 @@ public partial class ClientReferral : System.Web.UI.Page
             if (returnValue.ResultStatus == 0 && returnValue.Result != null)
             {
                 hiddenFieldValue = string.Empty;
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
+                string script = @"
+                    Swal.fire({
+                        title: '" + message + @"',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+
             }
             else
             {
@@ -734,9 +744,20 @@ public partial class ClientReferral : System.Web.UI.Page
 
             string base64String = Convert.ToBase64String(fileBytes);
 
-            return base64String;
-        }
+            string encodebase64string = EncodeBase64(base64String);
 
+            return encodebase64string;
+        }
+    }
+
+    public string EncodeBase64(string base64String)
+    {
+        string s = base64String;
+        s = s.Split('=')[0];
+        s = s.Replace('+', '?');
+        s = s.Replace('/', '_');
+
+        return s;
     }
     protected void btnHiddenShow_Click(object sender, EventArgs e)
     {
