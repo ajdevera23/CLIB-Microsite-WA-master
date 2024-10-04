@@ -17,6 +17,7 @@ public partial class ClientReferral : System.Web.UI.Page
     {
 
         Session["pdfBase64"] = null;
+
         if (!IsPostBack)
         {
             SessionDisable();
@@ -58,11 +59,6 @@ public partial class ClientReferral : System.Web.UI.Page
             }
         }
     }
-
-
-
-
-
     #region GET VALIDATE CLAIMS
     public void GetValidateClaims()
     {
@@ -105,28 +101,38 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
+    #region DISPLAY VALIDATE BUTTON
     public void DisplayValidateButton()
     {
         ValidateButton.Style["display"] = "block";
     }
+    #endregion
+    #region READ ONLY TEXT FIELDS
     public void ReadOnlyTextFields()
     {
         referenceNumber.ReadOnly = true;
         firstName.ReadOnly = true;
         lastName.ReadOnly = true;
     }
+    #endregion
+    #region HIDE VALIDATE BUTTON
     public void HideValidateButton()
     {
         ValidateButton.Style["display"] = "none";
     }
+    #endregion
+    #region SESSION ENABLE
     public void SessionEnable()
     {
         Session["EnableClaims"] = true;
     }
+    #endregion
+    #region SESSION DISABLE
     public void SessionDisable()
     {
         Session["EnableClaims"] = false;
     }
+    #endregion
     #region GET NATURE OF CLAIMS
     public void GetNatureOfClaims()
     {
@@ -160,7 +166,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
-
     #region CLEAR ALL DOCUMENTS
     private void ClearAllDocuments()
     {
@@ -168,7 +173,6 @@ public partial class ClientReferral : System.Web.UI.Page
         documentContainer.Controls.Clear();
     }
     #endregion
-
     #region CLEAR FIELDS
     public void ClearAllFields()
     {
@@ -177,7 +181,6 @@ public partial class ClientReferral : System.Web.UI.Page
         lastName.Text = "";
     }
     #endregion
-
     #region Captcha
     public void generateNewCaptcha_Click(object sender, EventArgs e)
     {
@@ -185,7 +188,6 @@ public partial class ClientReferral : System.Web.UI.Page
         captchaText.Value = "";
     }
     #endregion
-
     #region  SelectedBenefitCodes
     private List<string> SelectedBenefitCodes
     {
@@ -201,7 +203,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
-
     #region GetDocumentsForSelectedBenefits
     public void GetDocumentsForSelectedBenefits()
     {
@@ -213,7 +214,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
-
     #region GetDocumentBasedOnBenefitRequest
     public void GetDocumentBasedOnBenefitRequest(string benefitCode)
     {
@@ -256,7 +256,7 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
-
+    #region DISPLAY DOCUMENTS
     private void DisplayDocuments(List<GetDocumentBasedOnBenefit> documents, string benefitCode)
     {
 
@@ -310,41 +310,8 @@ public partial class ClientReferral : System.Web.UI.Page
             }
         }
     }
-    protected void btnHiddenShow_Click(object sender, EventArgs e)
-    {
-        // Get the document ID from the hidden field
-        int documentId = int.Parse(hiddenDocumentId.Value);
-        // Call your existing C# logic to retrieve or display the document
-        GetExistingDocuments(documentId);
-    }
-
-
-    public void FailedList()
-    {
-        try
-        {
-
-        }
-        catch (Exception ex)
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
-            throw;
-        }
-    }
-
-    public void InitialListUpload()
-    {
-        try
-        {
-
-        }
-        catch (Exception ex)
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
-            throw;
-        }
-    }
-
+    #endregion
+    #region SAVE CLAIMS REQUIREMENTS REQUEST
     public void SaveClaimsRequirementsRequest(HttpPostedFile httpPostedFile, long documentId)
     {
         try
@@ -390,7 +357,8 @@ public partial class ClientReferral : System.Web.UI.Page
             throw;
         }
     }
-
+    #endregion
+    #region CLEAR DOCUMENTS
     // Method to clear specific documents from the UI based on BenefitCode
     private void ClearDocuments(string benefitCode)
     {
@@ -413,7 +381,8 @@ public partial class ClientReferral : System.Web.UI.Page
             documentContainer.Controls.Remove(controlToRemove);
         }
     }
-
+    #endregion
+    #region CHECK BENEFIT CHANGED
     // Event handler when a checkbox is checked or unchecked
     protected void chkBenefit_CheckedChanged(object sender, EventArgs e)
     {
@@ -448,7 +417,7 @@ public partial class ClientReferral : System.Web.UI.Page
         // Append or clear documents based on the current list
         GetDocumentsForSelectedBenefits();
     }
-
+    #endregion
     #region GetBenefitByNatureOfClaimRequest
     public void GetBenefitByNatureOfClaimRequest(string NatureOfClaim)
     {
@@ -492,13 +461,13 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
-
+    #region CLEAR ALL ELEMENTS
     public void ClearAllElements()
     {
         ClearAllDocuments();
         tableHeader.Style["display"] = "none";
     }
-
+    #endregion
     #region OPEN FILE DIALOG
     protected void btnHiddenUpload_Click(object sender, EventArgs e)
     {
@@ -555,7 +524,6 @@ public partial class ClientReferral : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
     }
     #endregion
-
     #region GetExistingDocuments
     public void GetExistingDocuments(int ClaimsDocumentID)
     {
@@ -607,7 +575,6 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
-
     #region CLICK DOWNLOAD DOCUMENT
     protected void btnDownloadDocument_Click(object sender, EventArgs e)
     {
@@ -727,7 +694,6 @@ public partial class ClientReferral : System.Web.UI.Page
     //        }
     //    }
     //}
-
     protected void SaveMe()
     {
         List<long> documentIds = new List<long>();
@@ -760,8 +726,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         hiddenFieldValue = string.Empty;
     }
-
-
     public string Base64Encoding(HttpPostedFile httpPostedFile)
     {
         using (var binaryReader = new System.IO.BinaryReader(httpPostedFile.InputStream))
@@ -774,4 +738,36 @@ public partial class ClientReferral : System.Web.UI.Page
         }
 
     }
+    protected void btnHiddenShow_Click(object sender, EventArgs e)
+    {
+        // Get the document ID from the hidden field
+        int documentId = int.Parse(hiddenDocumentId.Value);
+        // Call your existing C# logic to retrieve or display the document
+        GetExistingDocuments(documentId);
+    }
+    public void FailedList()
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
+            throw;
+        }
+    }
+    public void InitialListUpload()
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
+            throw;
+        }
+    }
+
 }
