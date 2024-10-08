@@ -120,6 +120,7 @@
 
             // If everything is okay, store the selected file for later preview
             $('#file_name_' + id).text(fileName);
+            $('#validation_message_' + id).text('');
             $('#btn_show_' + id).attr({ disabled: false });
             $('#btn_download_' + id).attr({ disabled: true });
             $("#mata_" + id).css("fill", "#00263E");
@@ -167,31 +168,82 @@
         }
     });
 
-    $(document).on('click', '#btn_Submit', function () {
-        $('#save_me_na').val('sawakas');
+    $(document).on('click', '#btn_Submit', function (e) {
+        e.preventDefault();
+
+        $(this).html('<span class="loading-spinner"></span> Submitting...').css({
+            "display": "inline-flex;",
+            "align-items": "center;",
+            "justify-content": "center;",
+            "position": "relative;"
+        }).attr({ disabled: true });
+
+        if (!validateRequiredDocuments()) {
+            Swal.fire({
+                title: 'Required',
+                text: 'Please upload the required documents.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            $(this).html('Submit');
+            return;
+        }
+        $('#param_for_saving').val('submit');
         $('#enrollmentForm').submit();
     })
 
+    function validateRequiredDocuments() {
+        let toValidate = [];
+        let message = "";
+
+        if ($("[id^='doc_']").length <= 0) toValidate.push("Please add the required documents.");
+
+        $("[id^='document_type_']").each(function (i, e) {
+            var docId = this.id.split('_')[2];
+            var fileInput = $('#file_upload_' + docId);
+
+            if (this.value == 'Primary') {
+                if (fileInput.val() == '' && $('#file_name_' + docId).text() == '') {
+                    toValidate.push('This document is required.');
+                    $('#validation_message_' + docId).text('This document is required.');
+                }
+            }
+        })
+
+        for (var i = 0; i < toValidate.length; i++) {
+            if (i == 0) {
+                message += toValidate[i];
+            } else {
+                message += ", " + toValidate[i];
+            }
+        }
+        if (toValidate.length == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 });
 
-var btncheckeligibility = $('.validate-btn');
+//var btncheckeligibility = $('.validate-btn');
 
-btncheckeligibility.click(function () {
-    Swal.fire({
-        title: 'Please wait while we process your details...',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false
-    });
+//btncheckeligibility.click(function () {
+//    Swal.fire({
+//        title: 'Please wait while we process your details...',
+//        showConfirmButton: false,
+//        allowOutsideClick: false,
+//        allowEscapeKey: false
+//    });
 
-    // Set a timer for 2 seconds (2000 milliseconds)
-    setTimeout(function () {
-        // Code to execute after the delay
-        // For example, you can make an AJAX call or any other function
-        console.log('Processing completed.'); // Placeholder for your next action
-        Swal.close(); // Close the Swal alert if needed
-    }, 1000);
-});
+//    // Set a timer for 2 seconds (2000 milliseconds)
+//    setTimeout(function () {
+//        // Code to execute after the delay
+//        // For example, you can make an AJAX call or any other function
+//        console.log('Processing completed.'); // Placeholder for your next action
+//        Swal.close(); // Close the Swal alert if needed
+//    }, 1000);
+//});
 
 
 

@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebCaptchaLib;
@@ -26,11 +30,11 @@ public partial class ClientReferral : System.Web.UI.Page
         else
         {
 
-            hiddenFieldValue = Request.Form["save_me_name"];
+            hiddenFieldValue = Request.Form["param_for_saving"];
 
-            if(hiddenFieldValue == "sawakas")
+            if (hiddenFieldValue == "submit")
             {
-                SaveMe();
+                SaveValidatedDocuments();
             }
 
             // Rebuild the document container on postback
@@ -274,33 +278,38 @@ public partial class ClientReferral : System.Web.UI.Page
                             //"<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" onchange="UploadFile(123)" hidden />" +
                             "<input type=\"file\" id=\"file_upload_" + document.ClaimsDocumentsId + "\" name=\"file_upload_" + document.ClaimsDocumentsId + "\" accept=\".jpg,.jpeg,.png,.pdf\" hidden />" +
                             "<input type=\"hidden\" name=\"documentId\" value=" + document.ClaimsDocumentsId + " />" +
+                            "<input type=\"hidden\" id=\"document_type_" + document.ClaimsDocumentsId + "\" value=" + document.DocumentType + " />" +
                         "</div>" +
+                        "<div class='row'>" +
+                            "<div class='col-md-12'>" +
+                                "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " + ">" +
+                                    "<svg class='icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' style='fill: #00263E;'>" +
+                                    "<path d='M13 19v-4h3l-4-5-4 5h3v4z'></path>" +
+                                    "<path d='M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z'></path>" +
+                                    "</svg> Upload" +
+                                "</button>" +
 
-                        "<button type='button' id='btn_upload_" + document.ClaimsDocumentsId + "' data-value='" + document.ClaimsDocumentsId + " 'class='button' style='margin-inline-end: 5px;' " + ">" +
-                        "<svg class='icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' style='fill: #00263E;'>" +
-                        "<path d='M13 19v-4h3l-4-5-4 5h3v4z'></path>" +
-                        "<path d='M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z'></path>" +
-                        "</svg> Upload" +
-                        "</button>" +
+                                "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\"style =\"margin-inline-end: 5px\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
+                                " onclick='DownloadDocument(" + document.ClaimsDocumentsId + ")'>" +
+                                    "<svg id=\"dl_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
+                                    "<path id=\"path1_dl_" + document.ClaimsDocumentsId + "\" d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
+                                    "<path id=\"path2_dl_" + document.ClaimsDocumentsId + "\" d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
+                                    "</svg> Download " +
+                                "</button>" +
 
-                        "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\"style =\"margin-inline-end: 5px\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
-                        " onclick='DownloadDocument(" + document.ClaimsDocumentsId + ")'>" +
-                            "<svg id=\"dl_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
-                            "<path id=\"path1_dl_" + document.ClaimsDocumentsId + "\" d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
-                            "<path id=\"path2_dl_" + document.ClaimsDocumentsId + "\" d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
-                            "</svg> Download " +
-                        "</button>" +
-
-                            // Button to show document (with documentId being passed to JavaScript)
-                            "<button AutoPostBack=\"true\" type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
-                            "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
-                            " onclick='showDocument(" + document.ClaimsDocumentsId + ")'>" +
-                            "<svg id=\"mata_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" +
-                            (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;") + "\">" +
-                            "<path id=\"path1_" + document.ClaimsDocumentsId + "\" d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
-                            "<path id=\"path2_" + document.ClaimsDocumentsId + "\" d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
-                            "</svg> Show " +
-                            "</button>" +
+                                    // Button to show document (with documentId being passed to JavaScript)
+                                "<button AutoPostBack=\"true\" type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
+                                    "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
+                                    " onclick='showDocument(" + document.ClaimsDocumentsId + ")'>" +
+                                    "<svg id=\"eye_icon_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style=\"" +
+                                    (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;" : "fill: gray; opacity: 0.5;") + "\">" +
+                                    "<path id=\"path1_" + document.ClaimsDocumentsId + "\" d=\"M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z\"></path>" +
+                                    "<path id=\"path2_" + document.ClaimsDocumentsId + "\" d=\"M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5zm0 12c-5.351 0-7.424-3.846-7.926-5C4.578 10.842 6.652 7 12 7c5.351 0 7.424 3.846 7.926 5-.504 1.158-2.578 5-7.926 5z\"></path>" +
+                                    "</svg> Show " +
+                                "</button>" +
+                            "</div>" +
+                        "</div>" +
+                        "<span class='text-danger' id=\"validation_message_" + document.ClaimsDocumentsId + "\" ></span>" +
                     "</div>";
 
 
@@ -343,7 +352,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 hiddenFieldValue = string.Empty;
 
 
-                
+
                 string script = @"
                     Swal.fire({
                         title: '" + message + @"',
@@ -437,7 +446,7 @@ public partial class ClientReferral : System.Web.UI.Page
         try
         {
 
-       
+
 
             GetBenefitByNatureOfClaimRequest getBenefitByNatureOfClaimRequest = new GetBenefitByNatureOfClaimRequest();
             token.Token = generateToken.GenerateTokenAuth();
@@ -707,7 +716,7 @@ public partial class ClientReferral : System.Web.UI.Page
     //        }
     //    }
     //}
-    protected void SaveMe()
+    protected void SaveValidatedDocuments()
     {
         List<long> documentIds = new List<long>();
 
@@ -794,4 +803,77 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
+    [WebMethod]
+    public static string UploadFiles()
+    {
+        try
+        {
+            var context = HttpContext.Current;
+            var json = new StreamReader(context.Request.InputStream).ReadToEnd(); // Read the incoming JSON
+            var data = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(json); // Deserialize the JSON
+
+            // Retrieve files and form data from the JSON object
+            var formData = (object[])data["formData"];
+            var files = (List<object>)data["files"]; // List of file names, if needed
+
+            foreach (var entry in formData)
+            {
+                var pair = (KeyValuePair<string, object>)entry;
+                if (pair.Key.StartsWith("file_upload_")) // Adjust according to your file input names
+                {
+                    // Process the files here (you would typically retrieve the HttpPostedFile)
+                    HttpPostedFile file = context.Request.Files[pair.Key]; // Access the uploaded file by name
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        //string path = Path.Combine(context.Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName));
+                        //file.SaveAs(path);
+                    }
+                }
+                else
+                {
+                    // Process other form data if needed
+                    var value = pair.Value; // This would be the corresponding value
+                }
+            }
+
+            return new JavaScriptSerializer().Serialize(new { success = true, message = "Files uploaded successfully!" });
+        }
+        catch (Exception ex)
+        {
+            return new JavaScriptSerializer().Serialize(new { success = false, message = ex.Message });
+        }
+    }
+
+    [WebMethod]
+    public static object UploadFiles2()
+    {
+        var context = HttpContext.Current;
+        var response = new { success = false, message = "" };
+
+        try
+        {
+            var files = context.Request.Files; // Get all uploaded files
+
+            // Process each file
+            for (int i = 0; i < files.Count; i++)
+            {
+                var file = files[i];
+                var documentId = context.Request.Form["documentId"]; // Get document ID
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    string path = Path.Combine(context.Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName));
+                    file.SaveAs(path); // Save the file to the server
+                }
+            }
+
+            response = new { success = true, message = "Files uploaded successfully!" };
+        }
+        catch (Exception ex)
+        {
+            response = new { success = false, message = ex.Message }; // Handle errors
+        }
+
+        return new JavaScriptSerializer().Serialize(response); // Return JSON response
+    }
 }

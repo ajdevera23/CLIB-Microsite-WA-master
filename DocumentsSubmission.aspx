@@ -4,7 +4,7 @@
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
     <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="On" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
-        <input type="hidden" id="save_me_na" name="save_me_name" />
+        <input type="hidden" id="param_for_saving" name="param_for_saving" />
          <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" Style="display: none;" />
@@ -128,6 +128,7 @@
 
                                                 <%--<asp:Button ID="btn_Submit" AutoPostBack="true" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />--%>
                                                 <button type="button" id="btn_Submit" class="validate-btn">Submit</button>
+                                                <%--<button type="button" id="btn_Submit" class="btn btn-primary">Submit</button>--%>
                                                 <br />
                                                 <br />
                                             </div>
