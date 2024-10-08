@@ -185,9 +185,10 @@
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
-            $(this).html('Submit');
+            $(this).html('Submit').attr({ disabled: false });
             return;
         }
+
         $('#param_for_saving').val('submit');
         $('#enrollmentForm').submit();
     })

@@ -312,10 +312,7 @@ public partial class ClientReferral : System.Web.UI.Page
                         "<span class='text-danger' id=\"validation_message_" + document.ClaimsDocumentsId + "\" ></span>" +
                     "</div>";
 
-
                 documentContainer.Controls.Add(litDocuments); // Assuming documentContainer is a placeholder in your UI
-
-
             }
         }
     }
