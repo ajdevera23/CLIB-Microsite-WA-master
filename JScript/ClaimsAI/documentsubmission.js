@@ -186,6 +186,7 @@
     $(document).on('click', '#btn_Submit', function (e) {
         e.preventDefault();
 
+        
         $(this).html('<span class="loading-spinner"></span> Submitting...').css({
             "display": "inline-flex;",
             "align-items": "center;",

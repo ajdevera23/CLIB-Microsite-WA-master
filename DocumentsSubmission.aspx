@@ -164,12 +164,14 @@
             </div>
         </div>
         <script>
+
         function showDocument(documentId) {
             let selectedFile = null;
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
             var fileUploadControl = document.getElementById('file_upload_' + documentId);
             var file = fileUploadControl.files[0];
             var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+          
             if(file){
                 var fileType = file.type;
                 if (fileType === 'application/pdf') {

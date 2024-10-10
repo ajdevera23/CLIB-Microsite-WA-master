@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
-using System.Web.Script.Serialization;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebCaptchaLib;
@@ -19,9 +17,7 @@ public partial class ClientReferral : System.Web.UI.Page
     string hiddenFieldValue = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
-
         Session["pdfBase64"] = null;
-
         if (!IsPostBack)
         {
             SessionDisable();
@@ -29,7 +25,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         else
         {
-
             hiddenFieldValue = Request.Form["param_for_saving"];
 
             if (hiddenFieldValue == "submit")
@@ -105,6 +100,16 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
+
+    public string SavingParam()
+    {
+        string savingparam = "saving_param";
+
+       savingparam = Session["param_saving"].ToString();
+
+        return savingparam;
+
+    }
     #region DISPLAY VALIDATE BUTTON
     public void DisplayValidateButton()
     {
@@ -791,14 +796,28 @@ public partial class ClientReferral : System.Web.UI.Page
                 });
             }
         }
-        
-        foreach(var status in result)
-        {
-            if(status.ResultStatus == 1)
-            {
-                SaveClaimsRequirementsRequest(status.Document, status.DocumentId);
-            }
-        }
+
+        //foreach(var status in result)
+        //{
+        //    if(status.ResultStatus == 1)
+        //    {
+        //        SaveClaimsRequirementsRequest(status.Document, status.DocumentId);
+        //    }
+        //}
+
+        string script = @"Swal.fire({
+                title: 'Information',
+                text: 'Claims successfully submitted.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });";
+
+        ClientScript.RegisterStartupScript(this.GetType(), "alert", script , true);
+
+        Session.Clear();
+        Session.Abandon();
+
+        Response.Redirect(Request.RawUrl);
     }
     public string Base64Encoding(HttpPostedFile httpPostedFile)
     {
@@ -861,5 +880,4 @@ public partial class ClientReferral : System.Web.UI.Page
 
         ClientScript.RegisterStartupScript(this.GetType(), "ClearTextbox", script, true);
     }
-
 }
