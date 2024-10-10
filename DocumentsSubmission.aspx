@@ -4,7 +4,7 @@
     <link href="Style/ClaimsAI/documentsubmission.css" rel="stylesheet" />
     <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="On" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
-        <input type="hidden" id="param_for_saving" name="param_for_saving" />
+        <input type="hidden" id="param_for_saving" name="param_for_saving" autocomplete="off" />
          <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" Style="display: none;" />
@@ -156,7 +156,7 @@
                             <div class="preview-container" id="previewContainer">
                                 <h5>File Preview:</h5>
                                 <img id="filePreview" alt="Image Preview" />
-                                <iframe id="pdfPreview"></iframe>
+                                <iframe id="pdfPreview" width="100%" height="500px"></iframe>
                             </div>
                         </div>
                     </div>
@@ -170,10 +170,8 @@
             var fileUploadControl = document.getElementById('file_upload_' + documentId);
             var file = fileUploadControl.files[0];
             var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-
             if(file){
                 var fileType = file.type;
-
                 if (fileType === 'application/pdf') {
                     pdfPreview.style.display = "block";
                     filePreview.style.display = "none";
