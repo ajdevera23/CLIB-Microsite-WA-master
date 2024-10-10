@@ -543,6 +543,7 @@ public partial class ClientReferral : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
     }
     #endregion
+
     #region GetExistingDocuments
     public void GetExistingDocuments(int ClaimsDocumentID)
     {
@@ -566,17 +567,34 @@ public partial class ClientReferral : System.Web.UI.Page
                 Session["FileType"] = returnValue.Result[0].FileType.ToString();
                 Session["FileLocation"] = returnValue.Result[0].FileLocation.ToString();
 
-
+                var filetype = GetMimeType(Session["FileName"].ToString());
 
                 if (Session["pdfBase64"] != null)
                 {
                     string script = @"
-                        var base64PDF = '" + Session["pdfBase64"] + @"';
-                        if (base64PDF !== null && base64PDF.trim() !== '') {
-                            var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
-                            document.getElementById('filePreview').src = 'data:application/pdf;base64,' + base64PDF;
+                    var base64PDF = '" + Session["pdfBase64"] + @"';
+                    var fileType = '" + filetype + @"';
+
+                    if (base64PDF !== null && base64PDF.trim() !== '') {
+                        var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
+
+                        // PDF Preview Condition
+                        if (fileType === 'application/pdf')
+                        {
+                            document.getElementById('pdfPreview').style.display = 'block';
+                            document.getElementById('filePreview').style.display = 'none';
+                            document.getElementById('pdfPreview').src = 'data:application/pdf;base64,' + base64PDF;
                             modalfilepreview.show();
-                        }";
+                        }
+                        // Image Preview Condition
+                        else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif')
+                        {
+                            document.getElementById('pdfPreview').style.display = 'none';
+                            document.getElementById('filePreview').style.display = 'block';
+                            document.getElementById('filePreview').src = 'data:' + fileType + ';base64,' + base64PDF;
+                            modalfilepreview.show();
+                        }
+                    }";
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
                 }
 
@@ -591,9 +609,28 @@ public partial class ClientReferral : System.Web.UI.Page
             Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + ex + "`); ", true);
             throw;
         }
+    }
 
+    private string GetMimeType(string fileName)
+    {
+        string extension = System.IO.Path.GetExtension(fileName).ToLowerInvariant();
+        switch (extension)
+        {
+            case ".pdf":
+                return "application/pdf";
+            case ".png":
+                return "image/png";
+            case ".jpg":
+            case ".jpeg":
+                return "image/jpeg";
+            case ".gif":
+                return "image/gif";
+            default:
+                return "application/octet-stream";
+        }
     }
     #endregion
+
     #region CLICK DOWNLOAD DOCUMENT
     protected void btnDownloadDocument_Click(object sender, EventArgs e)
     {
