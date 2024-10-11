@@ -20,6 +20,7 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Session["pdfBase64"] = null;
+
         if (!IsPostBack)
         {
             SessionDisable();
@@ -65,6 +66,7 @@ public partial class ClientReferral : System.Web.UI.Page
     {
         try
         {
+          
             GetClaimsIfExistRequest getclaimsexistrequest = new GetClaimsIfExistRequest();
 
             token.Token = generateTokenActimAI.GenerateToken();
@@ -85,9 +87,21 @@ public partial class ClientReferral : System.Web.UI.Page
                 HideValidateButton();
                 ReadOnlyTextFields();
                 Session["BenefitCoverageId"] = returnValue.Result[0].BenefitCoverageId.ToString();
+
+
+
+                string script = @"
+                setTimeout(function () {
+                        // Code to execute after the delay
+                        console.log('Processing completed.'); // Placeholder for your next action
+                        Swal.close(); // Close the Swal alert if needed
+                    }, 1000);
+                    ";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
             }
             else
             {
+
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
                 DisplayValidateButton();
                 SessionDisable();
@@ -572,6 +586,8 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
+      
+
                 Session["pdfBase64"] = returnValue.Result[0].FileData.ToString();
                 Session["FileName"] = returnValue.Result[0].FileName.ToString();
                 Session["FileType"] = returnValue.Result[0].FileType.ToString();
@@ -587,6 +603,11 @@ public partial class ClientReferral : System.Web.UI.Page
 
                     if (base64PDF !== null && base64PDF.trim() !== '') {
                         var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
+
+                        setTimeout(function () {
+                            console.log('Processing completed.'); 
+                            Swal.close();
+                        }, 100);
 
                         // PDF Preview Condition
                         if (fileType === 'application/pdf')
@@ -604,6 +625,8 @@ public partial class ClientReferral : System.Web.UI.Page
                             document.getElementById('filePreview').src = 'data:' + fileType + ';base64,' + base64PDF;
                             modalfilepreview.show();
                         }
+
+   
                     }";
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
                 }
@@ -651,11 +674,13 @@ public partial class ClientReferral : System.Web.UI.Page
         // File details
         string fileName = Session["FileName"].ToString();  // Specify your file name
         string contentType = Session["FileType"].ToString();  // Specify your file type
-        // Trigger the file download
+                                                              // Trigger the file download
         DownloadBase64File(base64FileString, fileName, contentType);
     }
     protected void DownloadBase64File(string base64String, string fileName, string contentType)
     {
+
+
         // Convert Base64 string to byte array
         byte[] fileBytes = Convert.FromBase64String(base64String);
 
@@ -671,12 +696,16 @@ public partial class ClientReferral : System.Web.UI.Page
         // Write the file bytes to the response output stream
         Response.BinaryWrite(fileBytes);
 
+        // Flush the response to the client
+        Response.Flush();
+
         // End the response
         Response.End();
     }
+
     #endregion
 
-   
+
     public void generateCaptcha()
     {
         #region Captcha
@@ -765,6 +794,7 @@ public partial class ClientReferral : System.Web.UI.Page
         hiddenFieldValue = string.Empty;
         List<long> documentIds = new List<long>();
         List<SaveClaimsRequirementsResult> result = new List<SaveClaimsRequirementsResult>();
+
         foreach (string key in Request.Form.Keys)
         {
             if (key == "documentId")
@@ -790,7 +820,6 @@ public partial class ClientReferral : System.Web.UI.Page
             if (uploadedFile != null && uploadedFile.ContentLength > 0)
             {
                 var returnValue = SaveClaimsRequirementsRequest(uploadedFile, documentId);
-                
                 result.Add(new SaveClaimsRequirementsResult()
                 {
                     DocumentId = documentId,
@@ -801,28 +830,25 @@ public partial class ClientReferral : System.Web.UI.Page
             }
         }
 
-        //foreach(var status in result)
-        //{
-        //    if(status.ResultStatus == 1)
-        //    {
-        //        SaveClaimsRequirementsRequest(status.Document, status.DocumentId);
-        //    }
-        //}
-
+        // Use SweetAlert2's promise-based handling to redirect after 'OK'
         string script = @"Swal.fire({
-                title: 'Information',
-                text: 'Claims successfully submitted.',
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });";
+            title: 'Information',
+            text: 'Claims successfully submitted.',
+            icon: 'info',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.replace('" + Request.RawUrl + @"'); // Redirect without reloading the previous postback
+            }
+        });";
 
-        ClientScript.RegisterStartupScript(this.GetType(), "alert", script , true);
+        ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
 
         Session.Clear();
         Session.Abandon();
-
-        Response.Redirect(Request.RawUrl);
     }
+
+
     public string Base64Encoding(HttpPostedFile httpPostedFile)
     {
         using (var binaryReader = new System.IO.BinaryReader(httpPostedFile.InputStream))

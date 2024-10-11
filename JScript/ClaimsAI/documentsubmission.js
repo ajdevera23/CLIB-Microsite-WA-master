@@ -1,19 +1,5 @@
 ﻿$(document).ready(function () {
 
-    //window.onload = function () {
-    //    $('#param_for_saving').val('');
-    //}
-
-    //$(`[name="PurchaseOrderDetails[${i}].VatInclusive"]`).prop("checked", item.VatInclusive).trigger("change");
-
-    ////$('#infoForm_dataPrivacy1Checkbox').
-
-    //$('#infoForm_dataPrivacy1Checkbox').on('change', function () {
-    //    var checked = $(this).is(":checked");
-    //    computeSubTotal();
-    //})
-
-
     var myModal = $('#myModal');
     const previewContainer = document.getElementById("previewContainer");
     const filePreview = document.getElementById("filePreview");
@@ -40,49 +26,6 @@
 
     // Attach event listeners to each accordion header button
     collapses.forEach(collapse => collapse.addEventListener('click', handleExpandToggle));
-
-    //// Show preview modal when btn_show is clicked
-    //$('[id^="btn_show_"]').on('click', function () {
-    //    var docId = this.id.split('_')[2];
-
-    //    // Only show the modal if a file has been selected and validated
-    //    if (selectedFile) {
-    //        // Display the modal
-    //        myModal.modal('show');
-    //        previewContainer.style.display = "block";
-
-    //        // Preview the previously selected file
-    //        if (selectedFile.type.startsWith("image/")) {
-    //            filePreview.style.display = "block";
-    //            pdfPreview.style.display = "none";
-
-    //            const reader = new FileReader();
-    //            reader.onload = function (e) {
-    //                filePreview.src = e.target.result;
-    //            };
-    //            reader.readAsDataURL(selectedFile);
-    //        } else if (selectedFile.type === "application/pdf") {
-    //            pdfPreview.style.display = "block";
-    //            filePreview.style.display = "none";
-
-    //            const fileURL = URL.createObjectURL(selectedFile);
-    //            pdfPreview.src = fileURL;
-    //        }
-
-    //        // Set the docId in the hidden form input
-    //        $('#docIdInput').val(docId);
-
-    //        // Submit the form to trigger the server-side action
-    //        //$('#enrollmentForm').submit();
-    //    } else {
-    //        Swal.fire({
-    //            title: 'No file selected',
-    //            text: 'Please select a file before previewing.',
-    //            icon: 'warning',
-    //            confirmButtonText: 'OK'
-    //        });
-    //    }
-    //});
 
 
     // Trigger file upload when btn_upload is clicked
@@ -243,24 +186,7 @@
 
 });
 
-var btncheckeligibility = $('.validate-btn');
 
-btncheckeligibility.click(function () {
-    Swal.fire({
-        title: 'Please wait while we process your details...',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false
-    });
-
-    // Set a timer for 2 seconds (2000 milliseconds)
-    setTimeout(function () {
-        // Code to execute after the delay
-        // For example, you can make an AJAX call or any other function
-        console.log('Processing completed.'); // Placeholder for your next action
-        Swal.close(); // Close the Swal alert if needed
-    }, 1000);
-});
 
 
 

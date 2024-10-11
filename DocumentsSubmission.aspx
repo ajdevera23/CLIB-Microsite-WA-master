@@ -163,75 +163,83 @@
                 </div>
             </div>
         </div>
-        <script>
+        </diV>
+ <script>
+function showDocument(documentId) {
+    let selectedFile = null;
+    document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+    var fileUploadControl = document.getElementById('file_upload_' + documentId);
+    var file = fileUploadControl.files[0];
+    var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+  
+    if(file){
+        var fileType = file.type;
+        if (fileType === 'application/pdf') {
+            pdfPreview.style.display = "block";
+            filePreview.style.display = "none";
 
-        function showDocument(documentId) {
-            let selectedFile = null;
-            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-            var fileUploadControl = document.getElementById('file_upload_' + documentId);
-            var file = fileUploadControl.files[0];
-            var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-          
-            if(file){
-                var fileType = file.type;
-                if (fileType === 'application/pdf') {
-                    pdfPreview.style.display = "block";
-                    filePreview.style.display = "none";
+            const fileURL = URL.createObjectURL(file);
+            pdfPreview.src = fileURL;
+            myModal.show();
 
-                    const fileURL = URL.createObjectURL(file);
-                    pdfPreview.src = fileURL;
-                    myModal.show();
+            return;     
+        } 
+        else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif') {
+            filePreview.style.display = "block";
+            pdfPreview.style.display = "none";
 
-                    return;     
-                } 
-                else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif') {
-                    filePreview.style.display = "block";
-                    pdfPreview.style.display = "none";
+            const reader = new FileReader();
+            reader.onload = function (e) {
+            filePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
 
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                    filePreview.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
+            myModal.show();
 
-                    myModal.show();
+            return;   
+        } 
+}
+       
 
-                    return;   
-                } 
-            }
-               
+// Trigger the hidden button to perform a server-side postback
+document.getElementById('<%= btnHiddenShow.ClientID %>').click();
+    
+Swal.fire({
+        title: 'Generating preview, Please wait..',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+});
+}
 
-            // Trigger the hidden button to perform a server-side postback
-            document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-                
-            Swal.fire({
-                    title: 'Generating preview, Please wait..',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                });
-                setTimeout(function () {
-                    console.log('Processing completed.'); 
-                    Swal.close();
-                }, 2000);
-            }
+function DownloadDocument(documentId) {
 
-            function DownloadDocument(documentId) {
+ document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+ document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
 
-             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-             document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
+ Swal.fire({
+     title: 'Downloading, Please wait..',
+     showConfirmButton: false,
+     allowOutsideClick: false,
+     allowEscapeKey: false
+ });
+    setTimeout(function () {
+        console.log('Processing completed.');
+        Swal.close();
+    }, 5000);
+}         
 
-             Swal.fire({
-                 title: 'Downloading, Please wait..',
-                 showConfirmButton: false,
-                 allowOutsideClick: false,
-                 allowEscapeKey: false
-             });
-             setTimeout(function () {
-                 console.log('Processing completed.');
-                  Swal.close();
-              }, 2000);
-            }         
-            
-        </script>
+
+var btncheckeligibility = document.querySelector('.validate-btn');
+
+btncheckeligibility.addEventListener('click', function () {
+    Swal.fire({
+        title: 'Please wait while we process your details...',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    });
+});
+
+ </script>
 </asp:Content>

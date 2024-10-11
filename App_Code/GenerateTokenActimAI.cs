@@ -10,19 +10,19 @@ public class GenerateTokenActimAI
         string responseString = "";
         using (var client = new WebClient())
         {
-            client.Headers.Add("Host", "api.docthread.ai");
-            client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            client.Headers.Add("Host", SystemSetting.ActimAI_Host);
+            client.Headers.Add("Content-Type", SystemSetting.ActimAI_Content_Type);
 
             var data = new NameValueCollection
             {
-                { "client_id", "clib-aica-sandbox-api" },
-                { "client_secret", "bH1airsgEFzhug0wjizkDkfNdePRkSdV" },
-                { "grant_type", "client_credentials" }
+                { "client_id", SystemSetting.ActimAI_client_id },
+                { "client_secret", SystemSetting.ActimAI_client_secret },
+                { "grant_type", SystemSetting.ActimAI_grant_type }
             };
 
             try
             {
-                byte[] response = client.UploadValues("https://api.docthread.ai/v1/CLI0240930/auth/token", "POST", data);
+                byte[] response = client.UploadValues(SystemSetting.ActimAI_Api_Docthread, "POST", data);
                  responseString = Encoding.UTF8.GetString(response);
             
             }
@@ -35,9 +35,7 @@ public class GenerateTokenActimAI
                 }
             }
         }
-
     return responseString;
-
 
     }
 }

@@ -96,4 +96,51 @@ public class SystemSetting
         }
         // dapat 3072
     }
+    public static string ActimAI_Api_Docthread
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_Api_Docthread"];
+        }
+    }
+
+    public static string ActimAI_client_id
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_client_id"];
+        }
+    }
+
+
+    public static string ActimAI_client_secret
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_client_secret"];
+        }
+    }
+    public static string ActimAI_grant_type
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_grant_type"];
+        }
+    }
+
+    public static string ActimAI_Host
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_Host"];
+        }
+    }
+
+    public static string ActimAI_Content_Type
+    {
+        get
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["ActimAI_Content_Type"];
+        }
+    }
 }
