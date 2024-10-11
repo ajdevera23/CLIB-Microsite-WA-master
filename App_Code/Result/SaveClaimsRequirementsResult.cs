@@ -14,7 +14,9 @@ public class SaveClaimsRequirements
 
 public class SaveClaimsRequirementsResult
 {
+    public long DocumentId { get; set; }
     public string Message { get; set; }
     public SaveClaimsRequirements Result { get; set; }
     public int ResultStatus { get; set; }
+    public HttpPostedFile Document { get; set; }
 }

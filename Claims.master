@@ -80,8 +80,7 @@
             </div>
         </div>
     </div>
-    <%--<script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>--%>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<%= ResolveUrl("~/JScript/Jquery/jquery.min.js") %>"></script>
     <script src="<%= ResolveUrl("~/JScript/Plugins/Bootstrap/bootstrap.js") %>"></script>
 
     <script src="<%= ResolveUrl("~/JScript/ClaimsAI/documentsubmission.js") %>"></script>

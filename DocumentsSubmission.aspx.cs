@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
-using System.Web.Script.Serialization;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebCaptchaLib;
@@ -21,9 +19,7 @@ public partial class ClientReferral : System.Web.UI.Page
     string hiddenFieldValue = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
-
         Session["pdfBase64"] = null;
-
         if (!IsPostBack)
         {
             SessionDisable();
@@ -31,7 +27,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         else
         {
-
             hiddenFieldValue = Request.Form["param_for_saving"];
 
             if (hiddenFieldValue == "submit")
@@ -110,6 +105,16 @@ public partial class ClientReferral : System.Web.UI.Page
 
     }
     #endregion
+
+    public string SavingParam()
+    {
+        string savingparam = "saving_param";
+
+       savingparam = Session["param_saving"].ToString();
+
+        return savingparam;
+
+    }
     #region DISPLAY VALIDATE BUTTON
     public void DisplayValidateButton()
     {
@@ -302,7 +307,7 @@ public partial class ClientReferral : System.Web.UI.Page
                                     "</svg> Download " +
                                 "</button>" +
 
-                                    // Button to show document (with documentId being passed to JavaScript)
+                                // Button to show document (with documentId being passed to JavaScript)
                                 "<button AutoPostBack=\"true\" type=\"button\" id=\"btn_show_" + document.ClaimsDocumentsId +
                                     "\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
                                     " onclick='showDocument(" + document.ClaimsDocumentsId + ")'>" +
@@ -323,7 +328,7 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
     #region SAVE CLAIMS REQUIREMENTS REQUEST
-    public void SaveClaimsRequirementsRequest(HttpPostedFile httpPostedFile, long documentId)
+    public SaveClaimsRequirementsResult SaveClaimsRequirementsRequest(HttpPostedFile httpPostedFile, long documentId)
     {
         try
         {
@@ -348,30 +353,31 @@ public partial class ClientReferral : System.Web.UI.Page
             var returnValue = getList.SaveClaimsRequirementsRequest(saveClaimsRequirementsRequest);
             string message = returnValue.Message;
 
+            return returnValue;
 
-            if (returnValue.ResultStatus == 0 && returnValue.Result != null)
-            {
-                hiddenFieldValue = string.Empty;
+            //if (returnValue.ResultStatus == 0 && returnValue.Result != null)
+            //{
+            //    hiddenFieldValue = string.Empty;
 
 
 
-                string script = @"
-                    Swal.fire({
-                        title: '" + message + @"',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    });";
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+            //    string script = @"
+            //        Swal.fire({
+            //            title: '" + message + @"',
+            //            confirmButtonText: 'OK'
+            //        }).then((result) => {
+            //            if (result.isConfirmed) {
+            //                window.location.reload();
+            //            }
+            //        });";
+            //    Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
 
-            }
-            else
-            {
-                hiddenFieldValue = string.Empty;
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
-            }
+            //}
+            //else
+            //{
+            //    hiddenFieldValue = string.Empty;
+            //    Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire(`" + message + "`); ", true);
+            //}
 
         }
         catch (Exception ex)
@@ -703,7 +709,6 @@ public partial class ClientReferral : System.Web.UI.Page
         {
             GetValidateClaims();
         }
-
     }
     protected void natureofclaimDropdownlist_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -756,8 +761,10 @@ public partial class ClientReferral : System.Web.UI.Page
     //}
     protected void SaveValidatedDocuments()
     {
+        ClearTextbox();
+        hiddenFieldValue = string.Empty;
         List<long> documentIds = new List<long>();
-
+        List<SaveClaimsRequirementsResult> result = new List<SaveClaimsRequirementsResult>();
         foreach (string key in Request.Form.Keys)
         {
             if (key == "documentId")
@@ -774,6 +781,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 }
             }
         }
+
         foreach (var documentId in documentIds)
         {
             string fileInputName = "file_upload_" + documentId;
@@ -781,10 +789,39 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (uploadedFile != null && uploadedFile.ContentLength > 0)
             {
-                SaveClaimsRequirementsRequest(uploadedFile, documentId);
+                var returnValue = SaveClaimsRequirementsRequest(uploadedFile, documentId);
+                
+                result.Add(new SaveClaimsRequirementsResult()
+                {
+                    DocumentId = documentId,
+                    ResultStatus = returnValue.ResultStatus,
+                    Message = returnValue.Message,
+                    Document = uploadedFile
+                });
             }
         }
-        hiddenFieldValue = string.Empty;
+
+        //foreach(var status in result)
+        //{
+        //    if(status.ResultStatus == 1)
+        //    {
+        //        SaveClaimsRequirementsRequest(status.Document, status.DocumentId);
+        //    }
+        //}
+
+        string script = @"Swal.fire({
+                title: 'Information',
+                text: 'Claims successfully submitted.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });";
+
+        ClientScript.RegisterStartupScript(this.GetType(), "alert", script , true);
+
+        Session.Clear();
+        Session.Abandon();
+
+        Response.Redirect(Request.RawUrl);
     }
     public string Base64Encoding(HttpPostedFile httpPostedFile)
     {
@@ -841,77 +878,10 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
-    [WebMethod]
-    public static string UploadFiles()
+    protected void ClearTextbox()
     {
-        try
-        {
-            var context = HttpContext.Current;
-            var json = new StreamReader(context.Request.InputStream).ReadToEnd(); // Read the incoming JSON
-            var data = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(json); // Deserialize the JSON
+        string script = "document.getElementById('param_for_saving').value = '';";
 
-            // Retrieve files and form data from the JSON object
-            var formData = (object[])data["formData"];
-            var files = (List<object>)data["files"]; // List of file names, if needed
-
-            foreach (var entry in formData)
-            {
-                var pair = (KeyValuePair<string, object>)entry;
-                if (pair.Key.StartsWith("file_upload_")) // Adjust according to your file input names
-                {
-                    // Process the files here (you would typically retrieve the HttpPostedFile)
-                    HttpPostedFile file = context.Request.Files[pair.Key]; // Access the uploaded file by name
-                    if (file != null && file.ContentLength > 0)
-                    {
-                        //string path = Path.Combine(context.Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName));
-                        //file.SaveAs(path);
-                    }
-                }
-                else
-                {
-                    // Process other form data if needed
-                    var value = pair.Value; // This would be the corresponding value
-                }
-            }
-
-            return new JavaScriptSerializer().Serialize(new { success = true, message = "Files uploaded successfully!" });
-        }
-        catch (Exception ex)
-        {
-            return new JavaScriptSerializer().Serialize(new { success = false, message = ex.Message });
-        }
-    }
-
-    [WebMethod]
-    public static object UploadFiles2()
-    {
-        var context = HttpContext.Current;
-        var response = new { success = false, message = "" };
-
-        try
-        {
-            var files = context.Request.Files; // Get all uploaded files
-
-            // Process each file
-            for (int i = 0; i < files.Count; i++)
-            {
-                var file = files[i];
-                var documentId = context.Request.Form["documentId"]; // Get document ID
-
-                if (file != null && file.ContentLength > 0)
-                {
-                    string path = Path.Combine(context.Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName));
-                    file.SaveAs(path); // Save the file to the server
-                }
-            }
-
-            response = new { success = true, message = "Files uploaded successfully!" };
-        }
-        catch (Exception ex)
-        {
-            response = new { success = false, message = ex.Message }; // Handle errors
-        }
-
-        return new JavaScriptSerializer().Serialize(response); // Return JSON response
+        ClientScript.RegisterStartupScript(this.GetType(), "ClearTextbox", script, true);
     }
 }

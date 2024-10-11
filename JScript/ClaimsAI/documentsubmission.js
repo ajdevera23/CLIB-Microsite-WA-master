@@ -1,4 +1,19 @@
 ﻿$(document).ready(function () {
+
+    //window.onload = function () {
+    //    $('#param_for_saving').val('');
+    //}
+
+    //$(`[name="PurchaseOrderDetails[${i}].VatInclusive"]`).prop("checked", item.VatInclusive).trigger("change");
+
+    ////$('#infoForm_dataPrivacy1Checkbox').
+
+    //$('#infoForm_dataPrivacy1Checkbox').on('change', function () {
+    //    var checked = $(this).is(":checked");
+    //    computeSubTotal();
+    //})
+
+
     var myModal = $('#myModal');
     const previewContainer = document.getElementById("previewContainer");
     const filePreview = document.getElementById("filePreview");
@@ -123,7 +138,7 @@
             $('#validation_message_' + id).text('');
             $('#btn_show_' + id).attr({ disabled: false });
             $('#btn_download_' + id).attr({ disabled: true });
-            $("#mata_" + id).css("fill", "#00263E");
+            $("#eye_icon_" + id).css("fill", "#00263E");
             $("#dl_" + id).css({
                 "fill": "gray",
                 "opacity": "0.5"
@@ -153,7 +168,7 @@
 
             $('#file_name_' + id).text('');
             $('#btn_show_' + id).attr({ disabled: true });
-            $("#mata_" + id).css({
+            $("#meye_icon_" + id).css({
                 "fill": "gray",
                 "opacity": "0.5"
             });
@@ -171,6 +186,7 @@
     $(document).on('click', '#btn_Submit', function (e) {
         e.preventDefault();
 
+        
         $(this).html('<span class="loading-spinner"></span> Submitting...').css({
             "display": "inline-flex;",
             "align-items": "center;",
