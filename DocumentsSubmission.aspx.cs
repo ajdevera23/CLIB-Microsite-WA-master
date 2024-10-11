@@ -15,7 +15,9 @@ public partial class ClientReferral : System.Web.UI.Page
 {
     TokenRequest token = new TokenRequest();
     GenerateToken generateToken = new GenerateToken();
+    GenerateTokenActimAI generateTokenActimAI = new GenerateTokenActimAI();
     GetList getList = new GetList();
+
     string hiddenFieldValue = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -69,6 +71,9 @@ public partial class ClientReferral : System.Web.UI.Page
         try
         {
             GetClaimsIfExistRequest getclaimsexistrequest = new GetClaimsIfExistRequest();
+
+            token.Token = generateTokenActimAI.GenerateToken();
+
             token.Token = generateToken.GenerateTokenAuth();
             getclaimsexistrequest.Token = token.Token;
             getclaimsexistrequest.ClaimsReferenceNumber = referenceNumber.Text.ToString();
@@ -543,7 +548,6 @@ public partial class ClientReferral : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
     }
     #endregion
-
     #region GetExistingDocuments
     public void GetExistingDocuments(int ClaimsDocumentID)
     {
@@ -630,7 +634,6 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
     #endregion
-
     #region CLICK DOWNLOAD DOCUMENT
     protected void btnDownloadDocument_Click(object sender, EventArgs e)
     {
@@ -667,6 +670,7 @@ public partial class ClientReferral : System.Web.UI.Page
     }
     #endregion
 
+   
     public void generateCaptcha()
     {
         #region Captcha
