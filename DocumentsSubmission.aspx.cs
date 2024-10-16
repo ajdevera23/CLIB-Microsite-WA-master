@@ -87,6 +87,10 @@ public partial class ClientReferral : System.Web.UI.Page
                 HideValidateButton();
                 ReadOnlyTextFields();
                 Session["BenefitCoverageId"] = returnValue.Result[0].BenefitCoverageId.ToString();
+                Session["ClaimsId"] = returnValue.Result[0].ClaimsId.ToString();
+                Session["IsClaimsExists"] = returnValue.Result[0].IsClaimsExists.ToString();
+                Session["ProductCode"] = returnValue.Result[0].ProductCode.ToString();  
+
 
 
 
