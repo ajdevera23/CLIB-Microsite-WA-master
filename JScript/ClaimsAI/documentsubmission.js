@@ -129,6 +129,17 @@
     $(document).on('click', '#btn_Submit', function (e) {
         e.preventDefault();
 
+        //var inputedCaptcha = $('#infoForm_captchaText').val();
+
+        //if (!inputedCaptcha) {
+        //    Swal.fire({
+        //        title: 'Required',
+        //        text: 'Captcha is required.',
+        //        icon: 'warning',
+        //        confirmButtonText: 'OK'
+        //    });
+        //    return;
+        //}
         
         $(this).html('<span class="loading-spinner"></span> Submitting...').css({
             "display": "inline-flex;",
@@ -183,6 +194,54 @@
             return false;
         }
     }
+
+    $(document).on('change', '#infoForm_dataPrivacy1Checkbox', function () {
+        if ($(this).prop('checked'))
+            $('#infoForm_captchaText').attr({ disabled: false })
+        else
+            $('#infoForm_captchaText').val('').attr({ disabled: true })
+    })
+
+    $(document).on('input', '#infoForm_captchaText', function () {
+        var captchaInput = this.value;
+
+        $.ajax({
+            type: "POST",
+            url: "DocumentSubmission.aspx/ValidateCaptcha",
+            data: JSON.stringify({ captcha: captchaInput }),
+            contentType: "application/json; charset=utf-8",
+            dataType: 'JSON',
+            headers: {
+                "__RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // Include anti-forgery token
+            },
+            success: function (response) {
+                // Handle success
+            },
+            error: function (error) {
+                // Handle error
+            }
+        });
+
+    })
+
+    // Function to show the spinner overlay
+    function showSpinner() {
+        $(".overlay-page").show();
+    }
+
+    // Function to hide the spinner overlay
+    function hideSpinner() {
+        $(".overlay-page").hide();
+    }
+
+    // Show spinner on partial postback start and hide on postback end
+    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(function () {
+        showSpinner();
+    });
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+        hideSpinner();
+    });
 
 });
 

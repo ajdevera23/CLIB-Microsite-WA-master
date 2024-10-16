@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebCaptchaLib;
@@ -66,7 +66,7 @@ public partial class ClientReferral : System.Web.UI.Page
     {
         try
         {
-          
+
             GetClaimsIfExistRequest getclaimsexistrequest = new GetClaimsIfExistRequest();
 
             token.Token = generateTokenActimAI.GenerateToken();
@@ -90,6 +90,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 Session["ClaimsId"] = returnValue.Result[0].ClaimsId.ToString();
                 Session["IsClaimsExists"] = returnValue.Result[0].IsClaimsExists.ToString();
                 Session["ProductCode"] = returnValue.Result[0].ProductCode.ToString();  
+
 
 
 
@@ -128,10 +129,9 @@ public partial class ClientReferral : System.Web.UI.Page
     {
         string savingparam = "saving_param";
 
-       savingparam = Session["param_saving"].ToString();
+        savingparam = Session["param_saving"].ToString();
 
         return savingparam;
-
     }
     #region DISPLAY VALIDATE BUTTON
     public void DisplayValidateButton()
@@ -277,6 +277,8 @@ public partial class ClientReferral : System.Web.UI.Page
             }
             else
             {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Error: " + returnValue.Message + "');", true);
+                return;
                 // Optional: Handle the case when no documents are found
                 // Example: Show a message to the user
             }
@@ -434,6 +436,8 @@ public partial class ClientReferral : System.Web.UI.Page
     // Event handler when a checkbox is checked or unchecked
     protected void chkBenefit_CheckedChanged(object sender, EventArgs e)
     {
+        //ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowSpinner", "showSpinner();", true);
+
         CheckBox chkBenefit = (CheckBox)sender;
         RepeaterItem item = (RepeaterItem)chkBenefit.NamingContainer;
 
@@ -471,9 +475,6 @@ public partial class ClientReferral : System.Web.UI.Page
     {
         try
         {
-
-
-
             GetBenefitByNatureOfClaimRequest getBenefitByNatureOfClaimRequest = new GetBenefitByNatureOfClaimRequest();
             token.Token = generateToken.GenerateTokenAuth();
             getBenefitByNatureOfClaimRequest.Token = token.Token;
@@ -590,7 +591,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
             if (returnValue.ResultStatus == 0 && returnValue.Result != null && returnValue.Result.Count > 0)
             {
-      
+
 
                 Session["pdfBase64"] = returnValue.Result[0].FileData.ToString();
                 Session["FileName"] = returnValue.Result[0].FileName.ToString();
@@ -750,6 +751,8 @@ public partial class ClientReferral : System.Web.UI.Page
         UpdatePanel1.Update();
     }
 
+
+
     //protected void btn_Submit_Click(object sender, EventArgs e)
     //{
 
@@ -852,7 +855,6 @@ public partial class ClientReferral : System.Web.UI.Page
         Session.Abandon();
     }
 
-
     public string Base64Encoding(HttpPostedFile httpPostedFile)
     {
         using (var binaryReader = new System.IO.BinaryReader(httpPostedFile.InputStream))
@@ -913,5 +915,17 @@ public partial class ClientReferral : System.Web.UI.Page
         string script = "document.getElementById('param_for_saving').value = '';";
 
         ClientScript.RegisterStartupScript(this.GetType(), "ClearTextbox", script, true);
+    }
+
+    [WebMethod]
+    public static string ValidateCaptcha(string captcha)
+    {
+        string sessionCaptcha = HttpContext.Current.Session["CaptchaCode"] as string;
+
+        bool isValid = (sessionCaptcha != null && captcha == sessionCaptcha);
+
+        var result = new { isValid = isValid };
+
+        return new JavaScriptSerializer().Serialize(result);
     }
 }
