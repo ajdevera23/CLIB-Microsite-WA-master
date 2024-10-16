@@ -5,12 +5,15 @@
     <form id="enrollmentForm" class="container body-content container-enrollment" method="post" autocomplete="On" runat="server" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="docId" id="docIdInput" value="">
         <input type="hidden" id="param_for_saving" name="param_for_saving" autocomplete="off" />
-         <asp:HiddenField ID="hiddenDocumentId" runat="server" />
+        <asp:HiddenField ID="hiddenDocumentId" runat="server" />
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" Style="display: none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" Style="display: none;" />
 
         <div class="container">
+            <div class="overlay-page">
+                <div class="spinner-page"></div>
+            </div>
             <div class="app-accordion" id="accordian1id" app-accordian>
                 <!-- Accordion Item 1 -->
                 <div class="app-collapse" app-collapse>
@@ -48,7 +51,7 @@
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <% if (Session["EnableClaims"] != null && (bool)Session["EnableClaims"] == true)
-                    { %>
+                            { %>
                         <!-- Accordion Item 2 -->
                         <div class="app-collapse" app-collapse>
                             <div class="collapse-header-button" aria-expanded="true" aria-controls="sect2" id="collapse2id" indipendente="false" app-collapse-header-btn>
@@ -123,7 +126,7 @@
                                                 <asp:LinkButton ID="generateNewCaptcha" runat="server" OnClick="generateNewCaptcha_Click" Font-Size="Small" Font-Italic="true">Generate new code</asp:LinkButton>
                                                 <br />
                                                 <div class="col-md-4 mb-3">
-                                                    <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" />
+                                                    <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" disabled />
                                                 </div>
 
                                                 <%--<asp:Button ID="btn_Submit" AutoPostBack="true" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />--%>
@@ -163,83 +166,83 @@
                 </div>
             </div>
         </div>
-        </diV>
- <script>
-function showDocument(documentId) {
-    let selectedFile = null;
-    document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
-    var fileUploadControl = document.getElementById('file_upload_' + documentId);
-    var file = fileUploadControl.files[0];
-    var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-  
-    if(file){
-        var fileType = file.type;
-        if (fileType === 'application/pdf') {
-            pdfPreview.style.display = "block";
-            filePreview.style.display = "none";
+    </div>
+    <script>
+        function showDocument(documentId) {
+            let selectedFile = null;
+            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+            var fileUploadControl = document.getElementById('file_upload_' + documentId);
+            var file = fileUploadControl.files[0];
+            var myModal = new bootstrap.Modal(document.getElementById('myModal'));
 
-            const fileURL = URL.createObjectURL(file);
-            pdfPreview.src = fileURL;
-            myModal.show();
+            if (file) {
+                var fileType = file.type;
+                if (fileType === 'application/pdf') {
+                    pdfPreview.style.display = "block";
+                    filePreview.style.display = "none";
 
-            return;     
-        } 
-        else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif') {
-            filePreview.style.display = "block";
-            pdfPreview.style.display = "none";
+                    const fileURL = URL.createObjectURL(file);
+                    pdfPreview.src = fileURL;
+                    myModal.show();
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-            filePreview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                    return;
+                }
+                else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/gif') {
+                    filePreview.style.display = "block";
+                    pdfPreview.style.display = "none";
 
-            myModal.show();
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        filePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
 
-            return;   
-        } 
-}
-       
+                    myModal.show();
 
-// Trigger the hidden button to perform a server-side postback
-document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-    
-Swal.fire({
-        title: 'Generating preview, Please wait..',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false
-});
-}
-
-function DownloadDocument(documentId) {
-
- document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
- document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
-
- Swal.fire({
-     title: 'Downloading, Please wait..',
-     showConfirmButton: false,
-     allowOutsideClick: false,
-     allowEscapeKey: false
- });
-    setTimeout(function () {
-        console.log('Processing completed.');
-        Swal.close();
-    }, 5000);
-}         
+                    return;
+                }
+            }
 
 
-var btncheckeligibility = document.querySelector('.validate-btn');
+            // Trigger the hidden button to perform a server-side postback
+            document.getElementById('<%= btnHiddenShow.ClientID %>').click();
 
-btncheckeligibility.addEventListener('click', function () {
-    Swal.fire({
-        title: 'Please wait while we process your details...',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false
-    });
-});
+            Swal.fire({
+                title: 'Generating preview, Please wait..',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+        }
 
- </script>
+        function DownloadDocument(documentId) {
+
+            document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
+            document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
+
+            Swal.fire({
+                title: 'Downloading, Please wait..',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+            setTimeout(function () {
+                console.log('Processing completed.');
+                Swal.close();
+            }, 5000);
+        }
+
+
+        var btncheckeligibility = document.querySelector('.validate-btn');
+
+        btncheckeligibility.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Please wait while we process your details...',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+        });
+    </script>
 </asp:Content>
