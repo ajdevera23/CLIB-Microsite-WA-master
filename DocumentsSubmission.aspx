@@ -126,7 +126,7 @@
                                                 <asp:LinkButton ID="generateNewCaptcha" runat="server" OnClick="generateNewCaptcha_Click" Font-Size="Small" Font-Italic="true">Generate new code</asp:LinkButton>
                                                 <br />
                                                 <div class="col-md-4 mb-3">
-                                                    <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" disabled />
+                                                    <input type="text" class="form-control" id="captchaText" placeholder="Please answer Captcha Text" runat="server" style="text-align: center;" />
                                                 </div>
 
                                                 <%--<asp:Button ID="btn_Submit" AutoPostBack="true" runat="server" Text="Submit" CssClass="validate-btn" OnClick="btn_Submit_Click" />--%>
@@ -236,9 +236,9 @@
         var btncheckeligibility = document.querySelector('.validate-btn');
 
         btncheckeligibility.addEventListener('click', function () {
+            //$(this).html('<span class="loading-spinner"></span> Validating...').attr({disabled: true})
             Swal.fire({
                 title: 'Please wait while we process your details...',
-                icon: 'info',
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 allowEscapeKey: false

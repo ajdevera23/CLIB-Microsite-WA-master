@@ -129,18 +129,6 @@
     $(document).on('click', '#btn_Submit', function (e) {
         e.preventDefault();
 
-        //var inputedCaptcha = $('#infoForm_captchaText').val();
-
-        //if (!inputedCaptcha) {
-        //    Swal.fire({
-        //        title: 'Required',
-        //        text: 'Captcha is required.',
-        //        icon: 'warning',
-        //        confirmButtonText: 'OK'
-        //    });
-        //    return;
-        //}
-        
         $(this).html('<span class="loading-spinner"></span> Submitting...').css({
             "display": "inline-flex;",
             "align-items": "center;",
@@ -148,14 +136,47 @@
             "position": "relative;"
         }).attr({ disabled: true });
 
-        if (!validateRequiredDocuments()) {
+        if ($('#infoForm_natureofclaimDropdownlist').val() == 'Select') {
             Swal.fire({
                 title: 'Required',
-                text: 'Please upload the required documents.',
+                text: 'Nature of claims is required!',
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
-            $(this).html('Submit').attr({ disabled: false });
+            $('#btn_Submit').html('Submit').attr({ disabled: false });
+            return;
+        }
+
+        if (!validateRequiredDocuments()) {
+            Swal.fire({
+                title: 'Required',
+                text: 'Please select atleast one benefit and upload all the required documents.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            $('#btn_Submit').html('Submit').attr({ disabled: false });
+            return;
+        }
+
+        if (!$('#infoForm_dataPrivacy1Checkbox').prop('checked')) {
+            Swal.fire({
+                title: 'Required',
+                text: 'Data Privacy Agreement and Client Consent Declaration is Required!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            $('#btn_Submit').html('Submit').attr({ disabled: false });
+            return;
+        }
+
+        if (!$('#infoForm_captchaText').val()) {
+            Swal.fire({
+                title: 'Required',
+                text: 'Captcha is required!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            $('#btn_Submit').html('Submit').attr({ disabled: false });
             return;
         }
 
@@ -164,10 +185,21 @@
     })
 
     function validateRequiredDocuments() {
+        var totalBenefits = 0, totalBenefitsChecked = 0;
         let toValidate = [];
         let message = "";
 
         if ($("[id^='doc_']").length <= 0) toValidate.push("Please add the required documents.");
+
+        $("[id^='infoForm_rptBenefits_chkBenefit_']").each(function () {
+            if (!$(this).prop('checked'))
+                totalBenefits++;
+            else
+                totalBenefitsChecked++;
+        })
+
+        if (totalBenefitsChecked == 0)
+            toValidate.push("Please select atleast one benefit.");
 
         $("[id^='document_type_']").each(function (i, e) {
             var docId = this.id.split('_')[2];
@@ -195,46 +227,14 @@
         }
     }
 
-    $(document).on('change', '#infoForm_dataPrivacy1Checkbox', function () {
-        if ($(this).prop('checked'))
-            $('#infoForm_captchaText').attr({ disabled: false })
-        else
-            $('#infoForm_captchaText').val('').attr({ disabled: true })
-    })
-
-    $(document).on('input', '#infoForm_captchaText', function () {
-        var captchaInput = this.value;
-
-        $.ajax({
-            type: "POST",
-            url: "DocumentSubmission.aspx/ValidateCaptcha",
-            data: JSON.stringify({ captcha: captchaInput }),
-            contentType: "application/json; charset=utf-8",
-            dataType: 'JSON',
-            headers: {
-                "__RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // Include anti-forgery token
-            },
-            success: function (response) {
-                // Handle success
-            },
-            error: function (error) {
-                // Handle error
-            }
-        });
-
-    })
-
-    // Function to show the spinner overlay
     function showSpinner() {
         $(".overlay-page").show();
     }
 
-    // Function to hide the spinner overlay
     function hideSpinner() {
         $(".overlay-page").hide();
     }
 
-    // Show spinner on partial postback start and hide on postback end
     Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(function () {
         showSpinner();
     });

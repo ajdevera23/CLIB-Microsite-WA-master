@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -797,6 +796,20 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void SaveValidatedDocuments()
     {
         ClearTextbox();
+        if (!WebCaptcha.IsCaptchaCorrect(captchaText.Value.Trim(), HttpContext.Current))
+        {
+            string script2 = @"Swal.fire({
+                title: 'Warning',
+                text: 'Incorrect captcha!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });";
+
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", script2, true);
+
+            return;
+        }
+
         hiddenFieldValue = string.Empty;
         List<long> documentIds = new List<long>();
         List<SaveClaimsRequirementsResult> result = new List<SaveClaimsRequirementsResult>();
@@ -914,17 +927,5 @@ public partial class ClientReferral : System.Web.UI.Page
         string script = "document.getElementById('param_for_saving').value = '';";
 
         ClientScript.RegisterStartupScript(this.GetType(), "ClearTextbox", script, true);
-    }
-
-    [WebMethod]
-    public static string ValidateCaptcha(string captcha)
-    {
-        string sessionCaptcha = HttpContext.Current.Session["CaptchaCode"] as string;
-
-        bool isValid = (sessionCaptcha != null && captcha == sessionCaptcha);
-
-        var result = new { isValid = isValid };
-
-        return new JavaScriptSerializer().Serialize(result);
     }
 }
