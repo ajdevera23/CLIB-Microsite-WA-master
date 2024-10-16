@@ -6,6 +6,7 @@ using System.Web;
 public class GetClaimsIfExist
 {
     public long BenefitCoverageId { get; set; }
+    public long ClaimsId { get; set; }
     public bool IsClaimsExists { get; set; }
     public string ProductCode { get; set; }
 }
