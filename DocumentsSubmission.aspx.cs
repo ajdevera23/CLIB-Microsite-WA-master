@@ -851,9 +851,9 @@ public partial class ClientReferral : System.Web.UI.Page
 
         // Use SweetAlert2's promise-based handling to redirect after 'OK'
         string script = @"Swal.fire({
-            title: 'Information',
+            title: 'Success',
             text: 'Claims successfully submitted.',
-            icon: 'info',
+            icon: 'success',
             confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
