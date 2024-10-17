@@ -9,10 +9,11 @@
         <asp:Button ID="btnHiddenShow" runat="server" OnClick="btnHiddenShow_Click" Style="display: none;" />
         <asp:Button ID="btnDownloadDocument" runat="server" OnClick="btnDownloadDocument_Click" Style="display: none;" />
         <asp:Button ID="btnHiddenUpload" runat="server" OnClick="btnHiddenUpload_Click" Style="display: none;" />
-
         <div class="container">
             <div class="overlay-page">
-                <div class="spinner-page"></div>
+                <div class="spinner-page">
+                    <img src="Images/CebLogAnima.gif" />
+                </div>
             </div>
             <div class="app-accordion" id="accordian1id" app-accordian>
                 <!-- Accordion Item 1 -->
@@ -168,6 +169,23 @@
         </div>
     </div>
     <script>
+
+        function showSpinner() {
+            $(".overlay-page").show();
+        }
+
+        function hideSpinner() {
+            $(".overlay-page").hide();
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(function () {
+            showSpinner();
+        });
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+            hideSpinner();
+        });
+
         function showDocument(documentId) {
             let selectedFile = null;
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
@@ -203,34 +221,20 @@
                 }
             }
 
-
             // Trigger the hidden button to perform a server-side postback
             document.getElementById('<%= btnHiddenShow.ClientID %>').click();
-
-            Swal.fire({
-                title: 'Generating preview, Please wait..',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            });
         }
 
         function DownloadDocument(documentId) {
 
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
             document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
+            showSpinner();
 
-            Swal.fire({
-                title: 'Downloading, Please wait..',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            });
-            setTimeout(function () {
-                console.log('Processing completed.');
-                Swal.close();
-            }, 5000);
+            // Delay hiding the spinner to simulate loading
+
         }
+
 
 
         var btncheckeligibility = document.querySelector('.validate-btn');

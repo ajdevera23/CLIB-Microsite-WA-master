@@ -138,9 +138,7 @@
 
         if ($('#infoForm_natureofclaimDropdownlist').val() == 'Select') {
             Swal.fire({
-                title: 'Required',
-                text: 'Nature of claims is required!',
-                icon: 'warning',
+                text: 'Please select Nature of Claim',
                 confirmButtonText: 'OK'
             });
             $('#btn_Submit').html('Submit').attr({ disabled: false });
@@ -149,9 +147,7 @@
 
         if (!validateRequiredDocuments()) {
             Swal.fire({
-                title: 'Required',
                 text: 'Please select atleast one benefit and upload all the required documents.',
-                icon: 'warning',
                 confirmButtonText: 'OK'
             });
             $('#btn_Submit').html('Submit').attr({ disabled: false });
@@ -160,9 +156,7 @@
 
         if (!$('#infoForm_dataPrivacy1Checkbox').prop('checked')) {
             Swal.fire({
-                title: 'Required',
-                text: 'Data Privacy Agreement and Client Consent Declaration is Required!',
-                icon: 'warning',
+                text: 'Please read and check our Data Privacy policy before proceeding.',
                 confirmButtonText: 'OK'
             });
             $('#btn_Submit').html('Submit').attr({ disabled: false });
@@ -171,9 +165,7 @@
 
         if (!$('#infoForm_captchaText').val()) {
             Swal.fire({
-                title: 'Required',
-                text: 'Captcha is required!',
-                icon: 'warning',
+                text: 'Please answer Captcha Text!',
                 confirmButtonText: 'OK'
             });
             $('#btn_Submit').html('Submit').attr({ disabled: false });
@@ -226,22 +218,6 @@
             return false;
         }
     }
-
-    function showSpinner() {
-        $(".overlay-page").show();
-    }
-
-    function hideSpinner() {
-        $(".overlay-page").hide();
-    }
-
-    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(function () {
-        showSpinner();
-    });
-
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-        hideSpinner();
-    });
 
 });
 

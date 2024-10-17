@@ -35,17 +35,17 @@ public partial class ClientReferral : System.Web.UI.Page
             }
 
             // Rebuild the document container on postback
-            if (Request.Files.Count > 0)
-            {
-                HttpPostedFile uploadedFile = Request.Files[0];
-                if (uploadedFile != null && uploadedFile.ContentLength > 0)
-                {
-                    string filePath = Server.MapPath("~/UploadedFiles/") + uploadedFile.FileName;
-                    uploadedFile.SaveAs(filePath);
+            //if (Request.Files.Count > 0)
+            //{
+            //    HttpPostedFile uploadedFile = Request.Files[0];
+            //    if (uploadedFile != null && uploadedFile.ContentLength > 0)
+            //    {
+            //        string filePath = Server.MapPath("~/UploadedFiles/") + uploadedFile.FileName;
+            //        uploadedFile.SaveAs(filePath);
 
-                    Response.Write("File uploaded successfully!");
-                }
-            }
+            //        Response.Write("File uploaded successfully!");
+            //    }
+            //}
 
             foreach (string benefitCode in SelectedBenefitCodes)
             {
@@ -605,13 +605,13 @@ public partial class ClientReferral : System.Web.UI.Page
                     var base64PDF = '" + Session["pdfBase64"] + @"';
                     var fileType = '" + filetype + @"';
 
-                    if (base64PDF !== null && base64PDF.trim() !== '') {
-                        var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
 
                         setTimeout(function () {
-                            console.log('Processing completed.'); 
-                            Swal.close();
-                        }, 100);
+                            hideSpinner();
+                        }, 500); 
+                    
+                    if (base64PDF !== null && base64PDF.trim() !== '') {
+                        var modalfilepreview = new bootstrap.Modal(document.getElementById('myModal'));
 
                         // PDF Preview Condition
                         if (fileType === 'application/pdf')
@@ -679,11 +679,20 @@ public partial class ClientReferral : System.Web.UI.Page
         string fileName = Session["FileName"].ToString();  // Specify your file name
         string contentType = Session["FileType"].ToString();  // Specify your file type
                                                               // Trigger the file download
-        DownloadBase64File(base64FileString, fileName, contentType);
+
+        if(base64FileString != null && fileName != null && contentType != null)
+        {
+            string script = @" $('.overlay-page').hide();";
+
+            ClientScript.RegisterStartupScript(this.GetType(), "HideOverlayScript", script);
+
+            DownloadBase64File(base64FileString, fileName, contentType);
+        }
+    
     }
     protected void DownloadBase64File(string base64String, string fileName, string contentType)
     {
-
+   
 
         // Convert Base64 string to byte array
         byte[] fileBytes = Convert.FromBase64String(base64String);
