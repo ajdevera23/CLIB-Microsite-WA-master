@@ -542,11 +542,9 @@
     </div>
     <div class="popup" id="popup">
         <div class="popup-title-container">
-            <svg class="popup-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="#FF8C00">
-                <path d="M11 9h2v6h-2V9zm0 8h2v2h-2v-2z"/>
-                <path d="M12 3C6.48 3 2 7.48 2 13s4.48 10 10 10 10-4.48 10-10S17.52 3 12 3zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-              </svg>
-            <div class="popup-title">Please make sure that the information you provided is correct</div>
+            <center>
+               <p style="margin:auto; align-content:center; justify-content:center; display:flex; padding:10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: #ffd800;transform: ;msFilter:;"><path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM12 20c-4.411 0-8-3.589-8-8s3.567-8 7.953-8C16.391 4 20 7.589 20 12s-3.589 8-8 8z"></path><path d="M11 7h2v7h-2zm0 8h2v2h-2z"></path></svg> &nbsp; Please make sure that the information you provided is correct</p> 
+            </center>
         </div>
         <div class="popup-buttons">
                <button runat="server" type="submit" class="button button-microsite popup-button proceed" id="submitBtn" name="submitBtn" text="Submit" OnClientClick="this.disabled='true';" UseSubmitBehavior="false">Proceed</button>
