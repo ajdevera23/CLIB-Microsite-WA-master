@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -88,7 +90,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 Session["BenefitCoverageId"] = returnValue.Result[0].BenefitCoverageId.ToString();
                 Session["ClaimsId"] = returnValue.Result[0].ClaimsId.ToString();
                 Session["IsClaimsExists"] = returnValue.Result[0].IsClaimsExists.ToString();
-                Session["ProductCode"] = returnValue.Result[0].ProductCode.ToString();  
+                Session["ProductCode"] = returnValue.Result[0].ProductCode.ToString();
 
 
 
@@ -318,8 +320,15 @@ public partial class ClientReferral : System.Web.UI.Page
                                     "</svg> Upload" +
                                 "</button>" +
 
-                                "<button AutoPostBack=\"true\" type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\"style =\"margin-inline-end: 5px\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
-                                " onclick='DownloadDocument(" + document.ClaimsDocumentsId + ")'>" +
+                                //"<button AutoPostBack=\"true\" type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\"style =\"margin-inline-end: 5px\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") +
+                                //" onclick='DownloadDocument(" + document.ClaimsDocumentsId + ")'>" +
+                                //    "<svg id=\"dl_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
+                                //    "<path id=\"path1_dl_" + document.ClaimsDocumentsId + "\" d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
+                                //    "<path id=\"path2_dl_" + document.ClaimsDocumentsId + "\" d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
+                                //    "</svg> Download " +
+                                //"</button>" +
+
+                                "<button type=\"button\" id=\"btn_download_" + document.ClaimsDocumentsId + "\"style =\"margin-inline-end: 5px\" class=\"button\"" + (!string.IsNullOrEmpty(document.FileName) ? "" : "disabled") + ">" +
                                     "<svg id=\"dl_" + document.ClaimsDocumentsId + "\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" style =\"" + (!string.IsNullOrEmpty(document.FileName) ? "fill: #00263E;transform: ;msFilter:;" : "fill: gray; opacity: 0.5;") + "\">" +
                                     "<path id=\"path1_dl_" + document.ClaimsDocumentsId + "\" d=\"M18.948 11.112C18.511 7.67 15.563 5 12.004 5c-2.756 0-5.15 1.611-6.243 4.15-2.148.642-3.757 2.67-3.757 4.85 0 2.757 2.243 5 5 5h1v-2h-1c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.757 2.673-3.016l.581-.102.192-.558C8.153 8.273 9.898 7 12.004 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-2v2h2c2.206 0 4-1.794 4-4a4.008 4.008 0 0 0-3.056-3.888z\"></path>" +
                                     "<path id=\"path2_dl_" + document.ClaimsDocumentsId + "\" d=\"M13.004 14v-4h-2v4h-3l4 5 4-5z\"></path>" +
@@ -673,11 +682,11 @@ public partial class ClientReferral : System.Web.UI.Page
         int documentId = int.Parse(hiddenDocumentId.Value);
         GetExistingDocuments(documentId);
         string base64FileString = Session["pdfBase64"].ToString();
-        string fileName = Session["FileName"].ToString(); 
-        string contentType = Session["FileType"].ToString();  
-                                                           
+        string fileName = Session["FileName"].ToString();
+        string contentType = Session["FileType"].ToString();
 
-        if(base64FileString != null && fileName != null && contentType != null)
+
+        if (base64FileString != null && fileName != null && contentType != null)
         {
             string script5 = @" $('.overlay-page').hide();";
 
@@ -685,7 +694,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
             DownloadBase64File(base64FileString, fileName, contentType);
         }
-    
+
     }
     protected void DownloadBase64File(string base64String, string fileName, string contentType)
     {
@@ -919,5 +928,80 @@ public partial class ClientReferral : System.Web.UI.Page
         string script = "document.getElementById('param_for_saving').value = '';";
 
         ClientScript.RegisterStartupScript(this.GetType(), "ClearTextbox", script, true);
+    }
+
+    [WebMethod]
+    public static object TryWhy(string Name, string Email)
+    {
+        var result = new { success = true, message = "User submitted successfully!" };
+
+        // Here, you can process the data (e.g., save to a database)
+        // If there's a validation error, you can modify the result object
+        if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email))
+        {
+            result = new { success = false, message = "Validation failed!" };
+        }
+
+        return new JavaScriptSerializer().Serialize(result);
+    }
+
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
+    public static string DownloadDocument(int documentId, string referenceNo)
+    {
+        var result = new object();
+        try
+        {
+            var docData = GetDocuments(documentId, referenceNo);
+            string base64FileString = docData.Result.Select(x => x.FileData).FirstOrDefault();
+            string fileName = docData.Result.Select(x => x.FileName).FirstOrDefault();
+            string contentType = docData.Result.Select(x => x.FileType).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(base64FileString))
+            {
+                result = new { success = false, message = "No data to download" };
+            }
+            else
+            {
+                result = new
+                {
+                    success = true,
+                    base64File = base64FileString,
+                    fileName = fileName,
+                    contentType = contentType
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            result = new { success = false, message = ex.Message }; // Return error message
+        }
+
+        // Serialize the result and set maxJsonLength
+        return new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue }.Serialize(result);
+    }
+
+    public static GetExistingDocumentsResults GetDocuments(int ClaimsDocumentID, string referenceNo)
+    {
+        try
+        {
+            var token = new GenerateToken();
+            var getList = new GetList();
+
+            GetExistingDocumentsRequest getExistingDocumentsRequest = new GetExistingDocumentsRequest();
+
+            getExistingDocumentsRequest.Token = token.GenerateTokenAuth();
+            getExistingDocumentsRequest.ClaimsDocumentsId = ClaimsDocumentID;
+            getExistingDocumentsRequest.ClaimsReferenceNumber = referenceNo;
+            getExistingDocumentsRequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
+
+            var returnValue = getList.GetExistingDocuments(getExistingDocumentsRequest);
+            return returnValue;
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

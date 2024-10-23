@@ -219,6 +219,55 @@
         }
     }
 
+    $(document).on('click', '[id^="btn_download_"]', function () {
+        var docId = this.id.split('_')[2];
+        var refNo = $('#infoForm_referenceNumber').val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'DocumentsSubmission.aspx/DownloadDocument',
+            data: JSON.stringify({ documentId: docId, referenceNo: refNo }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            beforeSend: function () {
+                showSpinner();
+            },
+            success: function (response) {
+                var parsedResponse = JSON.parse(response.d);
+
+                if (parsedResponse.success) {
+                    var base64Data = parsedResponse.base64File;
+                    var fileName = parsedResponse.fileName;
+                    var contentType = parsedResponse.contentType;
+
+                    // Convert base64 to Blob
+                    var byteCharacters = atob(base64Data);
+                    var byteNumbers = new Array(byteCharacters.length);
+                    for (var i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    var byteArray = new Uint8Array(byteNumbers);
+                    var blob = new Blob([byteArray], { type: contentType });
+
+                    // Create a link element for download
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click(); // Programmatically click the link to trigger the download
+                    hideSpinner();
+                } else {
+                    hideSpinner();
+                    Swal.fire({
+                        text: 'No document downloaded.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("AJAX error: ", textStatus, errorThrown);
+            }
+        });
+    })
 });
 
 

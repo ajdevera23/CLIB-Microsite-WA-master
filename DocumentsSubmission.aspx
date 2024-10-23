@@ -231,7 +231,7 @@
 
             document.getElementById('<%= hiddenDocumentId.ClientID %>').value = documentId;
             document.getElementById('<%= btnDownloadDocument.ClientID %>').click();
-            showSpinner();
+            //showSpinner();
 
             // Delay hiding the spinner to simulate loading
 
