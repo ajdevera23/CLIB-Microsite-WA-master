@@ -258,7 +258,8 @@
                 } else {
                     hideSpinner();
                     Swal.fire({
-                        text: 'No document downloaded.',
+                        title: 'Download Interupted',
+                        text: 'Please try again.',
                         confirmButtonText: 'OK'
                     });
                 }
