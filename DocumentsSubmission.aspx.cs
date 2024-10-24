@@ -933,21 +933,6 @@ public partial class ClientReferral : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static object TryWhy(string Name, string Email)
-    {
-        var result = new { success = true, message = "User submitted successfully!" };
-
-        // Here, you can process the data (e.g., save to a database)
-        // If there's a validation error, you can modify the result object
-        if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email))
-        {
-            result = new { success = false, message = "Validation failed!" };
-        }
-
-        return new JavaScriptSerializer().Serialize(result);
-    }
-
-    [WebMethod]
     [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
     public static string DownloadDocument(int documentId, string referenceNo)
     {
@@ -976,10 +961,9 @@ public partial class ClientReferral : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            result = new { success = false, message = ex.Message }; // Return error message
+            result = new { success = false, message = ex.Message };
         }
 
-        // Serialize the result and set maxJsonLength
         return new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue }.Serialize(result);
     }
 
@@ -1016,8 +1000,7 @@ public partial class ClientReferral : System.Web.UI.Page
         }
     }
 
-
-    public static GetExistingDocumentsResults GetDocuments(int ClaimsDocumentID, string referenceNo)
+    private static GetExistingDocumentsResults GetDocuments(int documentId, string referenceNo)
     {
         try
         {
@@ -1027,7 +1010,7 @@ public partial class ClientReferral : System.Web.UI.Page
             GetExistingDocumentsRequest getExistingDocumentsRequest = new GetExistingDocumentsRequest();
 
             getExistingDocumentsRequest.Token = token.GenerateTokenAuth();
-            getExistingDocumentsRequest.ClaimsDocumentsId = ClaimsDocumentID;
+            getExistingDocumentsRequest.ClaimsDocumentsId = documentId;
             getExistingDocumentsRequest.ClaimsReferenceNumber = referenceNo;
             getExistingDocumentsRequest.PlatformKey = ConfigurationManager.AppSettings["CLIBAPIKey"];
 
