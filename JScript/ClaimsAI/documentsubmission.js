@@ -264,6 +264,7 @@
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                hideSpinner();
                 console.error("AJAX error: ", textStatus, errorThrown);
             }
         });
