@@ -499,6 +499,7 @@ public partial class ClientReferral : System.Web.UI.Page
                 tableHeader.Style["display"] = "table-header-group";
                 // Bind the JSON result to the Repeater
                 rptBenefits.DataSource = returnValue.Result;
+
                 rptBenefits.DataBind();
             }
             else
@@ -797,6 +798,7 @@ public partial class ClientReferral : System.Web.UI.Page
     protected void SaveValidatedDocuments()
     {
         ClearTextbox();
+        ActimeAISaving();
         if (!WebCaptcha.IsCaptchaCorrect(captchaText.Value.Trim(), HttpContext.Current))
         {
             string script2 = @"Swal.fire({
@@ -980,6 +982,40 @@ public partial class ClientReferral : System.Web.UI.Page
         // Serialize the result and set maxJsonLength
         return new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue }.Serialize(result);
     }
+
+    public void ActimeAISaving()
+    {
+        Claim claimRequest = new Claim();
+        claimRequest.CRN = referenceNumber.Text.ToString();
+        claimRequest.NatureOfClaims = natureofclaimDropdownlist.SelectedValue.ToString();
+        claimRequest.ProductCode = Session["ProductCode"].ToString();
+        claimRequest.Benefits = new List<Benefit>();
+
+        foreach (RepeaterItem item in rptBenefits.Items)
+        {
+            CheckBox chkBenefit = (CheckBox)item.FindControl("chkBenefit");
+            HiddenField hiddenBenefitCode = (HiddenField)item.FindControl("hiddenBenefitCode");
+            HiddenField hiddenBenefitId = (HiddenField)item.FindControl("hiddenBenefitId");
+
+            if (chkBenefit != null && chkBenefit.Checked)
+            {
+                string benefitName = DataBinder.Eval(item.DataItem, "Benefit").ToString();
+                string coverageAmount = DataBinder.Eval(item.DataItem, "CoverageAmount").ToString();
+
+                // Parse BenefitId from string to int
+                int benefitId = int.Parse(hiddenBenefitId.Value);
+
+                claimRequest.Benefits.Add(new Benefit
+                {
+                    BenefitId = benefitId,
+                    BenefitCode = hiddenBenefitCode.Value,
+                    BenefitName = benefitName,
+                    CoverageAmount = coverageAmount
+                });
+            }
+        }
+    }
+
 
     public static GetExistingDocumentsResults GetDocuments(int ClaimsDocumentID, string referenceNo)
     {

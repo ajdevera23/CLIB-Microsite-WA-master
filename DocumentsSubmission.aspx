@@ -94,6 +94,9 @@
                                                             <td style="display: none;">
                                                                 <asp:HiddenField ID="hiddenBenefitCode" runat="server" Value='<%# Eval("BenefitCode") %>' />
                                                             </td>
+                                                             <td style="display: none;">
+                                                                <asp:HiddenField ID="hiddenBenefitId" runat="server" Value='<%# Eval("BenefitId") %>' />
+                                                            </td>
                                                         </tr>
                                                     </ItemTemplate>
                                                 </asp:Repeater>
