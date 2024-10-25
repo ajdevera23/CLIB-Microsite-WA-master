@@ -266,6 +266,11 @@
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 hideSpinner();
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please try again.',
+                    confirmButtonText: 'OK'
+                });
                 console.error("AJAX error: ", textStatus, errorThrown);
             }
         });
