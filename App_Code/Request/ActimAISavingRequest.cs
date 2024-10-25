@@ -5,6 +5,7 @@ using System.Web;
 
 public class Claim
 {
+    public string Token { get; set; }
     public string CRN { get; set; }
     public string NatureOfClaims { get; set; }
     public string ProductCode { get; set; }

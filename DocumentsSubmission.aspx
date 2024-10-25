@@ -89,8 +89,16 @@
                                                             <td>
                                                                 <asp:CheckBox ID="chkBenefit" runat="server" AutoPostBack="true" OnCheckedChanged="chkBenefit_CheckedChanged" />
                                                             </td>
-                                                            <td><%# Eval("Benefit") %></td>
-                                                            <td><%# "PHP " + String.Format("{0:N2}", Eval("CoverageAmount")) %></td>
+                                                            <td>
+                                                               <asp:HiddenField ID="hiddenBenefitName" runat="server" Value='<%# Eval("Benefit") %>' />
+                                                                <%# Eval("Benefit") %>
+
+                                                            </td>
+                                                            <td>
+                                                               <asp:HiddenField ID="hiddenCoverageAmount" runat="server" Value=' <%# "PHP " + String.Format("{0:N2}", Eval("CoverageAmount")) %>' />
+                                                                <%# "PHP " + String.Format("{0:N2}", Eval("CoverageAmount")) %>
+
+                                                            </td>
                                                             <td style="display: none;">
                                                                 <asp:HiddenField ID="hiddenBenefitCode" runat="server" Value='<%# Eval("BenefitCode") %>' />
                                                             </td>

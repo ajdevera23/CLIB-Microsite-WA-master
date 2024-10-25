@@ -70,7 +70,7 @@ public partial class ClientReferral : System.Web.UI.Page
 
             GetClaimsIfExistRequest getclaimsexistrequest = new GetClaimsIfExistRequest();
 
-            token.Token = generateTokenActimAI.GenerateToken();
+        
 
             token.Token = generateToken.GenerateTokenAuth();
             getclaimsexistrequest.Token = token.Token;
@@ -970,6 +970,8 @@ public partial class ClientReferral : System.Web.UI.Page
     public void ActimeAISaving()
     {
         Claim claimRequest = new Claim();
+        token.Token = generateTokenActimAI.GenerateToken();
+        claimRequest.Token = token.Token;
         claimRequest.CRN = referenceNumber.Text.ToString();
         claimRequest.NatureOfClaims = natureofclaimDropdownlist.SelectedValue.ToString();
         claimRequest.ProductCode = Session["ProductCode"].ToString();
@@ -980,24 +982,27 @@ public partial class ClientReferral : System.Web.UI.Page
             CheckBox chkBenefit = (CheckBox)item.FindControl("chkBenefit");
             HiddenField hiddenBenefitCode = (HiddenField)item.FindControl("hiddenBenefitCode");
             HiddenField hiddenBenefitId = (HiddenField)item.FindControl("hiddenBenefitId");
+            HiddenField hiddenBenefitName = (HiddenField)item.FindControl("hiddenBenefitName");
+            HiddenField hiddenCoverageAmount = (HiddenField)item.FindControl("hiddenCoverageAmount");
+
 
             if (chkBenefit != null && chkBenefit.Checked)
             {
-                string benefitName = DataBinder.Eval(item.DataItem, "Benefit").ToString();
-                string coverageAmount = DataBinder.Eval(item.DataItem, "CoverageAmount").ToString();
 
-                // Parse BenefitId from string to int
                 int benefitId = int.Parse(hiddenBenefitId.Value);
 
                 claimRequest.Benefits.Add(new Benefit
                 {
                     BenefitId = benefitId,
                     BenefitCode = hiddenBenefitCode.Value,
-                    BenefitName = benefitName,
-                    CoverageAmount = coverageAmount
+                    BenefitName = hiddenBenefitName.Value,
+                    CoverageAmount = hiddenCoverageAmount.Value
                 });
             }
         }
+
+        var returnValue = getList.SaveActimAIRequest(claimRequest);
+
     }
 
     private static GetExistingDocumentsResults GetDocuments(int documentId, string referenceNo)

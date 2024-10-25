@@ -436,18 +436,18 @@ public class GetList
         return returnValue;
     }
 
-    //public SaveClaimsRequirementsResult SaveActimAIRequest(Claim token)
-    //{
-    //    SaveClaimsRequirementsResult returnValue = new SaveClaimsRequirementsResult();
+    public SaveClaimsRequirementsResult SaveActimAIRequest(Claim token)
+    {
+        SaveClaimsRequirementsResult returnValue = new SaveClaimsRequirementsResult();
 
-    //    string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
+        string jsonRequest = Newtonsoft.Json.JsonConvert.SerializeObject(token);
 
-    //    string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["SaveActimAIRequest"].Trim());
+        string jsonResult = SystemUtility.JsonHttpPost(jsonRequest, ConfigurationManager.AppSettings["SaveActimAIRequest"].Trim());
 
-    //    returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveClaimsRequirementsResult>(jsonResult);
+        returnValue = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveClaimsRequirementsResult>(jsonResult);
 
-    //    return returnValue;
-    //}
+        return returnValue;
+    }
 
     public AgentReferralResult IQRSaveClientReferral(AgentReferralRequest token)
     {
